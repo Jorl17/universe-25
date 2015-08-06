@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
+import javafx.geometry.BoundingBox;
 
 /**
  * Created by jorl17 on 06/08/15.
@@ -19,11 +20,13 @@ public class Background extends Group implements Disposable {
     private Table grid;
     private int nRows, nCols;
     private float squareSize;
+
     public Background(int nRows, int nCols, float squareSize) {
         this.nRows = nRows;
         this.nCols = nCols;
         this.squareSize = squareSize;
-        System.out.println("" + nRows*squareSize+ "x" + nCols*squareSize);
+
+        //System.out.println("" + nRows*squareSize+ "x" + nCols*squareSize);
 
         bgCellTexture = new Texture("grass.jpg");
         grid = new Table();

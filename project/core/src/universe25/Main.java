@@ -19,13 +19,15 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import universe25.GameLogic.AgentManager;
+import universe25.GameLogic.SimplisticAnt;
 
 public class Main extends ApplicationAdapter {
     private Stage stage;
 
     @Override
     public void create () {
-        stage = new Stage(new FitViewport(640, 480));
+        stage = new AgentManager(new FitViewport(640, 480));
         Gdx.input.setInputProcessor(stage);
 
         stage.addListener(new InputListener() {
@@ -42,10 +44,9 @@ public class Main extends ApplicationAdapter {
             }
         });
 
-
-        Background background = new Background((int)Math.round (stage.getHeight() / 32.0), (int)Math.round(stage.getWidth() / 32.0), 32);
-        //background.setPosition(0, stage.getHeight());
-        stage.addActor(background);
+        SimplisticAnt simplisticAnt = new SimplisticAnt();
+        simplisticAnt.setPosition(30, 30);
+        stage.addActor(simplisticAnt);
     }
 
     @Override
