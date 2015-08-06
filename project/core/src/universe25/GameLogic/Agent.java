@@ -1,21 +1,17 @@
 package universe25.GameLogic;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import javafx.geometry.BoundingBox;
+import universe25.SteerableAgent.SteerableImage;
 
 import java.util.ArrayList;
 
 /**
  * Created by jorl17 on 06/08/15.
  */
-public abstract class Agent extends Image implements Disposable {
+public abstract class Agent extends SteerableImage {
     private final Texture texture;
     private BoundingBox boundingBox;
     private boolean collidedWithWorld;
@@ -25,13 +21,6 @@ public abstract class Agent extends Image implements Disposable {
         super(texture);
         this.texture = texture;
         setBounds(getX(), getY(), getWidth(), getHeight());
-        setTouchable(Touchable.enabled);
-        collidedAgents = new ArrayList<Agent>();
-    }
-
-    protected Agent(String path) {
-        setDrawable(new TextureRegionDrawable(new TextureRegion(texture = new Texture(path))));
-        setBounds(getX(), getY(), getImageWidth(), getImageHeight());
         setTouchable(Touchable.enabled);
         collidedAgents = new ArrayList<Agent>();
     }
@@ -93,9 +82,4 @@ public abstract class Agent extends Image implements Disposable {
         collidedAgents.clear();
     }
 
-    /*@Override
-    public void draw(Batch batch, float parentAlpha) {
-        System.out.println(getX() +", " + getY() + ", " + getWidth() + ", " + getHeight());
-        super.draw(batch, parentAlpha);
-    }*/
 }

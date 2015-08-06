@@ -29,9 +29,9 @@ public class AgentManager extends Stage{
     }
 
     @Override
-    public void act() {
+    public void act(float deltaTime) {
         checkCollisions();
-        super.act();
+        super.act(deltaTime);
     }
 
     private void checkCollisions() {
@@ -61,19 +61,20 @@ public class AgentManager extends Stage{
 
     private void collideAgentWithWorld(Agent agent) {
         BoundingBox agentbb = agent.getBoundingBox();
+
         if ( agentbb.getMinX() <= worldBoundingBox.getMinX()  ) {
             agent.setX((float) worldBoundingBox.getMinX());
             agent.setCollidedWithWorld(true);
-        } else if ( agentbb.getMinX() + agentbb.getWidth() >= worldBoundingBox.getMinX() + worldBoundingBox.getWidth() ) {
-            agent.setX((float) (worldBoundingBox.getMinX() + worldBoundingBox.getWidth()));
+        } else if ( agentbb.getMaxX() >= worldBoundingBox.getMaxX() ) {
+            agent.setX((float) (worldBoundingBox.getMaxX() -  agentbb.getWidth()));
             agent.setCollidedWithWorld(true);
         }
 
         if ( agentbb.getMinY() <= worldBoundingBox.getMinY()  ) {
             agent.setY((float) worldBoundingBox.getMinY());
             agent.setCollidedWithWorld(true);
-        } else if ( agentbb.getMinY() + agentbb.getHeight() >= worldBoundingBox.getMinY() + worldBoundingBox.getHeight() ) {
-            agent.setY((float) (worldBoundingBox.getMinY() + worldBoundingBox.getHeight()));
+        } else if ( agentbb.getMaxY() >= worldBoundingBox.getMaxY() ) {
+            agent.setY((float) (worldBoundingBox.getMaxY() - agentbb.getHeight()));
             agent.setCollidedWithWorld(true);
         }
     }
