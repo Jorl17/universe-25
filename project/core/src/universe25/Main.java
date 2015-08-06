@@ -10,55 +10,42 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class Main extends ApplicationAdapter {
     private Stage stage;
-    class MyActor extends Image {
-
-        public MyActor() {
-            super(new Texture("badlogic.jpg"));
-            setBounds(getX(), getY(), getWidth(), getHeight());
-            setTouchable(Touchable.enabled);
-
-            addListener(new InputListener() {
-                @Override
-                public boolean keyDown(InputEvent event, int keycode) {
-                    if (keycode == Input.Keys.RIGHT) {
-                        ColorAction c = new ColorAction();
-                        c.setEndColor(Color.BLUE);
-                        c.setDuration(5.0f);
-                        ColorAction c2 = new ColorAction();
-                        c2.setEndColor(getColor());
-                        c2.setDuration(5.0f);
-                        RepeatAction forever = Actions.forever(Actions.sequence(c, c2));
-                        MyActor.this.addAction(forever);
-                    } else if (keycode == Input.Keys.LEFT) {
-                        ((RepeatAction) getActions().first()).finish();
-                    }
-                    return true;
-                }
-            });
-
-        }
-
-        @Override
-        public void act(float delta) {
-            super.act(delta);
-        }
-    }
 
     @Override
     public void create () {
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(640, 480));
         Gdx.input.setInputProcessor(stage);
-        MyActor actor = new MyActor();
-        stage.addActor(actor);
-        stage.setKeyboardFocus(actor);
+
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("x, y" + x + " " + y);
+                Vector2 coord = new Vector2(x,y);//stage.screenToStageCoordinates(new Vector2(x, y));
+                System.out.println("coord=" + coord);
+                Actor hitActor = stage.hit(coord.x, coord.y, false);
+                if ( hitActor != null )
+                    Gdx.app.log("info", "hit " + hitActor.getName());
+                //return super.touchDown(event, x, y, pointer, button);
+                return false;
+            }
+        });
+
+
+        Background background = new Background((int)Math.round (stage.getHeight() / 32.0), (int)Math.round(stage.getWidth() / 32.0), 32);
+        //background.setPosition(0, stage.getHeight());
+        stage.addActor(background);
     }
 
     @Override
@@ -67,5 +54,15 @@ public class Main extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, false);
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
     }
 }
