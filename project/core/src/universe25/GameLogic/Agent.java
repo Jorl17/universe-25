@@ -1,17 +1,19 @@
 package universe25.GameLogic;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Disposable;
 import javafx.geometry.BoundingBox;
-import universe25.SteerableAgent.SteerableImage;
+import universe25.GameLogic.Movement.MovableImage;
 
 import java.util.ArrayList;
 
 /**
  * Created by jorl17 on 06/08/15.
  */
-public abstract class Agent extends SteerableImage {
+public abstract class Agent extends MovableImage implements Disposable {
     private final Texture texture;
     private BoundingBox boundingBox;
     private boolean collidedWithWorld;
@@ -82,4 +84,7 @@ public abstract class Agent extends SteerableImage {
         collidedAgents.clear();
     }
 
+    public Vector2 getPosition() {
+        return new Vector2(getX(), getY());
+    }
 }

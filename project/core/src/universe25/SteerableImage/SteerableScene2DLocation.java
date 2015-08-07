@@ -1,4 +1,4 @@
-package universe25.SteerableAgent;
+package universe25.SteerableImage;
 
 /**
  * Created by jorl17 on 07/08/15.
