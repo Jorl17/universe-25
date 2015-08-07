@@ -1,4 +1,4 @@
-package universe25.GameLogic;
+package universe25.Agents;
 
 import com.badlogic.gdx.graphics.Texture;
 

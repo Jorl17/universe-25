@@ -1,4 +1,4 @@
-package universe25.GameLogic;
+package universe25.Agents.Worlds;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -6,9 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.geometry.BoundingBox;
-import universe25.Background;
-
-import java.util.ArrayList;
+import universe25.Agents.Agent;
 
 /**
  * Created by jorl17 on 06/08/15.
@@ -42,7 +40,7 @@ public class AgentManager extends Stage{
     private void collideAgents() {
         Array<Actor> actors = getActors();
         for (int i = 0; i <  actors.size ; i++ )
-            if (actors.get(i) instanceof  Agent)
+            if (actors.get(i) instanceof Agent)
                 for (int j = i+1; j < actors.size; j++)
                     if ( actors.get(j) instanceof Agent)
                         if ( ((Agent) actors.get(i)).interesects((Agent) actors.get(j)) ) {

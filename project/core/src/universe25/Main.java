@@ -7,11 +7,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import universe25.GameLogic.Agent;
-import universe25.GameLogic.AgentManager;
+import universe25.Agents.Agent;
+import universe25.Agents.Worlds.AgentManager;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.WeightedGoal;
-import universe25.GameLogic.SimplisticAnt;
+import universe25.Agents.SimplisticAnt;
 
 public class Main extends ApplicationAdapter {
     private Stage stage;

@@ -1,9 +1,8 @@
-package universe25.GameLogic;
+package universe25.Agents;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Disposable;
 import javafx.geometry.BoundingBox;
 import universe25.GameLogic.Movement.MovableImage;
