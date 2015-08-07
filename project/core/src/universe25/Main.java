@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import universe25.Agents.Agent;
-import universe25.Agents.Worlds.AgentManager;
+import universe25.Agents.Worlds.World;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.WeightedGoal;
 import universe25.Agents.SimplisticAnt;
@@ -18,7 +18,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create () {
-        stage = new AgentManager(new FitViewport(640, 480));
+        stage = new World(new FitViewport(640, 480));
         Gdx.input.setInputProcessor(stage);
 
         stage.addListener(new InputListener() {

@@ -8,14 +8,18 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by jorl17 on 06/08/15.
  */
-public class AgentManager extends Stage{
+public class World extends Stage {
     private static final float TILE_SIZE = 32.0f;
     private BoundingBox worldBoundingBox;
+    private Map<String, GridMapLayer> gridLayers;
 
-    public AgentManager(Viewport viewport) {
+    public World(Viewport viewport) {
         super(viewport);
         create();
     }
@@ -24,6 +28,13 @@ public class AgentManager extends Stage{
         this.worldBoundingBox = new BoundingBox(0,0,getWidth(), getHeight());
         Background background = new Background(Math.round (getHeight() / TILE_SIZE), Math.round(getWidth() / TILE_SIZE), 32);
         this.addActor(background);
+        createGridLayers();
+    }
+
+    private void createGridLayers() {
+        this.gridLayers = new HashMap<>();
+        GridMapLayer<Float> layer = new GridMapLayer<Float>(Float.class, getWidth(), getHeight(), TILE_SIZE, "TestLayer");
+        this.gridLayers.put(layer.getName(), layer);
     }
 
     @Override
