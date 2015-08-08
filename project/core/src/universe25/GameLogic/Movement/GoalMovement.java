@@ -2,6 +2,7 @@ package universe25.GameLogic.Movement;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,7 +49,7 @@ public class GoalMovement {
 
     public void updateGoalDirection() {
         goalDirection.setZero();
-        Vector2 position = new Vector2(actor.getX(), actor.getY());
+        Vector2 position = new Vector2(actor.getX(Align.center), actor.getY(Align.center));
         for (WeightedGoal goal : goals)
             goalDirection.add(goal.getWeightedGoal(position));
 
