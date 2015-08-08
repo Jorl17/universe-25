@@ -37,6 +37,8 @@ public class World extends Stage {
         this.gridLayers.put(layer.getName(), layer);
         layer.increasePheromoneAt(50,50,10);
         layer.increasePheromoneAt(150,150,100);
+        layer.increasePheromoneAt(300,5,100);
+        layer.increasePheromoneAt(5,300,100);
         addActor(layer);
     }
 
@@ -97,5 +99,9 @@ public class World extends Stage {
             if ( actor instanceof Disposable )
                 ((Disposable) actor).dispose();
         super.dispose();
+    }
+
+    public Map<String, GridMapLayer> getGridLayers() {
+        return gridLayers;
     }
 }
