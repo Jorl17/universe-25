@@ -52,6 +52,7 @@ public class FieldOfView {
 
         shapeRenderer.line(tri[0].x, tri[0].y, tri[1].x, tri[1].y );
         shapeRenderer.line(tri[0].x, tri[0].y, tri[2].x, tri[2].y );
+        shapeRenderer.line(tri[1].x, tri[1].y, tri[2].x, tri[2].y );
         shapeRenderer.end();
         batch.begin();
     }
