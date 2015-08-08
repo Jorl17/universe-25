@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Disposable;
 import javafx.geometry.BoundingBox;
+import universe25.Agents.States.StateManager;
+import universe25.Agents.Worlds.World;
 import universe25.GameLogic.Movement.MovableImage;
 
 import java.util.ArrayList;
@@ -14,9 +16,10 @@ import java.util.ArrayList;
  */
 public abstract class Agent extends MovableImage implements Disposable {
     private final Texture texture;
-    private BoundingBox boundingBox;
-    private boolean collidedWithWorld;
-    private ArrayList<Agent> collidedAgents;
+    protected BoundingBox boundingBox;
+    protected boolean collidedWithWorld;
+    protected ArrayList<Agent> collidedAgents;
+    protected StateManager states;
 
     protected Agent(Texture texture) {
         super(texture);
@@ -24,6 +27,7 @@ public abstract class Agent extends MovableImage implements Disposable {
         setBounds(getX(), getY(), getWidth(), getHeight());
         setTouchable(Touchable.enabled);
         collidedAgents = new ArrayList<Agent>();
+        states = new StateManager(this);
     }
 
     @Override
@@ -49,7 +53,12 @@ public abstract class Agent extends MovableImage implements Disposable {
         clearCollisionsWithAgents();
     }
 
-    public abstract void update();
+    public void update() {
+        states.update();
+        agentUpdate();
+    }
+
+    public abstract void agentUpdate();
 
     @Override
     public void act(float delta) {
@@ -86,4 +95,10 @@ public abstract class Agent extends MovableImage implements Disposable {
     public Vector2 getPosition() {
         return new Vector2(getX(), getY());
     }
+
+    public World getWorld() {
+        return (World)getStage();
+    }
+
+
 }
