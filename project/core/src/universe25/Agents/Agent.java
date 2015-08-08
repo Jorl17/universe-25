@@ -12,6 +12,7 @@ import javafx.geometry.BoundingBox;
 import universe25.Agents.States.StateManager;
 import universe25.Agents.Worlds.World;
 import universe25.GameLogic.Movement.MovableImage;
+import universe25.GameLogic.Movement.WeightedGoal;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,9 @@ public abstract class Agent extends MovableImage implements Disposable {
     //FIXME: Temporary
     private ShapeRenderer shapeRenderer;
 
-    protected Agent(Texture texture) {
+    private FieldOfView fieldOfView;
+
+    protected Agent(Texture texture, float fov, float seeDistance) {
         super(texture);
         this.texture = texture;
         setBounds(getX(), getY(), getWidth(), getHeight());
@@ -36,6 +39,7 @@ public abstract class Agent extends MovableImage implements Disposable {
         collidedAgents = new ArrayList<Agent>();
         states = new StateManager(this);
         shapeRenderer = new ShapeRenderer();
+        fieldOfView = new FieldOfView(this, fov, seeDistance);
     }
 
     @Override
@@ -61,16 +65,13 @@ public abstract class Agent extends MovableImage implements Disposable {
         clearCollisionsWithAgents();
     }
 
-    public void update() {
-        states.update();
-        agentUpdate();
-    }
-
-    public abstract void agentUpdate();
+    public abstract void update();
 
     @Override
     public void act(float delta) {
         super.act(delta);
+        states.update();
+        fieldOfView.update();
         update();
         cleanupCollisions();
     }
@@ -119,6 +120,15 @@ public abstract class Agent extends MovableImage implements Disposable {
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.line(pos.x, pos.y, pos.x + facing.x, pos.y + facing.y );
         shapeRenderer.end();
+
+        ArrayList<WeightedGoal> goals = getGoalMovement().getGoals();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        for ( WeightedGoal g : goals) {
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.line(pos.x, pos.y, g.getGoal().x, g.getGoal().y );
+        }
+        shapeRenderer.end();
         batch.begin();
+        fieldOfView.draw(batch);
     }
 }

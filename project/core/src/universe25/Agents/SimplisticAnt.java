@@ -8,13 +8,13 @@ import universe25.Agents.States.Wander;
  */
 public class SimplisticAnt extends Agent {
     public SimplisticAnt() {
-        super(new Texture("ant.png"));
+        super(new Texture("ant.png"), 30, 150);
         states.addState(new Wander(this, 100, 80));
     }
 
 
     @Override
-    public void agentUpdate() {
+    public void update() {
 
     }
 
