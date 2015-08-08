@@ -33,8 +33,11 @@ public class World extends Stage {
 
     private void createGridLayers() {
         this.gridLayers = new HashMap<>();
-        GridMapLayer<Float> layer = new GridMapLayer<Float>(Float.class, getWidth(), getHeight(), TILE_SIZE, "TestLayer");
+        TestPheromoneMapLayer layer = new TestPheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "TestLayer", 100);
         this.gridLayers.put(layer.getName(), layer);
+        layer.increasePheromoneAt(50,50,10);
+        layer.increasePheromoneAt(150,150,100);
+        addActor(layer);
     }
 
     @Override
