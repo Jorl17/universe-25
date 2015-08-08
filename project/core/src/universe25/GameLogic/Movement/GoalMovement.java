@@ -34,7 +34,7 @@ public class GoalMovement {
         updateGoalDirection();
     }
 
-    private void clearGoals() {
+    public void clearGoals() {
         this.goals.clear();
     }
 
