@@ -5,14 +5,14 @@ import universe25.Agents.Agent;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public abstract class StateWithPriority extends State {
+public abstract class StateWithPriority<T extends Agent> extends State<T> {
     private int priority;
-    protected StateWithPriority(Agent agent, String name, int priority) {
+    protected StateWithPriority(T agent, String name, int priority) {
         super(agent, name);
         this.priority = priority;
     }
 
-    protected StateWithPriority(Agent agent, String name) {
+    protected StateWithPriority(T agent, String name) {
         this(agent,name,0);
     }
 

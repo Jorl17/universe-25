@@ -72,20 +72,26 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     public abstract void update();
 
+    private void updateCellsInFov() {
+        FloatLayer firstFloatLayer = (FloatLayer)getWorld().getGridLayers().get("TestLayer");
+        tmpCellsInFov = firstFloatLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
+        Vector2 pos = getPosition();
+        for (int i = 0; i < tmpCellsInFov.size(); i++) {
+            int[] cell = tmpCellsInFov.get(i);
+            if ( firstFloatLayer.isPointInCell(pos, cell[1], cell[0])) {
+                tmpCellsInFov.remove(i);
+                break;
+            }
+        }
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
         states.update();
         fieldOfView.update();
-        TestPheromoneMapLayer pheromoneLayer = (TestPheromoneMapLayer)getWorld().getGridLayers().get("TestLayer");
-        tmpCellsInFov = pheromoneLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
-        Vector2 pos = getPosition();
-        for (int i = 0; i < tmpCellsInFov.size(); i++) {
-            int[] cell = tmpCellsInFov.get(i);
-            if ( pheromoneLayer.isPointInCell(pos, cell[1], cell[0])) {
-                tmpCellsInFov.remove(i);
-            }
-        }
+        updateCellsInFov();
+
         update();
         cleanupCollisions();
     }
@@ -124,7 +130,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     }
 
 
-    public boolean areThereCellsWithValueAtFloatLayer(String layerName) {
+    protected boolean areThereCellsWithValueAtFloatLayer(String layerName) {
         FloatLayer testLayer = (FloatLayer) getWorld().getGridLayers().get(layerName);
         if ( tmpCellsInFov != null ) {
             for ( int[] cell : tmpCellsInFov) {
@@ -137,16 +143,7 @@ public abstract class Agent extends MovableImage implements Disposable {
         return false;
     }
 
-    public boolean areThereCellsWithPheromone() {
-        return areThereCellsWithValueAtFloatLayer("TestLayer");
-    }
-
-    public boolean areThereCellsWithFood() {
-        return areThereCellsWithValueAtFloatLayer("FoodLayer");
-    }
-
-
-    private ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(String layername) {
+    protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(String layername) {
         ArrayList<ValuePositionPair<Float>> ret = new ArrayList<>();
         FloatLayer testLayer = (FloatLayer) getWorld().getGridLayers().get(layername);
         if (tmpCellsInFov != null ) {
@@ -160,13 +157,7 @@ public abstract class Agent extends MovableImage implements Disposable {
         return ret;
     }
 
-    public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithPheromone() {
-        return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer("TestLayer");
-    }
 
-    public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithFood() {
-        return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer("FoodLayer");
-    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {

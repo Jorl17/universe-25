@@ -5,11 +5,11 @@ import universe25.Agents.Agent;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public abstract class State {
-    public final Agent agent;
+public abstract class State<T extends Agent> {
+    public final T agent;
     private final String name;
 
-    protected State(Agent agent, String name) {
+    protected State(T agent, String name) {
         this.agent = agent;
         this.name = name;
     }

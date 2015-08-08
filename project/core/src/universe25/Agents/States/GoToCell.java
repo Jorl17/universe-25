@@ -9,10 +9,10 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public abstract class GoToCell extends StateWithPriority {
+public abstract class GoToCell<T extends Agent> extends StateWithPriority<T> {
     private int priority;
     private ArrayList<ValuePositionPair<Float>> cellsWithValues;
-    public GoToCell(Agent agent, int priority, String name) {
+    public GoToCell(T agent, int priority, String name) {
         super(agent, name, -1);
         this.priority = priority;
     }
