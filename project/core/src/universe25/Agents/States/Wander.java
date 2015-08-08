@@ -25,9 +25,9 @@ public class Wander extends State {
         //System.out.println(dir);
         float rotationAngle = (float) (Math.random()*maxAllowedDegreeChange - maxAllowedDegreeChange/2);
         dir.rotate(rotationAngle);
-        System.out.println(rotationAngle);
-        float worldDiagonalLen = new Vector2(agent.getWorld().getWidth(), agent.getWorld().getHeight()).len();
-        this.target.set(agent.getPosition().add(dir.scl((float) (Math.random()*worldDiagonalLen)*0.5f + agent.getWidth()*1.5f)));
+        //System.out.println(rotationAngle);
+        //float worldDiagonalLen = new Vector2(agent.getWorld().getWidth(), agent.getWorld().getHeight()).len();
+        this.target.set(agent.getPosition().add(dir.scl(/*agent.getWidth()*2.5f*/500.0f)));
     }
 
     @Override
