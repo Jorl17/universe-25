@@ -1,6 +1,7 @@
 package universe25.Agents;
 
 import com.badlogic.gdx.graphics.Texture;
+import universe25.Agents.States.Wander;
 
 /**
  * Created by jorl17 on 06/08/15.
@@ -8,14 +9,13 @@ import com.badlogic.gdx.graphics.Texture;
 public class SimplisticAnt extends Agent {
     public SimplisticAnt() {
         super(new Texture("ant.png"));
+        states.addState(new Wander(this, 100));
     }
+
 
     @Override
-    public void update() {
-        wander();
+    public void agentUpdate() {
+
     }
 
-    private void wander() {
-        //FIXME
-    }
 }
