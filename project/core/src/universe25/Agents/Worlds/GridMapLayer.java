@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import universe25.Agents.ValuePositionPair;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class GridMapLayer<T> extends Actor {
         this.cellCentres = new Vector2[nRows][nCols];
         for (int i = 0; i < cellCentres.length; i++)
             for (int j = 0; j < cellCentres[0].length; j++)
-                this.cellCentres[i][j] = new Vector2(j * cellSize, i * cellSize);
+                this.cellCentres[i][j] = new Vector2(j * cellSize + cellSize*0.5f, i * cellSize+ cellSize*0.5f);
 
     }
 
@@ -92,11 +93,11 @@ public class GridMapLayer<T> extends Actor {
         return cells[(int) (y / cellSize)][(int) (x / cellSize)];
     }
 
-    public T getValueAtCell(int x, int y) {
-        if ( x < 0 || x > nCols ) return null;
-        if ( y < 0 || y > nRows ) return null;
+    public T getValueAtCell(int col, int row) {
+        if ( col < 0 || col > nCols ) return null;
+        if ( row < 0 || row > nRows ) return null;
 
-        return cells[y][x];
+        return cells[row][col];
     }
 
     public void setValueAt(float x, float y, T val) {
@@ -106,8 +107,8 @@ public class GridMapLayer<T> extends Actor {
         cells[(int) (y / cellSize)][(int) (x / cellSize)] = val;
     }
 
-    public void setValueAtCell(int x, int y, T val) {
-        cells[y][x] = val;
+    public void setValueAtCell(int col, int row, T val) {
+        cells[row][col] = val;
     }
 
     protected void drawCell(Batch batch, int col, int row) {
@@ -166,5 +167,28 @@ public class GridMapLayer<T> extends Actor {
 
     public Vector2[][] getCellCentres() {
         return cellCentres;
+    }
+
+    public Vector2 getCellCentre(int col, int row) {
+        return cellCentres[row][col].cpy();
+    }
+
+    public ValuePositionPair<T> getCellCentreAndValue(int col, int row) {
+        return new ValuePositionPair<T>(getValueAtCell(col, row), cellCentres[row][col].cpy());
+    }
+
+    public boolean isPointInCell(Vector2 pos, int col, int row) {
+        Vector2 topLeft = new Vector2(col * cellSize, row * cellSize),
+                topRight = new Vector2(col * cellSize, (row+1) * cellSize),
+                bottomRight = new Vector2((col+1) * cellSize, (row+1) * cellSize),
+                bottomLeft = new Vector2((col+1) * cellSize, row * cellSize);
+
+        com.badlogic.gdx.utils.Array<Vector2> vector2s = new com.badlogic.gdx.utils.Array<>();
+        vector2s.add(topLeft); vector2s.add(topRight); vector2s.add(bottomRight); vector2s.add(bottomLeft);
+        return Intersector.isPointInPolygon(vector2s, pos);/*
+        if ( pos.x > topRight.x || pos.x < topLeft.x ) return false;
+        if ( pos.y > topRight.y || pos.y < bottomRight.y ) return false;
+
+        return true;*/
     }
 }

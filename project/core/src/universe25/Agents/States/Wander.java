@@ -6,18 +6,22 @@ import universe25.Agents.Agent;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public class Wander extends State {
+public class Wander extends StateWithPriority {
     private long directionChangeIntervalMs;
     private float maxAllowedDegreeChange;
     private long lastChangeTime;
     private Vector2 target;
+    private int maxWanderPriority;
+    private float dontWanderProb;
 
-    public Wander(Agent agent, long directionChangeIntervalMs, float maxAllowedDegreeChange) {
-        super(agent, "Wander");
+    public Wander(Agent agent, long directionChangeIntervalMs, float maxAllowedDegreeChange, float dontWanderProb, int maxWanderPriority) {
+        super(agent, "Wander", 0);
         this.directionChangeIntervalMs = directionChangeIntervalMs;
         this.lastChangeTime = -1;
         this.maxAllowedDegreeChange = maxAllowedDegreeChange;
         this.target = new Vector2();
+        this.dontWanderProb = dontWanderProb;
+        this.maxWanderPriority = maxWanderPriority;
     }
 
     private void randomTarget() {
@@ -43,13 +47,21 @@ public class Wander extends State {
 
     @Override
     public void leaveState() {
+        System.out.println("Left " + getName());
         lastChangeTime = -1;
     }
 
     @Override
     public void enterState() {
+        System.out.println("Entered " + getName());
         lastChangeTime = -1;
         if ( agent.getGoalMovement() != null )
             agent.getGoalMovement().clearGoals();
+    }
+
+    @Override
+    public void updatePriority() {
+        setPriority(Math.random() > (1-dontWanderProb) ? maxWanderPriority : -1);
+
     }
 }

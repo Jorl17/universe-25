@@ -10,6 +10,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.States.StateManager;
+import universe25.Agents.Worlds.FloatLayer;
+import universe25.Agents.Worlds.GridMapLayer;
+import universe25.Agents.Worlds.TestPheromoneMapLayer;
 import universe25.Agents.Worlds.World;
 import universe25.GameLogic.Movement.MovableImage;
 import universe25.GameLogic.Movement.WeightedGoal;
@@ -74,7 +77,15 @@ public abstract class Agent extends MovableImage implements Disposable {
         super.act(delta);
         states.update();
         fieldOfView.update();
-        tmpCellsInFov = getWorld().getGridLayers().get("TestLayer").getCellsWithinTriangle(fieldOfView.getFovTriangle());
+        TestPheromoneMapLayer pheromoneLayer = (TestPheromoneMapLayer)getWorld().getGridLayers().get("TestLayer");
+        tmpCellsInFov = pheromoneLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
+        Vector2 pos = getPosition();
+        for (int i = 0; i < tmpCellsInFov.size(); i++) {
+            int[] cell = tmpCellsInFov.get(i);
+            if ( pheromoneLayer.isPointInCell(pos, cell[1], cell[0])) {
+                tmpCellsInFov.remove(i);
+            }
+        }
         update();
         cleanupCollisions();
     }
@@ -112,6 +123,51 @@ public abstract class Agent extends MovableImage implements Disposable {
         return (World)getStage();
     }
 
+
+    public boolean areThereCellsWithValueAtFloatLayer(String layerName) {
+        FloatLayer testLayer = (FloatLayer) getWorld().getGridLayers().get(layerName);
+        if ( tmpCellsInFov != null ) {
+            for ( int[] cell : tmpCellsInFov) {
+                int row = cell[0], col = cell[1];
+                ValuePositionPair<Float> cellCentreAndValue = testLayer.getCellCentreAndValue(col, row);
+                if ( cellCentreAndValue.getValue() > 0 ) return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean areThereCellsWithPheromone() {
+        return areThereCellsWithValueAtFloatLayer("TestLayer");
+    }
+
+    public boolean areThereCellsWithFood() {
+        return areThereCellsWithValueAtFloatLayer("FoodLayer");
+    }
+
+
+    private ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(String layername) {
+        ArrayList<ValuePositionPair<Float>> ret = new ArrayList<>();
+        FloatLayer testLayer = (FloatLayer) getWorld().getGridLayers().get(layername);
+        if (tmpCellsInFov != null ) {
+            for ( int[] cell : tmpCellsInFov) {
+                int row = cell[0], col = cell[1];
+                ValuePositionPair<Float> cellCentreAndValue = testLayer.getCellCentreAndValue(col, row);
+                if ( cellCentreAndValue.getValue() > 0 ) ret.add(cellCentreAndValue);
+            }
+        }
+
+        return ret;
+    }
+
+    public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithPheromone() {
+        return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer("TestLayer");
+    }
+
+    public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithFood() {
+        return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer("FoodLayer");
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -144,4 +200,5 @@ public abstract class Agent extends MovableImage implements Disposable {
         fieldOfView.draw(batch);
 
     }
+
 }

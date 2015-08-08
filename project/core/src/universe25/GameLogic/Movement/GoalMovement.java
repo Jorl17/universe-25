@@ -29,9 +29,20 @@ public class GoalMovement {
         updateGoalDirection();
     }
 
+    public void addGoal(WeightedGoal g) {
+        this.goals.add(g);
+        updateGoalDirection();
+    }
+
     public void setWeightedGoals(WeightedGoal... g) {
         this.goals.clear();
         Collections.addAll(this.goals, g);
+        updateGoalDirection();
+    }
+
+    public void setWeightedGoals(ArrayList<WeightedGoal> g) {
+        this.goals.clear();
+        this.goals.addAll(g);
         updateGoalDirection();
     }
 

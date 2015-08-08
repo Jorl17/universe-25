@@ -33,18 +33,31 @@ public class World extends Stage {
 
     private void createGridLayers() {
         this.gridLayers = new HashMap<>();
-        TestPheromoneMapLayer layer = new TestPheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "TestLayer", 100);
-        this.gridLayers.put(layer.getName(), layer);
-        layer.increasePheromoneAt(50,50,10);
-        layer.increasePheromoneAt(150,150,100);
+        TestPheromoneMapLayer layer = new TestPheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "TestLayer", 500);
+        TestFoodLayer foodLayer = new TestFoodLayer(getWidth(), getHeight(), TILE_SIZE, "FoodLayer", 100);
+        addGridLayer(foodLayer);
+        addGridLayer(layer);
+        //for (int i = 0; i < 10; i++)
+        //    layer.increasePheromoneAt((float)Math.random()*getWidth(),(float)Math.random()*getHeight(),(float)Math.random()*50+50);
+        /*layer.increasePheromoneAt(150,150,100);
         layer.increasePheromoneAt(300,5,100);
-        layer.increasePheromoneAt(5,300,100);
+        layer.increasePheromoneAt(5,300,100);*/
+        //layer.increasePheromoneAt(5,300,100);
+        foodLayer.putFoodAt(250, 250, 100);
+
+        foodLayer.putFoodAt(450, 150, 100);
+        foodLayer.putFoodAt(350, 300, 100);
+    }
+
+    private  void addGridLayer(GridMapLayer layer) {
+        this.gridLayers.put(layer.getName(), layer);
         addActor(layer);
     }
 
     @Override
     public void act(float deltaTime) {
         checkCollisions();
+        ((TestPheromoneMapLayer)this.gridLayers.get("TestLayer")).evaporate(0.1f);
         super.act(deltaTime);
     }
 

@@ -78,7 +78,7 @@ public class Main extends ApplicationAdapter {
         simplisticAnt.setPosition(250, 250);
         simplisticAnt.setRotation(90);
         stage.addActor(simplisticAnt);
-        //for (int i = 0; i < 1000; i++) stage.addActor(new SimplisticAnt());
+        for (int i = 0; i < 10; i++) stage.addActor(new SimplisticAnt());
 
     }
 
