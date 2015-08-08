@@ -8,18 +8,26 @@ import universe25.Agents.Agent;
  */
 public class Wander extends State {
     private long directionChangeIntervalMs;
+    private float maxAllowedDegreeChange;
     private long lastChangeTime;
     private Vector2 target;
 
-    public Wander(Agent agent, long directionChangeIntervalMs) {
+    public Wander(Agent agent, long directionChangeIntervalMs, float maxAllowedDegreeChange) {
         super(agent, "Wander");
         this.directionChangeIntervalMs = directionChangeIntervalMs;
         this.lastChangeTime = -1;
+        this.maxAllowedDegreeChange = maxAllowedDegreeChange;
         this.target = new Vector2();
     }
 
     private void randomTarget() {
-        this.target.set((float)Math.random()*agent.getWorld().getWidth(),(float)Math.random()*agent.getWorld().getHeight());
+        Vector2 dir = agent.getFacingDirection();
+        //System.out.println(dir);
+        float rotationAngle = (float) (Math.random()*maxAllowedDegreeChange - maxAllowedDegreeChange/2);
+        dir.rotate(rotationAngle);
+        System.out.println(rotationAngle);
+        float worldDiagonalLen = new Vector2(agent.getWorld().getWidth(), agent.getWorld().getHeight()).len();
+        this.target.set(agent.getPosition().add(dir.scl((float) (Math.random()*worldDiagonalLen)*0.5f + agent.getWidth()*1.5f)));
     }
 
     @Override

@@ -37,7 +37,7 @@ public class Main extends ApplicationAdapter {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.DOWN) {
-                    Agent agent = (Agent) stage.getActors().get(1);
+                    Agent agent = (Agent) stage.getActors().get(2);
                     GoalMovement goalMovement = agent.getGoalMovement();
                     if (!goalMovement.hasGoals())
                         goalMovement.setGoal(new Vector2(250, 250));
@@ -58,9 +58,12 @@ public class Main extends ApplicationAdapter {
 
                     //agent.addAction(Actions.moveBy(0, -20.0f, 0.5f));
                 } else if ( keycode == Input.Keys.UP ) {
-                    Agent agent = (Agent) stage.getActors().get(1);
+                    Agent agent = (Agent) stage.getActors().get(2);
                     GoalMovement goalMovement = agent.getGoalMovement();
                     goalMovement.setWeightedGoals(new WeightedGoal(new Vector2(250,250), 1.0f), new WeightedGoal(new Vector2(100,10), 0.5f));
+                } else if ( keycode == Input.Keys.LEFT ) {
+                    Agent agent = (Agent) stage.getActors().get(2);
+                    agent.rotateBy(30);
                 }
 
                 return true;
@@ -70,7 +73,10 @@ public class Main extends ApplicationAdapter {
         });
 
         SimplisticAnt simplisticAnt = new SimplisticAnt();
-        //simplisticAnt.setPosition(30, 30);
+        //simplisticAnt.setPosition(250,250);
+
+        simplisticAnt.setPosition(30, 30);
+        simplisticAnt.setRotation(180);
         stage.addActor(simplisticAnt);
     }
 

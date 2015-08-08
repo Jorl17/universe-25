@@ -9,7 +9,7 @@ import universe25.Agents.States.Wander;
 public class SimplisticAnt extends Agent {
     public SimplisticAnt() {
         super(new Texture("ant.png"));
-        states.addState(new Wander(this, 100));
+        states.addState(new Wander(this, 100, 80));
     }
 
 
