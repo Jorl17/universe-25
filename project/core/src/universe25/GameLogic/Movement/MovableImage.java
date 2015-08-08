@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import universe25.SteerableImage.Scene2dSteeringUtils;
 
@@ -18,52 +19,67 @@ public class MovableImage extends Image {
     private final GoalMovement goalMovement;
     private static final float DEFAULT_SPEED = 1.0f;
     private float speed = DEFAULT_SPEED;
+    private Vector2 facingDirection;
 
     public MovableImage() {
+        super();
+        setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
     }
 
     public MovableImage(NinePatch patch) {
         super(patch);
+        setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
     }
 
     public MovableImage(TextureRegion region) {
         super(region);
+        setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
     }
 
     public MovableImage(Texture texture) {
         super(texture);
+        setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
     }
 
     public MovableImage(Skin skin, String drawableName) {
         super(skin, drawableName);
+        setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
     }
 
     public MovableImage(Drawable drawable) {
         super(drawable);
+        setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
     }
 
     public MovableImage(Drawable drawable, Scaling scaling) {
         super(drawable, scaling);
+        setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
     }
 
     public MovableImage(Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
+        setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
     }
 
     private void move() {
         goalMovement.updateGoalDirection();
         Vector2 movementSpeedVector = goalMovement.getMovementSpeedVector(speed);
-        moveBy(movementSpeedVector.x, movementSpeedVector.y);
+        if ( !movementSpeedVector.isZero() ) {
 
-        setRotation(-(float) (MathUtils.radiansToDegrees*Math.atan(movementSpeedVector.x / movementSpeedVector.y)));
+            moveBy(movementSpeedVector.x, movementSpeedVector.y);
+
+            //FIXME: This isn't right
+            //setRotation((float) (MathUtils.radiansToDegrees * Math.atan(movementSpeedVector.y / movementSpeedVector.x)));
+            setRotation(MathUtils.radiansToDegrees*(float)Math.atan2(movementSpeedVector.y, movementSpeedVector.x));
+        }
     }
 
     @Override
@@ -78,5 +94,12 @@ public class MovableImage extends Image {
 
     public GoalMovement getGoalMovement() {
         return goalMovement;
+    }
+
+    public Vector2 getFacingDirection() {
+        float rotation = getRotation();
+        if ( Float.isNaN(rotation) ) rotation = 0;
+        return new Vector2(1,0).rotate(rotation);
+
     }
 }
