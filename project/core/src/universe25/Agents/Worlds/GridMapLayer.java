@@ -75,6 +75,10 @@ public class GridMapLayer<T> extends Actor {
                 }
 
         this.cellCentres = new Vector2[nRows][nCols];
+        for (int i = 0; i < cellCentres.length; i++)
+            for (int j = 0; j < cellCentres[0].length; j++)
+                this.cellCentres[i][j] = new Vector2(j * cellSize, i * cellSize);
+
     }
 
     public String getName() {
@@ -115,6 +119,18 @@ public class GridMapLayer<T> extends Actor {
 
     }
 
+    // Always do batch.end() before!!
+    public void drawCell(Batch batch, int col, int row, Color c) {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(c);
+        shapeRenderer.rect(col*cellSize, row*cellSize, cellSize, cellSize);
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.end();
@@ -137,11 +153,13 @@ public class GridMapLayer<T> extends Actor {
         return shapeRenderer;
     }
 
-    public ArrayList<Vector2> getCellsWithinTriangle(Vector2[] triangle) {
-        ArrayList<Vector2> ret = new ArrayList<>();
+    public ArrayList<int[]> getCellsWithinTriangle(Vector2[] triangle) {
+        ArrayList<int[]> ret = new ArrayList<>();
         for (int i = 0; i < cellCentres.length; i++)
             for (int j = 0; j < cellCentres[0].length; j++)
-                if (Intersector.isPointInTriangle(cellCentres[i][j], triangle[0], triangle[1], triangle[2]));
+                if (Intersector.isPointInTriangle(cellCentres[i][j], triangle[0], triangle[1], triangle[2]))
+                    ret.add(new int[] { i, j});
+
 
         return ret;
     }
