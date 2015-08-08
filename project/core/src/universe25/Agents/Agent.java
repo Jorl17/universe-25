@@ -14,6 +14,7 @@ import universe25.Agents.Worlds.World;
 import universe25.GameLogic.Movement.MovableImage;
 import universe25.GameLogic.Movement.WeightedGoal;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +31,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     private ShapeRenderer shapeRenderer;
 
     private FieldOfView fieldOfView;
+    private ArrayList<int[]> tmpCellsInFov;
 
     protected Agent(Texture texture, float fov, float seeDistance) {
         super(texture);
@@ -72,6 +74,7 @@ public abstract class Agent extends MovableImage implements Disposable {
         super.act(delta);
         states.update();
         fieldOfView.update();
+        tmpCellsInFov = getWorld().getGridLayers().get("TestLayer").getCellsWithinTriangle(fieldOfView.getFovTriangle());
         update();
         cleanupCollisions();
     }
@@ -128,7 +131,17 @@ public abstract class Agent extends MovableImage implements Disposable {
             shapeRenderer.line(pos.x, pos.y, g.getGoal().x, g.getGoal().y );
         }
         shapeRenderer.end();
+
+
+        if ( tmpCellsInFov != null ) {
+            Color c = new Color(0.3f,0.3f,0.3f,0.5f);
+            for (int[] cell : tmpCellsInFov)
+                // cell[1] has col, cell[0] has row
+                getWorld().getGridLayers().get("TestLayer").drawCell(batch, cell[1], cell[0], c);
+        }
+
         batch.begin();
         fieldOfView.draw(batch);
+
     }
 }
