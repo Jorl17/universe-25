@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
-import universe25.Agents.Pheromone;
+import universe25.Agents.Pheromone.Pheromone;
 import universe25.Agents.SpeciesAgent;
 import universe25.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Worlds.GridLayers.GridMapLayer;
@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by jorl17 on 06/08/15.
  */
 public class World extends Stage {
-    private static final float TILE_SIZE = 16.0f;
+    private static final float TILE_SIZE = 8.0f;
     private BoundingBox worldBoundingBox;
     private Map<String, GridMapLayer> gridLayers;
 
