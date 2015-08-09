@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
 import universe25.Agents.ValuePositionPair;
-import universe25.Agents.Worlds.GridLayers.TestPheromoneMapLayer;
+import universe25.Agents.Worlds.GridLayers.PheromoneMapLayer;
 
 import java.util.ArrayList;
 
@@ -30,8 +30,8 @@ public abstract class SimplisticAnt extends Agent {
     protected abstract void prepareStates();
 
     private void increasePheromone() {
-        TestPheromoneMapLayer testLayer = (TestPheromoneMapLayer) getWorld().getGridLayers().get("TestPheromoneLayer");
-        TestPheromoneMapLayer foodPheromone = (TestPheromoneMapLayer) getWorld().getGridLayers().get("FoodPheromoneLayer");
+        PheromoneMapLayer testLayer = (PheromoneMapLayer) getWorld().getGridLayers().get("TestPheromoneLayer");
+        PheromoneMapLayer foodPheromone = (PheromoneMapLayer) getWorld().getGridLayers().get("FoodPheromoneLayer");
         Vector2 pos = getPosition();
 
         if ( areThereCellsWithFood() ) {

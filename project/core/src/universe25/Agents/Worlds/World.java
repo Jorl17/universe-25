@@ -11,7 +11,7 @@ import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
 import universe25.Agents.Worlds.GridLayers.GridMapLayer;
 import universe25.Agents.Worlds.GridLayers.TestFoodLayer;
-import universe25.Agents.Worlds.GridLayers.TestPheromoneMapLayer;
+import universe25.Agents.Worlds.GridLayers.PheromoneMapLayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +38,8 @@ public class World extends Stage {
 
     private void createGridLayers() {
         this.gridLayers = new HashMap<>();
-        TestPheromoneMapLayer layer = new TestPheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "TestPheromoneLayer", 500, Color.YELLOW);
-        TestPheromoneMapLayer foodPheromoneLayer = new TestPheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "FoodPheromoneLayer", 500, Color.CYAN);
+        PheromoneMapLayer layer = new PheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "TestPheromoneLayer", 500, Color.YELLOW);
+        PheromoneMapLayer foodPheromoneLayer = new PheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "FoodPheromoneLayer", 500, Color.CYAN);
         TestFoodLayer foodLayer = new TestFoodLayer(getWidth(), getHeight(), TILE_SIZE, "FoodLayer", 100);
 
         addGridLayer(layer);
@@ -71,10 +71,10 @@ public class World extends Stage {
         checkCollisions();
         /*((TestPheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).evaporate(0.8f);
         ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.5f);*/
-        ((TestPheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).evaporate(0.2f);
-        ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.05f);
-        ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).spread(0.002f, 0.1f);
-        ((TestPheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).spread(0.002f, 0.1f);
+        ((PheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).evaporate(0.2f);
+        ((PheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.05f);
+        ((PheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).spread(0.002f, 0.1f);
+        ((PheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).spread(0.002f, 0.1f);
         super.act(deltaTime);
     }
 

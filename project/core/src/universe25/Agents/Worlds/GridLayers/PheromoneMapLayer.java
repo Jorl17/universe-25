@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public class TestPheromoneMapLayer extends FloatLayer {
+public class PheromoneMapLayer extends FloatLayer {
 
-    public TestPheromoneMapLayer(float gridWidth, float gridHeight, float cellSize, String name, float pheromoneMax, Color c) {
+    public PheromoneMapLayer(float gridWidth, float gridHeight, float cellSize, String name, float pheromoneMax, Color c) {
         super(gridWidth, gridHeight, cellSize, name, pheromoneMax, c);
     }
 
-    public TestPheromoneMapLayer(float cellSize, int nRows, int nCols, String name, float pheromoneMax, Color c) {
+    public PheromoneMapLayer(float cellSize, int nRows, int nCols, String name, float pheromoneMax, Color c) {
         super(cellSize, nRows, nCols, name, pheromoneMax, c);
     }
 
