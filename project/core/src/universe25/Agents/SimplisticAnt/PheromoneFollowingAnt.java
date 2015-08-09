@@ -21,16 +21,36 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
 
     @Override
     protected void prepareStates() {
+        long wanderDirectionChangeIntervalMs = 100;
+        float wanderMaxAllowedChangeDegree = 80;
+        float wanderWhenSeeingPathPheromoneProbability = 0.2f;
+        float wanderWhenSeeingFoodPheromoneProbability = 0.05f;
+        long rampageActivationTimeMean = 3000L;
+        long rampageActivationTimeStd = 500L;
+        long rampageDeactivationTimeMean = 1000L;
+        long rampageDeactivationTimeStd = 300L;
         PriorityAggregatorState priorityAggregatorStates = new PriorityAggregatorState<>(this, "prioritisedStates");
-        priorityAggregatorStates.addState(new Wander<>(this, 100, 80, 0.2f, 15));
+        priorityAggregatorStates.addState(new Wander<>(this,
+                                                       wanderDirectionChangeIntervalMs,
+                                                       wanderMaxAllowedChangeDegree,
+                                                       wanderWhenSeeingPathPheromoneProbability, 15));
         priorityAggregatorStates.addState(new GoToPheromone(this, 10, pathPheronome));
         priorityAggregatorStates.addState(new GoToPheromone(this, 16, foodPheromone));
-        priorityAggregatorStates.addState(new Wander<>(this, 100, 80, 0.05f, 17));
+        priorityAggregatorStates.addState(new Wander<>(this,
+                                                       wanderDirectionChangeIntervalMs,
+                                                       wanderMaxAllowedChangeDegree,
+                                                       wanderWhenSeeingFoodPheromoneProbability, 17));
         priorityAggregatorStates.addState(new TickBasedPriorityStateActivator<>(this, "RampageForFood", 19,
-                new ParallelPriorityStates<>(this, "RampageAndChangeColor",
-                        new Wander<>(this, 100, 80),
-                        new ChangeColorState<>(this, Color.CYAN)),
-                PheromoneFollowingAnt.this::areThereCellsWithFood, new GaussianLongProducer(3000L, 500L), new GaussianLongProducer(1000L, 300L), true));
+                                          new ParallelPriorityStates<>(this, "RampageAndChangeColor",
+                                                                       new Wander<>(this, wanderDirectionChangeIntervalMs,
+                                                                                          wanderMaxAllowedChangeDegree),
+                                                                       new ChangeColorState<>(this, Color.CYAN)),
+                                                                   PheromoneFollowingAnt.this::areThereCellsWithFood,
+                                                                   new GaussianLongProducer(rampageActivationTimeMean,
+                                                                                            rampageActivationTimeStd),
+                                                                   new GaussianLongProducer(rampageDeactivationTimeMean,
+                                                                                            rampageDeactivationTimeStd),
+                                                                   true));
         priorityAggregatorStates.addState(new GoToFood(this, 20));
         states.addState(priorityAggregatorStates);
     }
