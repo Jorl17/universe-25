@@ -1,6 +1,7 @@
 package universe25.Agents.States;
 
 import universe25.Agents.Agent;
+import universe25.GameLogic.NumberProducers.NumberProducer;
 import universe25.GameLogic.Time.Ticks;
 
 import java.util.function.BooleanSupplier;
@@ -12,8 +13,8 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
     private State<T> state;
     private int priorityToSet;
     private BooleanSupplier shouldTickFunction;
-    private long ticksUntilActivation;
-    private long ticksUntilDeActivation;
+    private NumberProducer<Long> ticksUntilActivation;
+    private NumberProducer<Long> ticksUntilDeActivation;
     private boolean deActiveIfTicks;
 
     private long lastTimeTicked;
@@ -21,8 +22,8 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
     private boolean shouldLeave;
 
     public TickBasedPriorityStateActivator(T agent, String name, int priorityToSet, State<T> state,
-                                           BooleanSupplier shouldTickFunction, int ticksUntilActivation,
-                                           int ticksUntilDeActivation, boolean deActiveIfTicks) {
+                                           BooleanSupplier shouldTickFunction, NumberProducer<Long> ticksUntilActivation,
+                                           NumberProducer<Long> ticksUntilDeActivation, boolean deActiveIfTicks) {
         super(agent, name, -1);
         this.state = state;
         this.priorityToSet = priorityToSet;
@@ -40,7 +41,7 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
 
         if ( currentlyActive ) {
             if ( ( deActiveIfTicks && shouldTickFunction.getAsBoolean() ) ||
-               (Ticks.ticksSince(lastTimeTicked) > ticksUntilDeActivation) ) {
+               (Ticks.ticksSince(lastTimeTicked) > ticksUntilDeActivation.produce()) ) {
                 setPriority(0);
                 lastTimeTicked = Ticks.getTicks();
                 shouldLeave = true;
@@ -49,7 +50,7 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
         } else {
             if (shouldTickFunction.getAsBoolean()) lastTimeTicked = Ticks.getTicks();
 
-            if (Ticks.ticksSince(lastTimeTicked) > ticksUntilActivation) {
+            if (Ticks.ticksSince(lastTimeTicked) > ticksUntilActivation.produce()) {
                 currentlyActive = true;
                 setPriority(priorityToSet);
                 lastTimeTicked = Ticks.getTicks();
