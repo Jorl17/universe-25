@@ -1,5 +1,6 @@
 package universe25.Agents.States;
 
+import com.badlogic.gdx.graphics.Color;
 import universe25.Agents.Agent;
 import universe25.GameLogic.NumberProducers.NumberProducer;
 import universe25.GameLogic.Time.Ticks;
@@ -60,18 +61,24 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
 
     @Override
     public String update() {
-        if ( currentlyActive ) state.update();
+        if ( currentlyActive ) return state.update(); //FIXME: We should maybe do something if the state is meant to change?
         return null;
     }
 
     @Override
     public void leaveState() {
-        if ( currentlyActive || shouldLeave ) state.leaveState();
+        if ( currentlyActive || shouldLeave ) {
+            state.leaveState();
+            agent.setColor(1,1,1,1);
+        }
     }
 
     @Override
     public void enterState() {
-        if ( currentlyActive ) state.enterState();
+        if ( currentlyActive ) {
+            state.enterState();
+            agent.setColor(Color.CYAN);
+        }
     }
 
     @Override
