@@ -52,7 +52,7 @@ public class World extends Stage {
 
         foodLayer.putFoodAt(450, 150, 100);
         foodLayer.putFoodAt(350, 300, 100);*/
-        for (int i =0; i < 10 ; i++) {
+        for (int i =0; i < 1 ; i++) {
             Vector2 pos = randomPosition();
             foodLayer.putFoodAt(pos.x, pos.y, 100);
         }
@@ -66,8 +66,10 @@ public class World extends Stage {
     @Override
     public void act(float deltaTime) {
         checkCollisions();
-        ((TestPheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).evaporate(0.1f);
-        ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.5f);
+        /*((TestPheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).evaporate(0.8f);
+        ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.5f);*/
+        ((TestPheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).evaporate(0.2f);
+        ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.05f);
         super.act(deltaTime);
     }
 

@@ -67,4 +67,8 @@ public class StateManager {
             states[0].enterState();
         }
     }
+
+    public void clearStates() {
+        states.clear();
+    }
 }

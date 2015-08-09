@@ -15,7 +15,7 @@ public class ScouterAnt extends SimplisticAnt {
 
     public ScouterAnt() {
         //super(90, 200, 3, 3, 10);
-        super(90, 70, 3, 3, 3*3);
+        super(90, 70, 3, 3, 3*3, 3*3/3);
         setColor(new Color(1.0f,0.0f,0.0f,1.0f));
     }
 

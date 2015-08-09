@@ -41,8 +41,11 @@ public class TestPheromoneMapLayer extends FloatLayer {
                 decreasePheromoneAtCell(j, i, rate);
     }
 
-    /*@Override
+    @Override
     protected void drawCell(Batch batch, int col, int row) {
+        //super.drawCell(batch, col, row);
+    }
+    /*
         float valueAtCell = getValueAtCell(col, row);
         if ( valueAtCell > 0 ) {
             getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);

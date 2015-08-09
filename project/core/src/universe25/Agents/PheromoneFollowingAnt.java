@@ -13,7 +13,7 @@ import universe25.Agents.Worlds.FloatLayer;
 public class PheromoneFollowingAnt extends SimplisticAnt {
     public PheromoneFollowingAnt() {
         //super(30, 150, 1, 1, 15);
-        super(60, 50, 1, 1, 1*3);
+        super(60, 50, 1, 1, 1*3, 1*3/5.0f);
     }
 
     @Override
@@ -25,12 +25,16 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         priorityAggregatorStates.addState(new Wander<>(this, 100, 80, 0.05f, 17));
         priorityAggregatorStates.addState(new GoToFood(this, 20));
         states.addState(priorityAggregatorStates);
+        states.addState(new GoToPheromone(this, 16, "FoodPheromone2"));
     }
 
     @Override
     public void update() {
         super.update();
-        if ( ((FloatLayer)getWorld().getGridLayers().get("FoodLayer")).getValueAt(getPosition()) > 0)
-            setVisible(false);
+        if ( ((FloatLayer)getWorld().getGridLayers().get("FoodLayer")).getValueAt(getPosition()) > 0) {
+            getWorld().getActors().removeValue(this, false);
+            //getGoalMovement().clearGoals();
+            //states.clearStates();
+        }
     }
 }

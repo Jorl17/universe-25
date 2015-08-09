@@ -2,7 +2,6 @@ package universe25.Agents;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import universe25.Agents.Worlds.FloatLayer;
 import universe25.Agents.Worlds.TestPheromoneMapLayer;
 
 import java.util.ArrayList;
@@ -11,14 +10,17 @@ import java.util.ArrayList;
  * Created by jorl17 on 06/08/15.
  */
 public abstract class SimplisticAnt extends Agent {
-    private float pheromoneIncrease, pheromoneIncreaseWhenSeeingFoodOrFoodPheromone;
-    protected SimplisticAnt(float fov, float seeDistance, float speed, float pheromoneIncrease, float pheromoneIncreaseWhenSeeingFoodOrFoodPheromone) {
-        super(new Texture("ant.png"), fov, seeDistance, speed);
+    private float pheromoneIncrease, pheromoneIncreaseWhenSeeingFood;
+    private float pheromoneIncreaseWhenSeeingFoodPheromone;
+    private static final Texture texture = new Texture("ant.png");
+    protected SimplisticAnt(float fov, float seeDistance, float speed, float pheromoneIncrease, float pheromoneIncreaseWhenSeeingFood, float pheromoneIncreaseWhenSeeingFoodPheromone) {
+        super(texture, false, fov, seeDistance, speed);
         setSize(8,8);
         setOriginX(4);
         setOriginY(4);
         this.pheromoneIncrease = pheromoneIncrease;
-        this.pheromoneIncreaseWhenSeeingFoodOrFoodPheromone = pheromoneIncreaseWhenSeeingFoodOrFoodPheromone;
+        this.pheromoneIncreaseWhenSeeingFood = pheromoneIncreaseWhenSeeingFood;
+        this.pheromoneIncreaseWhenSeeingFoodPheromone = pheromoneIncreaseWhenSeeingFoodPheromone;
         //super(new Texture("ant.png"), 30, 150);
         prepareStates();
     }
@@ -31,13 +33,13 @@ public abstract class SimplisticAnt extends Agent {
         Vector2 pos = getPosition();
 
         if ( areThereCellsWithFood() ) {
-            foodPheromone.increasePheromoneAt(pos.x, pos.y, pheromoneIncreaseWhenSeeingFoodOrFoodPheromone);
+            foodPheromone.increasePheromoneAt(pos.x, pos.y, pheromoneIncreaseWhenSeeingFood);
         } else if ( areThereCellsWithPheromone("FoodPheromone") ) {
-            foodPheromone.increasePheromoneAt(pos.x, pos.y, pheromoneIncreaseWhenSeeingFoodOrFoodPheromone/2);
+            foodPheromone.increasePheromoneAt(pos.x, pos.y, pheromoneIncreaseWhenSeeingFoodPheromone);
         }
 
         testLayer.increasePheromoneAt(pos.x, pos.y, pheromoneIncrease);
-        //testLayer.increasePheromoneAt(pos.x, pos.y, areThereCellsWithFood() ? pheromoneIncreaseWhenSeeingFoodOrFoodPheromone : pheromoneIncrease);
+        //testLayer.increasePheromoneAt(pos.x, pos.y, areThereCellsWithFood() ? pheromoneIncreaseWhenSeeingFood : pheromoneIncrease);
     }
 
     @Override

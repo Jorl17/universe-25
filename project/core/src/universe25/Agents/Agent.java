@@ -34,14 +34,16 @@ public abstract class Agent extends MovableImage implements Disposable {
     private FieldOfView fieldOfView;
     private ArrayList<int[]> tmpCellsInFov;
     final boolean debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing;
+    private boolean shouldDisposeTexture;
 
-    protected Agent(Texture texture, float fov, float seeDistance, float speed) {
-        this(texture, fov, seeDistance, speed, false, false, false, false);
+    protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed) {
+        this(texture, shouldDisposeTexture, fov, seeDistance, speed, false, false, false, false);
     }
 
-    protected Agent(Texture texture, float fov, float seeDistance, float speed, boolean debugDrawFov, boolean debugDrawCellsUnderFov, boolean debugDrawGoals, boolean debugDrawfacing) {
+    protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed, boolean debugDrawFov, boolean debugDrawCellsUnderFov, boolean debugDrawGoals, boolean debugDrawfacing) {
         super(texture, speed);
         this.texture = texture;
+        this.shouldDisposeTexture = shouldDisposeTexture;
         this.debugDrawFov = debugDrawFov;
         this.debugDrawCellsUnderFov = debugDrawCellsUnderFov;
         this.debugDrawGoals = debugDrawGoals;
@@ -113,7 +115,8 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     @Override
     public void dispose() {
-        texture.dispose();
+        if (shouldDisposeTexture)
+            texture.dispose();
     }
 
     public void addCollisionWithWorld(int collision) {
