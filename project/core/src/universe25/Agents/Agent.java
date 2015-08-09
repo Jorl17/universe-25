@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.States.StateManager;
-import universe25.Agents.Worlds.FloatLayer;
+import universe25.Agents.Worlds.GridLayers.FloatLayer;
 import universe25.Agents.Worlds.World;
 import universe25.GameLogic.Movement.MovableImage;
 import universe25.GameLogic.Movement.WeightedGoal;

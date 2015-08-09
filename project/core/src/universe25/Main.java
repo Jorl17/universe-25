@@ -8,12 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import universe25.Agents.Agent;
-import universe25.Agents.PheromoneFollowingAnt;
-import universe25.Agents.ScouterAnt;
+import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
+import universe25.Agents.SimplisticAnt.ScouterAnt;
 import universe25.Agents.Worlds.World;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.WeightedGoal;
-import universe25.Agents.SimplisticAnt;
 
 public class Main extends ApplicationAdapter {
     private World stage;
@@ -80,7 +79,7 @@ public class Main extends ApplicationAdapter {
         simplisticAnt.setPosition(250, 250);
         simplisticAnt.setRotation(90);
         //stage.addActor(simplisticAnt);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             PheromoneFollowingAnt ant = new PheromoneFollowingAnt();
             ant.setPosition(stage.randomPosition());
             stage.addActor(ant);

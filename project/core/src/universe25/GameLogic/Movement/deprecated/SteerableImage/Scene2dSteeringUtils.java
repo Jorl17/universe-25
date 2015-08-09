@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 
-package universe25.GameLogic.Movement.SteerableImage;
+package universe25.GameLogic.Movement.deprecated.SteerableImage;
 
 import com.badlogic.gdx.math.Vector2;
 

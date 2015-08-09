@@ -1,4 +1,4 @@
-package universe25.Agents.Worlds;
+package universe25.Agents.Worlds.GridLayers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -43,6 +43,11 @@ public class FloatLayer extends GridMapLayer<Float> {
 
     public void decreaseValueAtCell(int col, int row, float amnt) {
         float newVal = Float.max(getValueAtCell(col,row) - amnt, 0);
+        setValueAtCell(col,row,newVal);
+    }
+
+    public void increaseValueAtCell(int col, int row, float amnt) {
+        float newVal = Float.min(getValueAtCell(col, row) + amnt, floatMax);
         setValueAtCell(col,row,newVal);
     }
 

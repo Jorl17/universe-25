@@ -1,11 +1,10 @@
-package universe25.Agents;
+package universe25.Agents.SimplisticAnt;
 
-import com.badlogic.gdx.math.Vector2;
-import universe25.Agents.States.GoToFood;
-import universe25.Agents.States.GoToPheromone;
+import universe25.Agents.States.SimplisticAntStates.GoToFood;
+import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
 import universe25.Agents.States.PriorityAggregatorState;
 import universe25.Agents.States.Wander;
-import universe25.Agents.Worlds.FloatLayer;
+import universe25.Agents.Worlds.GridLayers.FloatLayer;
 
 /**
  * Created by jorl17 on 08/08/15.

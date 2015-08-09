@@ -1,8 +1,10 @@
-package universe25.Agents;
+package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import universe25.Agents.Worlds.TestPheromoneMapLayer;
+import universe25.Agents.Agent;
+import universe25.Agents.ValuePositionPair;
+import universe25.Agents.Worlds.GridLayers.TestPheromoneMapLayer;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package universe25.GameLogic.Movement.SteerableImage;
+package universe25.GameLogic.Movement.deprecated.SteerableImage;
 
 /**
  * Created by jorl17 on 07/08/15.

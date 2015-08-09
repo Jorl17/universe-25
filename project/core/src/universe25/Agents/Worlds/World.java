@@ -9,6 +9,9 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
+import universe25.Agents.Worlds.GridLayers.GridMapLayer;
+import universe25.Agents.Worlds.GridLayers.TestFoodLayer;
+import universe25.Agents.Worlds.GridLayers.TestPheromoneMapLayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,6 +73,8 @@ public class World extends Stage {
         ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.5f);*/
         ((TestPheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).evaporate(0.2f);
         ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.05f);
+        ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).spread(0.002f, 0.1f);
+        ((TestPheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).spread(0.002f, 0.1f);
         super.act(deltaTime);
     }
 

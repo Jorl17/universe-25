@@ -1,7 +1,7 @@
-package universe25.Agents.States;
+package universe25.Agents.States.SimplisticAntStates;
 
-import universe25.Agents.Agent;
-import universe25.Agents.SimplisticAnt;
+import universe25.Agents.SimplisticAnt.SimplisticAnt;
+import universe25.Agents.States.GoToCell;
 import universe25.Agents.ValuePositionPair;
 
 import java.util.ArrayList;

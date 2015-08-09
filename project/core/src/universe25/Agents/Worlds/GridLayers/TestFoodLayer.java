@@ -1,4 +1,4 @@
-package universe25.Agents.Worlds;
+package universe25.Agents.Worlds.GridLayers;
 
 import com.badlogic.gdx.graphics.Color;
 
