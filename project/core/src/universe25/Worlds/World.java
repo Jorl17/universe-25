@@ -1,5 +1,6 @@
 package universe25.Worlds;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,8 +10,9 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
-import universe25.Agents.Pheromone.Pheromone;
+import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.SpeciesAgent;
+import universe25.GameLogic.Time.Ticks;
 import universe25.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Worlds.GridLayers.GridMapLayer;
 import universe25.Worlds.GridLayers.TestFoodLayer;
@@ -71,6 +73,8 @@ public class World extends Stage {
 
     @Override
     public void act(float deltaTime) {
+        Ticks.increaseTicks();
+        System.out.println(Gdx.graphics.getFramesPerSecond());
         checkCollisions();
 
         for (Pheromone p: getPheromones())

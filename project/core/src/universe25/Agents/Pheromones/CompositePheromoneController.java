@@ -1,4 +1,4 @@
-package universe25.Agents.Pheromone;
+package universe25.Agents.Pheromones;
 
 import java.util.ArrayList;
 import java.util.Collections;

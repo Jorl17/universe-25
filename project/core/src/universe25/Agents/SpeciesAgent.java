@@ -1,7 +1,7 @@
 package universe25.Agents;
 
 import com.badlogic.gdx.graphics.Texture;
-import universe25.Agents.Pheromone.Pheromone;
+import universe25.Agents.Pheromones.Pheromone;
 
 import java.util.ArrayList;
 

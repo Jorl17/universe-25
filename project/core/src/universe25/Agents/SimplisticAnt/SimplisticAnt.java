@@ -2,7 +2,7 @@ package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import universe25.Agents.Pheromone.*;
+import universe25.Agents.Pheromones.*;
 import universe25.Agents.SpeciesAgent;
 import universe25.Agents.ValuePositionPair;
 
@@ -34,23 +34,19 @@ public abstract class SimplisticAnt extends SpeciesAgent {
                                     (agent) -> ((SimplisticAnt)agent).areThereCellsWithFood()),
                                     new ConditionalIncreasePheromoneController(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFoodPheromone,
                                     (agent) -> ((SimplisticAnt)agent).areThereCellsWithPheromone(foodPheromone))
-                            );
+                                );
 
         pathPheronomeController = new IncreasePheromoneController(this, pathPheronome, pathPheronomeIncrease);
-        //super(new Texture("ant.png"), 30, 150);
+
         prepareStates();
     }
 
     protected abstract void prepareStates();
 
-    private void increasePheromone() {
-        foodPheromoneController.update();
-        pathPheronomeController.update();
-    }
-
     @Override
     public void update() {
-        increasePheromone();
+        foodPheromoneController.update();
+        pathPheronomeController.update();
     }
 
     public boolean areThereCellsWithPheromone(Pheromone pheromoneType) {

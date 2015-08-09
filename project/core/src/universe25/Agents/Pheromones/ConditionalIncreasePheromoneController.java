@@ -1,4 +1,4 @@
-package universe25.Agents.Pheromone;
+package universe25.Agents.Pheromones;
 
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;

@@ -1,7 +1,4 @@
-package universe25.Agents.Pheromone;
-
-import java.util.ArrayList;
-import java.util.Collections;
+package universe25.Agents.Pheromones;
 
 /**
  * Created by jorl17 on 09/08/15.

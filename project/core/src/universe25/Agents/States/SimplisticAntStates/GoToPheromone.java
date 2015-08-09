@@ -1,6 +1,6 @@
 package universe25.Agents.States.SimplisticAntStates;
 
-import universe25.Agents.Pheromone.Pheromone;
+import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.States.GoToCell;
 import universe25.Agents.ValuePositionPair;

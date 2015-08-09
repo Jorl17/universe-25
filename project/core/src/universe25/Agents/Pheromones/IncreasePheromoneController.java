@@ -1,9 +1,7 @@
-package universe25.Agents.Pheromone;
+package universe25.Agents.Pheromones;
 
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
-
-import java.util.function.Function;
 
 /**
  * Created by jorl17 on 09/08/15.

@@ -1,4 +1,4 @@
-package universe25.Agents.Pheromone;
+package universe25.Agents.Pheromones;
 
 import com.badlogic.gdx.graphics.Color;
 import universe25.Worlds.GridLayers.PheromoneMapLayer;
