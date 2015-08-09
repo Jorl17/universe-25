@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
+import universe25.Agents.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Agents.Worlds.GridLayers.GridMapLayer;
 import universe25.Agents.Worlds.GridLayers.TestFoodLayer;
 import universe25.Agents.Worlds.GridLayers.PheromoneMapLayer;
@@ -38,19 +39,21 @@ public class World extends Stage {
 
     private void createGridLayers() {
         this.gridLayers = new HashMap<>();
-        PheromoneMapLayer layer = new PheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "PathPheromoneLayer", 500, Color.YELLOW);
+        BaseEmptyLayer baseLayer = new BaseEmptyLayer(getWidth(), getHeight(), TILE_SIZE, "BaseLayer");
+        PheromoneMapLayer pathPheromoneLayer = new PheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "PathPheromoneLayer", 500, Color.YELLOW);
         PheromoneMapLayer foodPheromoneLayer = new PheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "FoodPheromoneLayer", 500, Color.CYAN);
         TestFoodLayer foodLayer = new TestFoodLayer(getWidth(), getHeight(), TILE_SIZE, "FoodLayer", 100);
 
-        addGridLayer(layer);
+        addGridLayer(baseLayer);
+        addGridLayer(pathPheromoneLayer);
         addGridLayer(foodPheromoneLayer);
         addGridLayer(foodLayer);
         //for (int i = 0; i < 10; i++)
-        //    layer.increasePheromoneAt((float)Math.random()*getWidth(),(float)Math.random()*getHeight(),(float)Math.random()*50+50);
-        /*layer.increasePheromoneAt(150,150,100);
-        layer.increasePheromoneAt(300,5,100);
-        layer.increasePheromoneAt(5,300,100);*/
-        //layer.increasePheromoneAt(5,300,100);
+        //    pathPheromoneLayer.increasePheromoneAt((float)Math.random()*getWidth(),(float)Math.random()*getHeight(),(float)Math.random()*50+50);
+        /*pathPheromoneLayer.increasePheromoneAt(150,150,100);
+        pathPheromoneLayer.increasePheromoneAt(300,5,100);
+        pathPheromoneLayer.increasePheromoneAt(5,300,100);*/
+        //pathPheromoneLayer.increasePheromoneAt(5,300,100);
         /*foodLayer.putFoodAt(250, 250, 100);
 
         foodLayer.putFoodAt(450, 150, 100);
@@ -133,6 +136,10 @@ public class World extends Stage {
 
     public Map<String, GridMapLayer> getGridLayers() {
         return gridLayers;
+    }
+
+    public BaseEmptyLayer getBaseLayer() {
+        return (BaseEmptyLayer) gridLayers.get("BaseLayer");
     }
 
     public Vector2 randomPosition() {

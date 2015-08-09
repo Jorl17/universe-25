@@ -28,7 +28,7 @@ public abstract class GoToCell<T extends Agent> extends StateWithPriority<T> {
     public String update() {
         cellsWithValues = getCenterOfCellsInFieldOfViewWithValues();//agent.getCenterOfCellsInFieldOfViewWithPheromone();
         ArrayList<WeightedGoal> goals = new ArrayList<>();
-        //TestPheromoneMapLayer pheromones = (TestPheromoneMapLayer) agent.getWorld().getGridLayers().get("TestLayer");
+
         for ( ValuePositionPair<Float> cell : cellsWithValues)
             goals.add(WeightedGoal.fromFloatValuePositionPair(cell));
 

@@ -75,12 +75,15 @@ public class GridMapLayer<T> extends Actor {
         T[][] ret = (T[][]) Array.newInstance(cls, nRows, nCols);
         for (int i = 0; i < nRows; i++)
             for (int j = 0; j < nCols; j++)
+                //FIXME: So hacky...
                 try {
                     ret[i][j] = cls.newInstance();
                 } catch (InstantiationException e) {
-                    //e.printStackTrace();
-                    //FIXME: So hacky...
-                    ret[i][j] = (T) new Float(0);
+                    try {
+                        ret[i][j] = (T) new Float(0);
+                    } catch (Exception e2) {
+                        ret[i][j] = (T) new Integer(0);
+                    }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }

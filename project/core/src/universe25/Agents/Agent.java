@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.States.StateManager;
+import universe25.Agents.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Agents.Worlds.GridLayers.FloatLayer;
 import universe25.Agents.Worlds.World;
 import universe25.GameLogic.Movement.MovableImage;
@@ -82,7 +83,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     public abstract void update();
 
     private void updateCellsInFov() {
-        FloatLayer firstFloatLayer = (FloatLayer)getWorld().getGridLayers().get("PathPheromoneLayer");
+        BaseEmptyLayer firstFloatLayer = getWorld().getBaseLayer();
         tmpCellsInFov = firstFloatLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
         Vector2 pos = getPosition();
         for (int i = 0; i < tmpCellsInFov.size(); i++) {
@@ -201,7 +202,7 @@ public abstract class Agent extends MovableImage implements Disposable {
             Color c = new Color(0.3f,0.3f,0.3f,0.5f);
             for (int[] cell : tmpCellsInFov)
                 // cell[1] has col, cell[0] has row
-                getWorld().getGridLayers().get("TestPheromoneLayer").drawCell(batch, cell[1], cell[0], c);
+                getWorld().getBaseLayer().drawCell(batch, cell[1], cell[0], c);
         }
 
         batch.begin();
