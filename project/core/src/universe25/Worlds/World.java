@@ -74,7 +74,7 @@ public class World extends Stage {
     @Override
     public void act(float deltaTime) {
         Ticks.increaseTicks();
-        System.out.println(Gdx.graphics.getFramesPerSecond());
+
         checkCollisions();
 
         for (Pheromone p: getPheromones())
