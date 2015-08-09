@@ -1,4 +1,4 @@
-package universe25.SteerableImage;
+package universe25.GameLogic.Movement.SteerableImage;
 
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
