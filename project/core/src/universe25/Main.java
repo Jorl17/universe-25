@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import universe25.Agents.Agent;
 import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
 import universe25.Agents.SimplisticAnt.ScouterAnt;
-import universe25.Agents.Worlds.World;
+import universe25.Worlds.World;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.WeightedGoal;
 

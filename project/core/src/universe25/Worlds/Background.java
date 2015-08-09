@@ -1,4 +1,4 @@
-package universe25.Agents.Worlds;
+package universe25.Worlds;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;

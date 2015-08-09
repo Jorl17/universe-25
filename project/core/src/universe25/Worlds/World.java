@@ -1,4 +1,4 @@
-package universe25.Agents.Worlds;
+package universe25.Worlds;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
@@ -9,10 +9,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
-import universe25.Agents.Worlds.GridLayers.BaseEmptyLayer;
-import universe25.Agents.Worlds.GridLayers.GridMapLayer;
-import universe25.Agents.Worlds.GridLayers.TestFoodLayer;
-import universe25.Agents.Worlds.GridLayers.PheromoneMapLayer;
+import universe25.Worlds.GridLayers.BaseEmptyLayer;
+import universe25.Worlds.GridLayers.GridMapLayer;
+import universe25.Worlds.GridLayers.TestFoodLayer;
+import universe25.Worlds.GridLayers.PheromoneMapLayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,8 +77,8 @@ public class World extends Stage {
         ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.5f);*/
         ((PheromoneMapLayer)this.gridLayers.get("PathPheromoneLayer")).evaporate(0.2f);
         ((PheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.05f);
-        ((PheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).spread(0.002f, 0.1f);
-        ((PheromoneMapLayer)this.gridLayers.get("PathPheromoneLayer")).spread(0.002f, 0.1f);
+        //((PheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).spread(0.002f, 0.1f);
+        //((PheromoneMapLayer)this.gridLayers.get("PathPheromoneLayer")).spread(0.002f, 0.1f);
         super.act(deltaTime);
     }
 

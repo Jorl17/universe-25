@@ -3,20 +3,21 @@ package universe25.Agents.SimplisticAnt;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
+import universe25.Agents.SpeciesAgent;
 import universe25.Agents.ValuePositionPair;
-import universe25.Agents.Worlds.GridLayers.PheromoneMapLayer;
+import universe25.Worlds.GridLayers.PheromoneMapLayer;
 
 import java.util.ArrayList;
 
 /**
  * Created by jorl17 on 06/08/15.
  */
-public abstract class SimplisticAnt extends Agent {
+public abstract class SimplisticAnt extends SpeciesAgent {
     private float pheromoneIncrease, pheromoneIncreaseWhenSeeingFood;
     private float pheromoneIncreaseWhenSeeingFoodPheromone;
     private static final Texture texture = new Texture("ant.png");
     protected SimplisticAnt(float fov, float seeDistance, float speed, float pheromoneIncrease, float pheromoneIncreaseWhenSeeingFood, float pheromoneIncreaseWhenSeeingFoodPheromone) {
-        super(texture, false, fov, seeDistance, speed);
+        super(texture, false, fov, seeDistance, speed, "SimplisticAnt");
         setSize(8,8);
         setOriginX(4);
         setOriginY(4);

@@ -4,7 +4,7 @@ import universe25.Agents.States.SimplisticAntStates.GoToFood;
 import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
 import universe25.Agents.States.PriorityAggregatorState;
 import universe25.Agents.States.Wander;
-import universe25.Agents.Worlds.GridLayers.FloatLayer;
+import universe25.Worlds.GridLayers.FloatLayer;
 
 /**
  * Created by jorl17 on 08/08/15.
