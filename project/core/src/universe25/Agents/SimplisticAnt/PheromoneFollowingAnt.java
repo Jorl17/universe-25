@@ -27,7 +27,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         priorityAggregatorStates.addState(new GoToPheromone(this, 16, foodPheromone));
         priorityAggregatorStates.addState(new Wander<>(this, 100, 80, 0.05f, 17));
         priorityAggregatorStates.addState(new TickBasedPriorityStateActivator<>(this, "RampageForFood", 19,
-                new ParallelPriorityStates(this, "RampageAndChangeColor",
+                new ParallelPriorityStates<>(this, "RampageAndChangeColor",
                         new Wander<>(this, 100, 80, 0.00f/*Does not matter*/, -1/*Does not matter*/),
                         new ChangeColorState<>(this, Color.CYAN)),
                 PheromoneFollowingAnt.this::areThereCellsWithFood, new GaussianLongProducer(3000L, 500L), new GaussianLongProducer(1000L, 300L), true));
