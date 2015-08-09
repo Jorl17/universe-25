@@ -69,7 +69,6 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
     public void leaveState() {
         if ( currentlyActive || shouldLeave ) {
             state.leaveState();
-            agent.setColor(1,1,1,1);
         }
     }
 
@@ -77,7 +76,6 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
     public void enterState() {
         if ( currentlyActive ) {
             state.enterState();
-            agent.setColor(Color.CYAN);
         }
     }
 

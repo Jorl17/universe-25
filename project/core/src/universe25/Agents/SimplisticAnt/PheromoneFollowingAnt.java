@@ -1,10 +1,11 @@
 package universe25.Agents.SimplisticAnt;
 
+import com.badlogic.gdx.graphics.Color;
+import universe25.Agents.States.*;
 import universe25.Agents.States.SimplisticAntStates.GoToFood;
 import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
-import universe25.Agents.States.PriorityAggregatorState;
-import universe25.Agents.States.TickBasedPriorityStateActivator;
-import universe25.Agents.States.Wander;
+import universe25.GameLogic.NumberProducers.GaussianLongProducer;
+import universe25.GameLogic.NumberProducers.UniformLongProducer;
 import universe25.Worlds.GridLayers.FloatLayer;
 
 import java.util.function.BooleanSupplier;
@@ -26,8 +27,10 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         priorityAggregatorStates.addState(new GoToPheromone(this, 16, foodPheromone));
         priorityAggregatorStates.addState(new Wander<>(this, 100, 80, 0.05f, 17));
         priorityAggregatorStates.addState(new TickBasedPriorityStateActivator<>(this, "RampageForFood", 19,
-                new Wander<>(this, 100, 80, 0.00f/*Does not matter*/, -1/*Does not matter*/),
-                PheromoneFollowingAnt.this::areThereCellsWithFood, () -> 1000L, () -> 300L, true));
+                new ParallelPriorityStates(this, "RampageAndChangeColor",
+                        new Wander<>(this, 100, 80, 0.00f/*Does not matter*/, -1/*Does not matter*/),
+                        new ChangeColorState<>(this, Color.CYAN)),
+                PheromoneFollowingAnt.this::areThereCellsWithFood, new GaussianLongProducer(3000L, 500L), new GaussianLongProducer(1000L, 300L), true));
         priorityAggregatorStates.addState(new GoToFood(this, 20));
         states.addState(priorityAggregatorStates);
     }
