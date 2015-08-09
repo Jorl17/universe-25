@@ -24,6 +24,11 @@ public class Wander<T extends Agent> extends StateWithPriority<T> {
         this.maxWanderPriority = maxWanderPriority;
     }
 
+    // By default, it wanders permantently (with zero probability)
+    public Wander(T agent, long directionChangeIntervalMs, float maxAllowedDegreeChange) {
+        this(agent,directionChangeIntervalMs,maxAllowedDegreeChange,0.0f,-1);
+    }
+
     private void randomTarget() {
         Vector2 dir = agent.getFacingDirection();
         //cSystem.out.println("rnd");
