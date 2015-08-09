@@ -17,6 +17,6 @@ public class UniformLongProducer implements NumberProducer<Long> {
     @Override
     public Long produce() {
         //FIXME This sounds so ugly
-        return ((long)(random.nextDouble()*(intervalHexclusive-intervalLinclusive)));
+        return (long) (random.nextDouble() * (intervalHexclusive - intervalLinclusive)) + intervalLinclusive;
     }
 }
