@@ -2,11 +2,14 @@ package universe25.Agents;
 
 import com.badlogic.gdx.graphics.Texture;
 
+import java.util.ArrayList;
+
 /**
  * Created by jorl17 on 09/08/15.
  */
 public abstract class SpeciesAgent extends Agent {
     private static String species;
+    private static ArrayList<Pheromone> pheromones = new ArrayList<>();
     protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed, String species) {
         super(texture, shouldDisposeTexture, fov, seeDistance, speed);
         SpeciesAgent.species = species;
@@ -20,4 +23,13 @@ public abstract class SpeciesAgent extends Agent {
     public static String getSpecies() {
         return species;
     }
+
+    public static ArrayList<Pheromone> getPheromones() {
+        return pheromones;
+    }
+
+    protected static void addSpeciesPheromone(Pheromone p) {
+        pheromones.add(p);
+    }
+
 }

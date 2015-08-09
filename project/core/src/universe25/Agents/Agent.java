@@ -141,31 +141,38 @@ public abstract class Agent extends MovableImage implements Disposable {
     }
 
 
-    protected boolean areThereCellsWithValueAtFloatLayer(String layerName) {
-        FloatLayer testLayer = (FloatLayer) getWorld().getGridLayers().get(layerName);
+    protected boolean areThereCellsWithValueAtFloatLayer(FloatLayer layer) {
         if ( tmpCellsInFov != null ) {
             for ( int[] cell : tmpCellsInFov) {
                 int row = cell[0], col = cell[1];
-                ValuePositionPair<Float> cellCentreAndValue = testLayer.getCellCentreAndValue(col, row);
+                ValuePositionPair<Float> cellCentreAndValue = layer.getCellCentreAndValue(col, row);
                 if ( cellCentreAndValue.getValue() > 0 ) return true;
             }
         }
 
         return false;
     }
+    protected boolean areThereCellsWithValueAtFloatLayer(String layerName) {
+        return areThereCellsWithValueAtFloatLayer((FloatLayer) getWorld().getGridLayers().get(layerName));
 
-    protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(String layername) {
+    }
+
+    protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(FloatLayer layer) {
         ArrayList<ValuePositionPair<Float>> ret = new ArrayList<>();
-        FloatLayer testLayer = (FloatLayer) getWorld().getGridLayers().get(layername);
+
         if (tmpCellsInFov != null ) {
             for ( int[] cell : tmpCellsInFov) {
                 int row = cell[0], col = cell[1];
-                ValuePositionPair<Float> cellCentreAndValue = testLayer.getCellCentreAndValue(col, row);
+                ValuePositionPair<Float> cellCentreAndValue = layer.getCellCentreAndValue(col, row);
                 if ( cellCentreAndValue.getValue() > 0 ) ret.add(cellCentreAndValue);
             }
         }
 
         return ret;
+    }
+
+    protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(String layername) {
+        return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer((FloatLayer)getWorld().getGridLayers().get(layername));
     }
 
 

@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
+import universe25.Agents.Pheromone;
+import universe25.Agents.SpeciesAgent;
 import universe25.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Worlds.GridLayers.GridMapLayer;
 import universe25.Worlds.GridLayers.TestFoodLayer;
@@ -35,31 +37,20 @@ public class World extends Stage {
         this.worldBoundingBox = new BoundingBox(0,0,getWidth(), getHeight());
         Background background = new Background(Math.round (getHeight() / TILE_SIZE), Math.round(getWidth() / TILE_SIZE), TILE_SIZE);
         this.addActor(background);
-        createGridLayers();
+
+        createLayersAndAddPheromones();
     }
 
-    private void createGridLayers() {
+    private void createLayersAndAddPheromones() {
         this.gridLayers = new HashMap<>();
         BaseEmptyLayer baseLayer = new BaseEmptyLayer(getWidth(), getHeight(), TILE_SIZE, "BaseLayer");
-        PheromoneMapLayer pathPheromoneLayer = new PheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "PathPheromoneLayer", 500, Color.YELLOW);
-        PheromoneMapLayer foodPheromoneLayer = new PheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, "FoodPheromoneLayer", 500, Color.CYAN);
         TestFoodLayer foodLayer = new TestFoodLayer(getWidth(), getHeight(), TILE_SIZE, "FoodLayer", 100);
 
         addGridLayer(baseLayer);
-        addGridLayer(pathPheromoneLayer);
-        addGridLayer(foodPheromoneLayer);
+        addPheromones();
         addGridLayer(foodLayer);
-        //for (int i = 0; i < 10; i++)
-        //    pathPheromoneLayer.increasePheromoneAt((float)Math.random()*getWidth(),(float)Math.random()*getHeight(),(float)Math.random()*50+50);
-        /*pathPheromoneLayer.increasePheromoneAt(150,150,100);
-        pathPheromoneLayer.increasePheromoneAt(300,5,100);
-        pathPheromoneLayer.increasePheromoneAt(5,300,100);*/
-        //pathPheromoneLayer.increasePheromoneAt(5,300,100);
-        /*foodLayer.putFoodAt(250, 250, 100);
 
-        foodLayer.putFoodAt(450, 150, 100);
-        foodLayer.putFoodAt(350, 300, 100);*/
-        for (int i =0; i < 1 ; i++) {
+        for (int i =0; i < 2 ; i++) {
             Vector2 pos = randomPosition();
             foodLayer.putFoodAt(pos.x, pos.y, 100);
         }
@@ -70,15 +61,21 @@ public class World extends Stage {
         addActor(layer);
     }
 
+    public void addPheromones() {
+        ArrayList<Pheromone> pheromones = SpeciesAgent.getPheromones();
+        for ( Pheromone pheromone : pheromones ) {
+            System.out.println("World registering " + pheromone);
+            pheromone.registerWithWorld(this);
+        }
+    }
+
     @Override
     public void act(float deltaTime) {
         checkCollisions();
-        /*((TestPheromoneMapLayer)this.gridLayers.get("TestPheromoneLayer")).evaporate(0.8f);
-        ((TestPheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.5f);*/
-        ((PheromoneMapLayer)this.gridLayers.get("PathPheromoneLayer")).evaporate(0.2f);
-        ((PheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).evaporate(0.05f);
-        //((PheromoneMapLayer)this.gridLayers.get("FoodPheromoneLayer")).spread(0.002f, 0.1f);
-        //((PheromoneMapLayer)this.gridLayers.get("PathPheromoneLayer")).spread(0.002f, 0.1f);
+
+        for (Pheromone p: getPheromones())
+                p.evaporate();
+
         super.act(deltaTime);
     }
 
@@ -155,5 +152,18 @@ public class World extends Stage {
                 ret.add((Agent) a);
 
         return ret;
+    }
+
+    public void registerPheromoneLayer(String worldLayerName, float pheromoneLayerMax, Color color) {
+        PheromoneMapLayer layer = new PheromoneMapLayer(getWidth(), getHeight(), TILE_SIZE, worldLayerName, pheromoneLayerMax, color);
+        addGridLayer(layer);
+    }
+
+    public ArrayList<Pheromone> getPheromones() {
+        return SpeciesAgent.getPheromones();
+    }
+
+    public static float getTileSize() {
+        return TILE_SIZE;
     }
 }

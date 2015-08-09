@@ -19,8 +19,8 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
     protected void prepareStates() {
         PriorityAggregatorState priorityAggregatorStates = new PriorityAggregatorState(this, "prioritisedStates");
         priorityAggregatorStates.addState(new Wander<>(this, 100, 80, 0.2f, 15));
-        priorityAggregatorStates.addState(new GoToPheromone(this, 10, "PathPheromone"));
-        priorityAggregatorStates.addState(new GoToPheromone(this, 16, "FoodPheromone"));
+        priorityAggregatorStates.addState(new GoToPheromone(this, 10, pathPheronome));
+        priorityAggregatorStates.addState(new GoToPheromone(this, 16, foodPheromone));
         priorityAggregatorStates.addState(new Wander<>(this, 100, 80, 0.05f, 17));
         priorityAggregatorStates.addState(new GoToFood(this, 20));
         states.addState(priorityAggregatorStates);

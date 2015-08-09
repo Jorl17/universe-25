@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import universe25.Agents.Agent;
 import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
 import universe25.Agents.SimplisticAnt.ScouterAnt;
+import universe25.Agents.SimplisticAnt.SimplisticAnt;
+import universe25.Agents.SpeciesAgent;
 import universe25.Worlds.World;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.WeightedGoal;
@@ -19,6 +21,8 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create () {
+        SimplisticAnt.initializePheromones();
+
         stage = new World(new FitViewport(640, 480));
         Gdx.input.setInputProcessor(stage);
 
@@ -46,9 +50,9 @@ public class Main extends ApplicationAdapter {
                 } else if ( keycode == Input.Keys.R ) {
                     stage.getAllAgents().forEach(Agent::toggleDebugDrawGoals);
                 } else if ( keycode == Input.Keys.A ) {
-                    stage.getGridLayers().get("PathPheromoneLayer").toggleDrawLayer();
+                    SimplisticAnt.getPathPheronome().getWorldLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.S ) {
-                    stage.getGridLayers().get("FoodPheromoneLayer").toggleDrawLayer();
+                    SimplisticAnt.getFoodPheromone().getWorldLayer().toggleDrawLayer();
                 }
                 else if (keycode == Input.Keys.DOWN) {
                     Agent agent = (Agent) stage.getActors().get(2);
