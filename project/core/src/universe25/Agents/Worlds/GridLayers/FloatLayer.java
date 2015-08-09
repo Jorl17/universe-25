@@ -9,18 +9,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class FloatLayer extends GridMapLayer<Float> {
     private float floatMax;
-    private Color drawColor;
 
     public FloatLayer(float gridWidth, float gridHeight, float cellSize, String name, float floatMax, Color drawColor) {
-        super(Float.class, gridWidth, gridHeight, cellSize, name);
+        super(Float.class, gridWidth, gridHeight, cellSize, name, drawColor, false);
         this.floatMax = floatMax;
-        this.drawColor = drawColor;
     }
 
     public FloatLayer(float cellSize, int nRows, int nCols, String name, float floatMax, Color drawColor) {
-        super(Float.class, cellSize, nRows, nCols, name);
+        super(Float.class, cellSize, nRows, nCols, name, drawColor, false);
         this.floatMax = floatMax;
-        this.drawColor = drawColor;
     }
 
     protected float normalizeValue(float val) {
@@ -57,10 +54,10 @@ public class FloatLayer extends GridMapLayer<Float> {
         float valueAtCell = getValueAtCell(col, row);
         if ( valueAtCell > 0 ) {
             getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);
-            getShapeRenderer().setColor(drawColor);
+            getShapeRenderer().setColor(getDrawColor());
             getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
             getShapeRenderer().end();
-            Color cpy = drawColor.cpy();
+            Color cpy = getDrawColor().cpy();
 
             cpy.a = normalizeValue(valueAtCell);
             getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);

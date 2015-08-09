@@ -34,7 +34,7 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     private FieldOfView fieldOfView;
     private ArrayList<int[]> tmpCellsInFov;
-    final boolean debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing;
+    boolean debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing;
     private boolean shouldDisposeTexture;
 
     protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed) {
@@ -219,5 +219,37 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     public int getCollisionsWithWorld() {
         return collisionsWithWorld;
+    }
+
+    public void setDebugDrawFov(boolean debugDrawFov) {
+        this.debugDrawFov = debugDrawFov;
+    }
+
+    public void setDebugDrawCellsUnderFov(boolean debugDrawCellsUnderFov) {
+        this.debugDrawCellsUnderFov = debugDrawCellsUnderFov;
+    }
+
+    public void setDebugDrawGoals(boolean debugDrawGoals) {
+        this.debugDrawGoals = debugDrawGoals;
+    }
+
+    public void setDebugDrawfacing(boolean debugDrawfacing) {
+        this.debugDrawfacing = debugDrawfacing;
+    }
+
+    public void toggleDebugDrawFov() {
+        debugDrawFov = !debugDrawFov;
+    }
+
+    public void toggleDebugDrawCellsUnderFov() {
+        debugDrawCellsUnderFov = !debugDrawCellsUnderFov;
+    }
+
+    public void toggleDebugDrawGoals() {
+        debugDrawGoals = !debugDrawGoals;
+    }
+
+    public void toggleDebugDrawfacing() {
+        debugDrawfacing = !debugDrawfacing;
     }
 }

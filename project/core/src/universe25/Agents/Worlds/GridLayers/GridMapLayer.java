@@ -12,7 +12,6 @@ import universe25.Agents.ValuePositionPair;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by jorl17 on 07/08/15.
@@ -24,6 +23,8 @@ public class GridMapLayer<T> extends Actor {
     protected T[][] cells;
     private Class<? extends T> cls;
     private final String name;
+    private Color drawColor;
+    private boolean drawLayer;
 
     //FIXME: The first of these could probably be made static. They both probably could
     private ShapeRenderer shapeRenderer;
@@ -31,7 +32,7 @@ public class GridMapLayer<T> extends Actor {
 
     private Vector2[][] cellCentres;
 
-    public GridMapLayer(Class<? extends T> cls, float gridWidth, float gridHeight, float cellSize, String name) {
+    public GridMapLayer(Class<? extends T> cls, float gridWidth, float gridHeight, float cellSize, String name, Color drawColor, boolean drawLayer) {
         this.cls = cls;
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
@@ -39,6 +40,8 @@ public class GridMapLayer<T> extends Actor {
         nCols = Math.round(gridWidth / cellSize);
         nRows = Math.round(gridHeight / cellSize);
         this.name = name;
+        this.drawColor = drawColor;
+        this.drawLayer = drawLayer;
 
         shapeRenderer = new ShapeRenderer();
         projectionMatrixSet = false;
@@ -151,20 +154,22 @@ public class GridMapLayer<T> extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.end();
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        if(!projectionMatrixSet){
-            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-            projectionMatrixSet = true;
+        if ( drawLayer ) {
+            batch.end();
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            if (!projectionMatrixSet) {
+                shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+                projectionMatrixSet = true;
+            }
+
+            for (int i = 0; i < nRows; i++)
+                for (int j = 0; j < nCols; j++)
+                    drawCell(batch, j, i);
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+            batch.begin();
         }
-
-        for (int i = 0; i < nRows; i++)
-            for (int j = 0; j < nCols; j++)
-                drawCell(batch, j,i);
-
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-        batch.begin();
     }
 
     protected ShapeRenderer getShapeRenderer() {
@@ -231,5 +236,17 @@ public class GridMapLayer<T> extends Actor {
         for (int i = 0; i < nRows; i++)
             System.arraycopy(cells[i], 0, ret[i], 0, nCols);
         return ret;
+    }
+
+    public void setDrawLayer(boolean drawLayer) {
+        this.drawLayer = drawLayer;
+    }
+
+    public void toggleDrawLayer() {
+        drawLayer = !drawLayer;
+    }
+
+    protected Color getDrawColor() {
+        return drawColor;
     }
 }

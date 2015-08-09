@@ -16,9 +16,7 @@ import com.badlogic.gdx.utils.Scaling;
  */
 public class MovableImage extends Image {
     private final GoalMovement goalMovement;
-    private static final float DEFAULT_SPEED = 1.0f;
     private float speed;
-    private Vector2 facingDirection;
 
     public MovableImage(float speed) {
         super();
@@ -107,4 +105,7 @@ public class MovableImage extends Image {
         return new Vector2(1,0).rotate(rotation);
 
     }
+
+
+
 }

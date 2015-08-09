@@ -37,7 +37,20 @@ public class Main extends ApplicationAdapter {
 
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.DOWN) {
+                if ( keycode == Input.Keys.Q ) {
+                    stage.getAllAgents().forEach(Agent::toggleDebugDrawCellsUnderFov);
+                } else if ( keycode == Input.Keys.W ) {
+                    stage.getAllAgents().forEach(Agent::toggleDebugDrawfacing);
+                } else if ( keycode == Input.Keys.E ) {
+                    stage.getAllAgents().forEach(Agent::toggleDebugDrawFov);
+                } else if ( keycode == Input.Keys.R ) {
+                    stage.getAllAgents().forEach(Agent::toggleDebugDrawGoals);
+                } else if ( keycode == Input.Keys.A ) {
+                    stage.getGridLayers().get("PathPheromoneLayer").toggleDrawLayer();
+                } else if ( keycode == Input.Keys.S ) {
+                    stage.getGridLayers().get("FoodPheromoneLayer").toggleDrawLayer();
+                }
+                else if (keycode == Input.Keys.DOWN) {
                     Agent agent = (Agent) stage.getActors().get(2);
                     GoalMovement goalMovement = agent.getGoalMovement();
                     if (!goalMovement.hasGoals())
@@ -61,7 +74,7 @@ public class Main extends ApplicationAdapter {
                 } else if ( keycode == Input.Keys.UP ) {
                     Agent agent = (Agent) stage.getActors().get(2);
                     GoalMovement goalMovement = agent.getGoalMovement();
-                    goalMovement.setWeightedGoals(new WeightedGoal(new Vector2(250,250), 1.0f), new WeightedGoal(new Vector2(100,10), 0.5f));
+                    goalMovement.setWeightedGoals(new WeightedGoal(new Vector2(250, 250), 1.0f), new WeightedGoal(new Vector2(100, 10), 0.5f));
                 } else if ( keycode == Input.Keys.LEFT ) {
                     Agent agent = (Agent) stage.getActors().get(2);
                     agent.rotateBy(30);

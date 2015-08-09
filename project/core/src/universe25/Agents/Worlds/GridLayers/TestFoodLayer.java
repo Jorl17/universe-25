@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 public class TestFoodLayer extends FloatLayer {
     public TestFoodLayer(float gridWidth, float gridHeight, float cellSize, String name, float foodMax) {
         super(gridWidth, gridHeight, cellSize, name, foodMax, Color.RED);
+        setDrawLayer(true);
     }
 
     public TestFoodLayer(float cellSize, int nRows, int nCols, String name, float foodMax) {

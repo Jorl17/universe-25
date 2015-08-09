@@ -57,7 +57,7 @@ public class PheromoneMapLayer extends FloatLayer {
 
     @Override
     protected void drawCell(Batch batch, int col, int row) {
-        //super.drawCell(batch, col, row);
+        super.drawCell(batch, col, row);
     }
     /*
         float valueAtCell = getValueAtCell(col, row);

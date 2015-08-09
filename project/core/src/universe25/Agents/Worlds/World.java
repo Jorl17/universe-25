@@ -14,6 +14,7 @@ import universe25.Agents.Worlds.GridLayers.GridMapLayer;
 import universe25.Agents.Worlds.GridLayers.TestFoodLayer;
 import universe25.Agents.Worlds.GridLayers.PheromoneMapLayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -144,5 +145,15 @@ public class World extends Stage {
 
     public Vector2 randomPosition() {
         return new Vector2((float)Math.random()*getWidth(), (float)Math.random()*getHeight());
+    }
+
+    public ArrayList<Agent> getAllAgents() {
+        Array<Actor> actors = getActors();
+        ArrayList<Agent> ret = new ArrayList<>();
+        for ( Actor a : actors )
+            if ( a instanceof Agent )
+                ret.add((Agent) a);
+
+        return ret;
     }
 }
