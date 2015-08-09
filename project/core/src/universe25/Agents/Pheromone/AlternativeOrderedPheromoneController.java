@@ -6,16 +6,17 @@ import java.util.Collections;
 /**
  * Created by jorl17 on 09/08/15.
  */
-public class AlternativeOrderedPheromoneController implements PheromoneController {
-    ArrayList<PheromoneController> controllers;
+public class AlternativeOrderedPheromoneController extends CompositePheromoneController {
+    public AlternativeOrderedPheromoneController() {
+        super();
+    }
     public AlternativeOrderedPheromoneController(PheromoneController... controllers) {
-        this.controllers = new ArrayList<>();
-        Collections.addAll(this.controllers, controllers);
+        super(controllers);
     }
 
     @Override
     public boolean update() {
-        for ( PheromoneController controller: this.controllers )
+        for ( PheromoneController controller: getControllers() )
             if ( controller.update() )
                 return true;
 
