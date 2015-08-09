@@ -159,9 +159,26 @@ public class GridMapLayer<T> extends Actor {
     }
 
     public ArrayList<int[]> getCellsWithinTriangle(Vector2[] triangle) {
+
+        // First get the "rectangular region" that contains this triangle
+        int p0Col = (int) (triangle[0].x / cellSize), p0Row = (int) (triangle[0].y / cellSize),
+            p1Col = (int) (triangle[1].x / cellSize), p1Row = (int) (triangle[1].y / cellSize),
+            p2Col = (int) (triangle[2].x / cellSize), p2Row = (int) (triangle[2].y / cellSize);
+        int minRow, minCol, maxRow, maxCol;
+        minCol = Integer.min(p0Col, Integer.min(p1Col, p2Col ));
+        maxCol = Integer.max(p0Col, Integer.max(p1Col, p2Col));
+        minRow = Integer.min(p0Row, Integer.min(p1Row, p2Row ));
+        maxRow = Integer.max(p0Row, Integer.max(p1Row, p2Row));
+
+        minRow = Integer.max(0, minRow);
+        minCol = Integer.max(0, minCol);
+        maxRow = Integer.min(nRows-1, maxRow);
+        maxCol = Integer.min(nCols-1, maxCol);
+
+        // Now search in those
         ArrayList<int[]> ret = new ArrayList<>();
-        for (int i = 0; i < cellCentres.length; i++)
-            for (int j = 0; j < cellCentres[0].length; j++)
+        for (int i = minRow; i <= maxRow; i++)
+            for (int j = minCol; j <= maxCol; j++)
                 if (Intersector.isPointInTriangle(cellCentres[i][j], triangle[0], triangle[1], triangle[2]))
                     ret.add(new int[] { i, j});
 
