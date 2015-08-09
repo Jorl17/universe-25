@@ -39,11 +39,11 @@ public abstract class GoToCell<T extends Agent> extends StateWithPriority<T> {
 
     @Override
     public void leaveState() {
-        System.out.println("Left " + getName());
+        //System.out.println("Left " + getName());
     }
 
     @Override
     public void enterState() {
-        System.out.println("Entered " + getName());
+        //System.out.println("Entered " + getName());
     }
 }

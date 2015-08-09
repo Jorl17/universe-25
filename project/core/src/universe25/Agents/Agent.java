@@ -11,13 +11,10 @@ import com.badlogic.gdx.utils.Disposable;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.States.StateManager;
 import universe25.Agents.Worlds.FloatLayer;
-import universe25.Agents.Worlds.GridMapLayer;
-import universe25.Agents.Worlds.TestPheromoneMapLayer;
 import universe25.Agents.Worlds.World;
 import universe25.GameLogic.Movement.MovableImage;
 import universe25.GameLogic.Movement.WeightedGoal;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +23,8 @@ import java.util.ArrayList;
 public abstract class Agent extends MovableImage implements Disposable {
     private final Texture texture;
     protected BoundingBox boundingBox;
-    protected boolean collidedWithWorld;
+    public static final int COLLIDED_TOP = 1, COLLIDED_LEFT = 2, COLLIDED_RIGHT = 4, COLLIDED_BOTTOM = 8;
+    protected int collisionsWithWorld;
     protected ArrayList<Agent> collidedAgents;
     protected StateManager states;
 
@@ -35,10 +33,19 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     private FieldOfView fieldOfView;
     private ArrayList<int[]> tmpCellsInFov;
+    final boolean debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing;
 
-    protected Agent(Texture texture, float fov, float seeDistance) {
-        super(texture);
+    protected Agent(Texture texture, float fov, float seeDistance, float speed) {
+        this(texture, fov, seeDistance, speed, false, false, false, false);
+    }
+
+    protected Agent(Texture texture, float fov, float seeDistance, float speed, boolean debugDrawFov, boolean debugDrawCellsUnderFov, boolean debugDrawGoals, boolean debugDrawfacing) {
+        super(texture, speed);
         this.texture = texture;
+        this.debugDrawFov = debugDrawFov;
+        this.debugDrawCellsUnderFov = debugDrawCellsUnderFov;
+        this.debugDrawGoals = debugDrawGoals;
+        this.debugDrawfacing = debugDrawfacing;
         setBounds(getX(), getY(), getWidth(), getHeight());
         setTouchable(Touchable.enabled);
         collidedAgents = new ArrayList<Agent>();
@@ -66,14 +73,14 @@ public abstract class Agent extends MovableImage implements Disposable {
     }
 
     private void cleanupCollisions() {
-        this.collidedWithWorld = false;
+        this.collisionsWithWorld = 0;
         clearCollisionsWithAgents();
     }
 
     public abstract void update();
 
     private void updateCellsInFov() {
-        FloatLayer firstFloatLayer = (FloatLayer)getWorld().getGridLayers().get("TestLayer");
+        FloatLayer firstFloatLayer = (FloatLayer)getWorld().getGridLayers().get("TestPheromoneLayer");
         tmpCellsInFov = firstFloatLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
         Vector2 pos = getPosition();
         for (int i = 0; i < tmpCellsInFov.size(); i++) {
@@ -88,9 +95,9 @@ public abstract class Agent extends MovableImage implements Disposable {
     @Override
     public void act(float delta) {
         super.act(delta);
-        states.update();
         fieldOfView.update();
         updateCellsInFov();
+        states.update();
 
         update();
         cleanupCollisions();
@@ -109,8 +116,8 @@ public abstract class Agent extends MovableImage implements Disposable {
         texture.dispose();
     }
 
-    public void setCollidedWithWorld(boolean collidedWithWorld) {
-        this.collidedWithWorld = collidedWithWorld;
+    public void addCollisionWithWorld(int collision) {
+        this.collisionsWithWorld |= collision;
     }
 
     public void addCollisionWithAgent(Agent o) {
@@ -162,34 +169,51 @@ public abstract class Agent extends MovableImage implements Disposable {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+
+
         batch.end();
         Vector2 facing = getFacingDirection().scl(50);
         Vector2 pos = getPosition();
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.BLUE);
-        shapeRenderer.line(pos.x, pos.y, pos.x + facing.x, pos.y + facing.y );
-        shapeRenderer.end();
 
-        ArrayList<WeightedGoal> goals = getGoalMovement().getGoals();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for ( WeightedGoal g : goals) {
-            shapeRenderer.setColor(Color.RED);
-            shapeRenderer.line(pos.x, pos.y, g.getGoal().x, g.getGoal().y );
+        if ( debugDrawfacing ) {
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLUE);
+            shapeRenderer.line(pos.x, pos.y, pos.x + facing.x, pos.y + facing.y);
+            shapeRenderer.end();
         }
-        shapeRenderer.end();
+
+        if ( debugDrawGoals ) {
+            ArrayList<WeightedGoal> goals = getGoalMovement().getGoals();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            for (WeightedGoal g : goals) {
+                shapeRenderer.setColor(Color.NAVY);
+                shapeRenderer.line(pos.x, pos.y, g.getGoal().x, g.getGoal().y);
+            }
+            shapeRenderer.end();
+        }
 
 
-        if ( tmpCellsInFov != null ) {
+        if ( debugDrawCellsUnderFov && tmpCellsInFov != null ) {
             Color c = new Color(0.3f,0.3f,0.3f,0.5f);
             for (int[] cell : tmpCellsInFov)
                 // cell[1] has col, cell[0] has row
-                getWorld().getGridLayers().get("TestLayer").drawCell(batch, cell[1], cell[0], c);
+                getWorld().getGridLayers().get("TestPheromoneLayer").drawCell(batch, cell[1], cell[0], c);
         }
 
         batch.begin();
-        fieldOfView.draw(batch);
+
+        if ( debugDrawFov )
+            fieldOfView.draw(batch);
+
 
     }
 
+    public void setPosition(Vector2 pos) {
+        setPosition(pos.x, pos.y);
+    }
+
+    public int getCollisionsWithWorld() {
+        return collisionsWithWorld;
+    }
 }

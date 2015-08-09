@@ -113,4 +113,9 @@ public class PriorityAggregatorState extends State {
     public void enterState() {
         enterHighestPriorityState();
     }
+
+    public String getCurrentStateName() {
+        if ( currentState == -1 ) return null;
+        return subStates.get(currentState).getName();
+    }
 }

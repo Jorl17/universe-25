@@ -93,6 +93,10 @@ public class GridMapLayer<T> extends Actor {
         return cells[(int) (y / cellSize)][(int) (x / cellSize)];
     }
 
+    public T getValueAt(Vector2 pos) {
+        return getValueAt(pos.x,pos.y);
+    }
+
     public T getValueAtCell(int col, int row) {
         if ( col < 0 || col > nCols ) return null;
         if ( row < 0 || row > nRows ) return null;

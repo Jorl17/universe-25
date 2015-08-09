@@ -2,7 +2,7 @@ package universe25.Agents;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import universe25.Agents.States.*;
+import universe25.Agents.Worlds.FloatLayer;
 import universe25.Agents.Worlds.TestPheromoneMapLayer;
 
 import java.util.ArrayList;
@@ -10,21 +10,34 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 06/08/15.
  */
-public class SimplisticAnt extends Agent {
-    public SimplisticAnt() {
-        super(new Texture("ant.png"), 90, 150);
+public abstract class SimplisticAnt extends Agent {
+    private float pheromoneIncrease, pheromoneIncreaseWhenSeeingFoodOrFoodPheromone;
+    protected SimplisticAnt(float fov, float seeDistance, float speed, float pheromoneIncrease, float pheromoneIncreaseWhenSeeingFoodOrFoodPheromone) {
+        super(new Texture("ant.png"), fov, seeDistance, speed);
+        setSize(8,8);
+        setOriginX(4);
+        setOriginY(4);
+        this.pheromoneIncrease = pheromoneIncrease;
+        this.pheromoneIncreaseWhenSeeingFoodOrFoodPheromone = pheromoneIncreaseWhenSeeingFoodOrFoodPheromone;
         //super(new Texture("ant.png"), 30, 150);
-        PriorityAggregatorState priorityAggregatorStates = new PriorityAggregatorState(this, "prioritisedStates");
-        priorityAggregatorStates.addState(new Wander(this, 100, 80, 0.05f, 15));
-        priorityAggregatorStates.addState(new GoToPheromone(this, 10));
-        priorityAggregatorStates.addState(new GoToFood(this, 20));
-        states.addState(priorityAggregatorStates);
+        prepareStates();
     }
 
+    protected abstract void prepareStates();
+
     private void increasePheromone() {
-        TestPheromoneMapLayer testLayer = (TestPheromoneMapLayer) getWorld().getGridLayers().get("TestLayer");
+        TestPheromoneMapLayer testLayer = (TestPheromoneMapLayer) getWorld().getGridLayers().get("TestPheromoneLayer");
+        TestPheromoneMapLayer foodPheromone = (TestPheromoneMapLayer) getWorld().getGridLayers().get("FoodPheromoneLayer");
         Vector2 pos = getPosition();
-        testLayer.increasePheromoneAt(pos.x, pos.y, 1);
+
+        if ( areThereCellsWithFood() ) {
+            foodPheromone.increasePheromoneAt(pos.x, pos.y, pheromoneIncreaseWhenSeeingFoodOrFoodPheromone);
+        } else if ( areThereCellsWithPheromone("FoodPheromone") ) {
+            foodPheromone.increasePheromoneAt(pos.x, pos.y, pheromoneIncreaseWhenSeeingFoodOrFoodPheromone/2);
+        }
+
+        testLayer.increasePheromoneAt(pos.x, pos.y, pheromoneIncrease);
+        //testLayer.increasePheromoneAt(pos.x, pos.y, areThereCellsWithFood() ? pheromoneIncreaseWhenSeeingFoodOrFoodPheromone : pheromoneIncrease);
     }
 
     @Override
@@ -32,16 +45,16 @@ public class SimplisticAnt extends Agent {
         increasePheromone();
     }
 
-    public boolean areThereCellsWithPheromone() {
-        return areThereCellsWithValueAtFloatLayer("TestLayer");
+    public boolean areThereCellsWithPheromone(String pheromoneType) {
+        return areThereCellsWithValueAtFloatLayer(pheromoneType + "Layer");
     }
 
     public boolean areThereCellsWithFood() {
         return areThereCellsWithValueAtFloatLayer("FoodLayer");
     }
 
-    public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithPheromone() {
-        return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer("TestLayer");
+    public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithPheromone(String pheromoneType) {
+        return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(pheromoneType + "Layer");
     }
 
     public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithFood() {

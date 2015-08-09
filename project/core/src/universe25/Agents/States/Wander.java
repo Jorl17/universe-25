@@ -6,7 +6,7 @@ import universe25.Agents.Agent;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public class Wander extends StateWithPriority {
+public class Wander<T extends Agent> extends StateWithPriority<T> {
     private long directionChangeIntervalMs;
     private float maxAllowedDegreeChange;
     private long lastChangeTime;
@@ -14,7 +14,7 @@ public class Wander extends StateWithPriority {
     private int maxWanderPriority;
     private float dontWanderProb;
 
-    public Wander(Agent agent, long directionChangeIntervalMs, float maxAllowedDegreeChange, float dontWanderProb, int maxWanderPriority) {
+    public Wander(T agent, long directionChangeIntervalMs, float maxAllowedDegreeChange, float dontWanderProb, int maxWanderPriority) {
         super(agent, "Wander", 0);
         this.directionChangeIntervalMs = directionChangeIntervalMs;
         this.lastChangeTime = -1;
@@ -26,12 +26,31 @@ public class Wander extends StateWithPriority {
 
     private void randomTarget() {
         Vector2 dir = agent.getFacingDirection();
-        //System.out.println(dir);
+        //cSystem.out.println("rnd");
+
         float rotationAngle = (float) (Math.random()*maxAllowedDegreeChange - maxAllowedDegreeChange/2);
         dir.rotate(rotationAngle);
-        //System.out.println(rotationAngle);
-        //float worldDiagonalLen = new Vector2(agent.getWorld().getWidth(), agent.getWorld().getHeight()).len();
-        this.target.set(agent.getPosition().add(dir.scl(/*agent.getWidth()*2.5f*/500.0f)));
+
+        int collisionsWithWorld = agent.getCollisionsWithWorld();
+
+        //System.out.println(collisionsWithWorld);
+        if ((collisionsWithWorld & Agent.COLLIDED_TOP) == Agent.COLLIDED_TOP) {
+            dir.add(new Vector2(0,-1));
+            //System.out.println("Collided top!");
+        } else if ((collisionsWithWorld & Agent.COLLIDED_BOTTOM) == Agent.COLLIDED_BOTTOM) {
+            dir.add(new Vector2(0,1));
+            //System.out.println("Collided Bottom!");
+        }
+
+        if ((collisionsWithWorld & Agent.COLLIDED_LEFT) == Agent.COLLIDED_LEFT) {
+            dir.add(new Vector2(1,0));
+            //System.out.println("Collided Left!");
+        } else if ((collisionsWithWorld & Agent.COLLIDED_RIGHT) == Agent.COLLIDED_RIGHT) {
+            dir.add(new Vector2(-1,0));
+            //System.out.println("Collided Right!");
+        }
+
+        this.target.set(agent.getPosition().add(dir.scl(700.0f)));
     }
 
     @Override
@@ -47,13 +66,13 @@ public class Wander extends StateWithPriority {
 
     @Override
     public void leaveState() {
-        System.out.println("Left " + getName());
+        //System.out.println("Left " + getName());
         lastChangeTime = -1;
     }
 
     @Override
     public void enterState() {
-        System.out.println("Entered " + getName());
+        //System.out.println("Entered " + getName());
         lastChangeTime = -1;
         if ( agent.getGoalMovement() != null )
             agent.getGoalMovement().clearGoals();
@@ -61,7 +80,7 @@ public class Wander extends StateWithPriority {
 
     @Override
     public void updatePriority() {
-        setPriority(Math.random() > (1-dontWanderProb) ? maxWanderPriority : -1);
+        setPriority(Math.random() > (1-dontWanderProb) ? maxWanderPriority : 0);
 
     }
 }

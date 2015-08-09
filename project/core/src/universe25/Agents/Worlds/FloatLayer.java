@@ -49,17 +49,20 @@ public class FloatLayer extends GridMapLayer<Float> {
 
     @Override
     protected void drawCell(Batch batch, int col, int row) {
-        getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);
-        getShapeRenderer().setColor(drawColor);
-        getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
-        getShapeRenderer().end();
-        Color cpy = drawColor.cpy();
+        float valueAtCell = getValueAtCell(col, row);
+        if ( valueAtCell > 0 ) {
+            getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);
+            getShapeRenderer().setColor(drawColor);
+            getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
+            getShapeRenderer().end();
+            Color cpy = drawColor.cpy();
 
-        cpy.a = normalizeValue(getValueAtCell(col, row));
-        getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
-        getShapeRenderer().setColor(cpy);
-        getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
-        getShapeRenderer().end();
+            cpy.a = normalizeValue(valueAtCell);
+            getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
+            getShapeRenderer().setColor(cpy);
+            getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
+            getShapeRenderer().end();
+        }
     }
 
     public float getMaxValue() {

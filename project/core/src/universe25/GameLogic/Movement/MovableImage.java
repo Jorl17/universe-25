@@ -18,49 +18,56 @@ import universe25.SteerableImage.Scene2dSteeringUtils;
 public class MovableImage extends Image {
     private final GoalMovement goalMovement;
     private static final float DEFAULT_SPEED = 1.0f;
-    private float speed = DEFAULT_SPEED;
+    private float speed;
     private Vector2 facingDirection;
 
-    public MovableImage() {
+    public MovableImage(float speed) {
         super();
         setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
+        this.speed = speed;
     }
 
-    public MovableImage(NinePatch patch) {
+    public MovableImage(NinePatch patch, float speed) {
         super(patch);
         setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
+        this.speed = speed;
     }
 
-    public MovableImage(TextureRegion region) {
+    public MovableImage(TextureRegion region, float speed) {
         super(region);
         setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
+        this.speed = speed;
     }
 
-    public MovableImage(Texture texture) {
+    public MovableImage(Texture texture, float speed) {
         super(texture);
         setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
+        this.speed = speed;
     }
 
-    public MovableImage(Skin skin, String drawableName) {
+    public MovableImage(Skin skin, String drawableName, float speed) {
         super(skin, drawableName);
         setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
+        this.speed = speed;
     }
 
-    public MovableImage(Drawable drawable) {
+    public MovableImage(Drawable drawable, float speed) {
         super(drawable);
         setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
+        this.speed = speed;
     }
 
-    public MovableImage(Drawable drawable, Scaling scaling) {
+    public MovableImage(Drawable drawable, Scaling scaling, float speed) {
         super(drawable, scaling);
         setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
+        this.speed = speed;
     }
 
     public MovableImage(Drawable drawable, Scaling scaling, int align) {
@@ -76,9 +83,8 @@ public class MovableImage extends Image {
 
             moveBy(movementSpeedVector.x, movementSpeedVector.y);
 
-            //FIXME: This isn't right
             //setRotation((float) (MathUtils.radiansToDegrees * Math.atan(movementSpeedVector.y / movementSpeedVector.x)));
-            setRotation(MathUtils.radiansToDegrees*(float)Math.atan2(movementSpeedVector.y, movementSpeedVector.x));
+            setRotation(MathUtils.radiansToDegrees * (float) Math.atan2(movementSpeedVector.y, movementSpeedVector.x));
         }
     }
 

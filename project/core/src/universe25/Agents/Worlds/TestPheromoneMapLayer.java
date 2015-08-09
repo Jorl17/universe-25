@@ -11,12 +11,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class TestPheromoneMapLayer extends FloatLayer {
 
-    public TestPheromoneMapLayer(float gridWidth, float gridHeight, float cellSize, String name, float pheromoneMax) {
-        super(gridWidth, gridHeight, cellSize, name, pheromoneMax, Color.YELLOW);
+    public TestPheromoneMapLayer(float gridWidth, float gridHeight, float cellSize, String name, float pheromoneMax, Color c) {
+        super(gridWidth, gridHeight, cellSize, name, pheromoneMax, c);
     }
 
-    public TestPheromoneMapLayer(float cellSize, int nRows, int nCols, String name, float pheromoneMax) {
-        super(cellSize, nRows, nCols, name, pheromoneMax, Color.YELLOW);
+    public TestPheromoneMapLayer(float cellSize, int nRows, int nCols, String name, float pheromoneMax, Color c) {
+        super(cellSize, nRows, nCols, name, pheromoneMax, c);
     }
 
     public void clearPheromoneAt(float x, float y) {
@@ -35,27 +35,29 @@ public class TestPheromoneMapLayer extends FloatLayer {
         decreaseValueAtCell(col,row,amnt);
     }
 
-
-    @Override
-    protected void drawCell(Batch batch, int col, int row) {
-        getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);
-        getShapeRenderer().setColor(Color.YELLOW);
-        getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
-        getShapeRenderer().end();
-        Color cpy = Color.YELLOW.cpy();
-
-        cpy.a = normalizeValue(getValueAtCell(col, row));
-        getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
-        getShapeRenderer().setColor(cpy);
-        getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
-        getShapeRenderer().end();
-    }
-
     public void evaporate(float rate) {
         for (int i = 0; i < nRows; i++)
             for (int j = 0; j < nCols; j++)
                 decreasePheromoneAtCell(j, i, rate);
     }
+
+    /*@Override
+    protected void drawCell(Batch batch, int col, int row) {
+        float valueAtCell = getValueAtCell(col, row);
+        if ( valueAtCell > 0 ) {
+            getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);
+            getShapeRenderer().setColor(drawColor);
+            getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
+            getShapeRenderer().end();
+            Color cpy = drawColor.cpy();
+
+            cpy.a = normalizeValue(valueAtCell);
+            getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
+            getShapeRenderer().setColor(cpy);
+            getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
+            getShapeRenderer().end();
+        }
+    }*/
 
     public float getMaxPheromone() { return getMaxValue(); }
 }

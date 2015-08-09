@@ -10,17 +10,19 @@ import java.util.ArrayList;
  * Created by jorl17 on 08/08/15.
  */
 public class GoToPheromone extends GoToCell<SimplisticAnt> {
-    public GoToPheromone(SimplisticAnt agent, int priority) {
-        super(agent, priority, "GoToPheromone");
+    private String pheromoneType;
+    public GoToPheromone(SimplisticAnt agent, int priority, String pheromoneType) {
+        super(agent, priority, "GoToPheromone (" + pheromoneType + ")");
+        this.pheromoneType = pheromoneType;
     }
 
     @Override
     protected boolean areThereCellsWithValues() {
-        return agent.areThereCellsWithPheromone();
+        return agent.areThereCellsWithPheromone(pheromoneType);
     }
 
     @Override
     protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValues() {
-        return agent.getCenterOfCellsInFieldOfViewWithPheromone();
+        return agent.getCenterOfCellsInFieldOfViewWithPheromone(pheromoneType);
     }
 }
