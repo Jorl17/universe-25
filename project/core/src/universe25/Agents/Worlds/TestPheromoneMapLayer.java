@@ -35,10 +35,27 @@ public class TestPheromoneMapLayer extends FloatLayer {
         decreaseValueAtCell(col,row,amnt);
     }
 
+    public void increasePheromoneAtCell(int col, int row, float amnt) {
+        increaseValueAtCell(col, row, amnt);
+    }
+
     public void evaporate(float rate) {
         for (int i = 0; i < nRows; i++)
             for (int j = 0; j < nCols; j++)
                 decreasePheromoneAtCell(j, i, rate);
+    }
+
+    public void spread(float rate, float spreadProbability) {
+        Float[][] tmpCells = cloneCells();
+        for (int i = 0; i < nRows; i++)
+            for (int j = 0; j < nCols; j++)
+                for (int k = i - 1; k <= i + 1; k++)
+                    for (int l = j - 1; l <= j + 1; l++)
+                        if ( Math.random() <= spreadProbability)
+                            if (k >= 0 && k < nRows && l >= 0 && l < nCols && !(k == i && l == j)) {
+                                increasePheromoneAtCell(l, k, rate * getValueAtCell(j, i, tmpCells));
+                                decreasePheromoneAtCell(j, i, .9f * rate * getValueAtCell(j, i, tmpCells));
+                            }
     }
 
     @Override

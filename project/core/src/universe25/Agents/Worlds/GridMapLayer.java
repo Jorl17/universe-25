@@ -62,24 +62,30 @@ public class GridMapLayer<T> extends Actor {
     }
 
     private void createCellArray() {
-        this.cells = (T[][]) Array.newInstance(cls, nRows, nCols);
-        for (int i = 0; i < nRows; i++)
-            for (int j = 0; j < nCols; j++)
-                try {
-                    this.cells[i][j] = cls.newInstance();
-                } catch (InstantiationException e) {
-                    //e.printStackTrace();
-                    //FIXME: So hacky...
-                    this.cells[i][j] = (T) new Float(0);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+        this.cells = createCells();
 
         this.cellCentres = new Vector2[nRows][nCols];
         for (int i = 0; i < cellCentres.length; i++)
             for (int j = 0; j < cellCentres[0].length; j++)
                 this.cellCentres[i][j] = new Vector2(j * cellSize + cellSize*0.5f, i * cellSize+ cellSize*0.5f);
 
+    }
+
+    private T[][] createCells() {
+        T[][] ret = (T[][]) Array.newInstance(cls, nRows, nCols);
+        for (int i = 0; i < nRows; i++)
+            for (int j = 0; j < nCols; j++)
+                try {
+                    ret[i][j] = cls.newInstance();
+                } catch (InstantiationException e) {
+                    //e.printStackTrace();
+                    //FIXME: So hacky...
+                    ret[i][j] = (T) new Float(0);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+        return ret;
     }
 
     public String getName() {
@@ -97,11 +103,15 @@ public class GridMapLayer<T> extends Actor {
         return getValueAt(pos.x,pos.y);
     }
 
-    public T getValueAtCell(int col, int row) {
+    public T getValueAtCell(int col, int row,T[][] cells) {
         if ( col < 0 || col > nCols ) return null;
         if ( row < 0 || row > nRows ) return null;
 
         return cells[row][col];
+    }
+
+    public T getValueAtCell(int col, int row) {
+        return getValueAtCell(col, row, this.cells);
     }
 
     public void setValueAt(float x, float y, T val) {
@@ -211,5 +221,12 @@ public class GridMapLayer<T> extends Actor {
         if ( pos.y > topRight.y || pos.y < bottomRight.y ) return false;
 
         return true;*/
+    }
+
+    public T[][] cloneCells() {
+        T[][] ret = (T[][]) Array.newInstance(cls, nRows, nCols);
+        for (int i = 0; i < nRows; i++)
+            System.arraycopy(cells[i], 0, ret[i], 0, nCols);
+        return ret;
     }
 }
