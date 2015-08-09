@@ -82,7 +82,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     public abstract void update();
 
     private void updateCellsInFov() {
-        FloatLayer firstFloatLayer = (FloatLayer)getWorld().getGridLayers().get("TestPheromoneLayer");
+        FloatLayer firstFloatLayer = (FloatLayer)getWorld().getGridLayers().get("PathPheromoneLayer");
         tmpCellsInFov = firstFloatLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
         Vector2 pos = getPosition();
         for (int i = 0; i < tmpCellsInFov.size(); i++) {

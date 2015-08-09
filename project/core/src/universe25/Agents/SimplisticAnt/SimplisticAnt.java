@@ -30,7 +30,7 @@ public abstract class SimplisticAnt extends Agent {
     protected abstract void prepareStates();
 
     private void increasePheromone() {
-        PheromoneMapLayer testLayer = (PheromoneMapLayer) getWorld().getGridLayers().get("TestPheromoneLayer");
+        PheromoneMapLayer testLayer = (PheromoneMapLayer) getWorld().getGridLayers().get("PathPheromoneLayer");
         PheromoneMapLayer foodPheromone = (PheromoneMapLayer) getWorld().getGridLayers().get("FoodPheromoneLayer");
         Vector2 pos = getPosition();
 
