@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.States.StateManager;
+import universe25.GameLogic.Movement.GoalMovement;
+import universe25.Objects.WorldObject;
 import universe25.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Worlds.GridLayers.FloatLayer;
 import universe25.Worlds.World;
@@ -23,10 +25,10 @@ import java.util.ArrayList;
  */
 public abstract class Agent extends MovableImage implements Disposable {
     private final Texture texture;
-    protected BoundingBox boundingBox;
     public static final int COLLIDED_TOP = 1, COLLIDED_LEFT = 2, COLLIDED_RIGHT = 4, COLLIDED_BOTTOM = 8;
     protected int collisionsWithWorld;
     protected ArrayList<Agent> collidedAgents;
+    protected ArrayList<WorldObject> collidedObjects;
     protected StateManager states;
 
     //FIXME: Temporary
@@ -36,6 +38,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     private ArrayList<int[]> tmpCellsInFov;
     boolean debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing;
     private boolean shouldDisposeTexture;
+    private Vector2 runawayFromObjectsVector;
 
     protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed) {
         this(texture, shouldDisposeTexture, fov, seeDistance, speed, false, false, false, false);
@@ -49,35 +52,22 @@ public abstract class Agent extends MovableImage implements Disposable {
         this.debugDrawCellsUnderFov = debugDrawCellsUnderFov;
         this.debugDrawGoals = debugDrawGoals;
         this.debugDrawfacing = debugDrawfacing;
-        setBounds(getX(), getY(), getWidth(), getHeight());
-        setTouchable(Touchable.enabled);
-        collidedAgents = new ArrayList<Agent>();
+        collidedAgents = new ArrayList<>();
+        collidedObjects = new ArrayList<>();
         states = new StateManager(this);
         shapeRenderer = new ShapeRenderer();
         fieldOfView = new FieldOfView(this, fov, seeDistance);
-    }
-
-    @Override
-    public void setBounds(float x, float y, float width, float height) {
-        super.setBounds(x, y, width, height);
-        boundingBox = new BoundingBox(x, y, width, height);
-    }
-
-    @Override
-    protected void positionChanged() {
-        super.positionChanged();
-        boundingBox = new BoundingBox(getX(), getY(), getWidth(), getHeight());
-    }
-
-    @Override
-    protected void sizeChanged() {
-        super.sizeChanged();
-        boundingBox = new BoundingBox(getX(), getY(), getWidth(), getHeight());
+        this.runawayFromObjectsVector  = new Vector2(0, 0);
     }
 
     private void cleanupCollisions() {
-        this.collisionsWithWorld = 0;
+        clearCollisionsWithWorld();
         clearCollisionsWithAgents();
+        clearCollisionsWithObjects();
+    }
+
+    private void clearCollisionsWithObjects() {
+        collidedObjects.clear();
     }
 
     public abstract void update();
@@ -103,15 +93,25 @@ public abstract class Agent extends MovableImage implements Disposable {
         states.update();
 
         update();
+
+        runAwayFromCollidingObjects();
+
         cleanupCollisions();
     }
 
-    public boolean interesects(Agent o) {
-        return boundingBox.intersects(o.boundingBox);
-    }
+    private void runAwayFromCollidingObjects() {
+        GoalMovement goalMovement = getGoalMovement();
 
-    public BoundingBox getBoundingBox() {
-        return boundingBox;
+        // First remove the goal, as there may actually be no object anymore
+        goalMovement.removeGoalIfExists(runawayFromObjectsVector);
+
+        // Now find the direction and scale it to hell
+        if ( !collidedObjects.isEmpty() ) {
+            runawayFromObjectsVector.set(getPosition());
+            for (WorldObject o : collidedObjects)
+                runawayFromObjectsVector.add(getPosition().sub(o.getPosition()).scl(500));
+            goalMovement.addGoal(new WeightedGoal(runawayFromObjectsVector, goalMovement.getHighestWeight()));
+        }
     }
 
     @Override
@@ -128,12 +128,12 @@ public abstract class Agent extends MovableImage implements Disposable {
         collidedAgents.add(o);
     }
 
-    public void clearCollisionsWithAgents() {
-        collidedAgents.clear();
+    public void addCollisionWithWorldObject(WorldObject o) {
+        collidedObjects.add(o);
     }
 
-    public Vector2 getPosition() {
-        return new Vector2(getX(Align.center), getY(Align.center));
+    public void clearCollisionsWithAgents() {
+        collidedAgents.clear();
     }
 
     public World getWorld() {
@@ -228,6 +228,10 @@ public abstract class Agent extends MovableImage implements Disposable {
         return collisionsWithWorld;
     }
 
+    public ArrayList<WorldObject> getCollidedObjects() {
+        return collidedObjects;
+    }
+
     public void setDebugDrawFov(boolean debugDrawFov) {
         this.debugDrawFov = debugDrawFov;
     }
@@ -258,5 +262,9 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     public void toggleDebugDrawfacing() {
         debugDrawfacing = !debugDrawfacing;
+    }
+
+    public void clearCollisionsWithWorld() {
+        collisionsWithWorld = 0;
     }
 }

@@ -14,16 +14,9 @@ import com.badlogic.gdx.utils.Scaling;
 /**
  * Created by jorl17 on 07/08/15.
  */
-public class MovableImage extends Image {
+public class MovableImage extends BoundingBoxImage {
     private final GoalMovement goalMovement;
     private float speed;
-
-    public MovableImage(float speed) {
-        super();
-        setOrigin(getX(Align.center), getY(Align.center));
-        goalMovement = new GoalMovement(this);
-        this.speed = speed;
-    }
 
     public MovableImage(NinePatch patch, float speed) {
         super(patch);
@@ -89,6 +82,10 @@ public class MovableImage extends Image {
     public void act(float delta) {
         super.act(delta);
         move();
+    }
+
+    public float getSpeed() {
+        return speed;
     }
 
     public void setSpeed(float speed) {

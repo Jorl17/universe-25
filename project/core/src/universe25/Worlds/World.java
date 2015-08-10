@@ -1,6 +1,5 @@
 package universe25.Worlds;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,6 +12,8 @@ import universe25.Agents.Agent;
 import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.SpeciesAgent;
 import universe25.GameLogic.Time.Ticks;
+import universe25.Objects.Stone;
+import universe25.Objects.WorldObject;
 import universe25.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Worlds.GridLayers.GridMapLayer;
 import universe25.Worlds.GridLayers.TestFoodLayer;
@@ -52,9 +53,16 @@ public class World extends Stage {
         addPheromones();
         addGridLayer(foodLayer);
 
-        for (int i =0; i < 2 ; i++) {
+        for (int i =0; i < 1 ; i++) {
             Vector2 pos = randomPosition();
             foodLayer.putFoodAt(pos.x, pos.y, 100);
+        }
+
+        for (int i = 0; i < 100; i++) {
+            Stone stone = new Stone();
+            Vector2 pos = randomPosition();
+            stone.setPosition(pos.x, pos.y);
+            addActor(stone);
         }
     }
 
@@ -89,21 +97,52 @@ public class World extends Stage {
 
     private void checkCollisions() {
         collideWithWorld();
-        collideAgents();
+        collideAgentsWithObjectsAndThemselves();
     }
 
-    private void collideAgents() {
+    private void collideAgentsWithObjectsAndThemselves() {
         Array<Actor> actors = getActors();
         for (int i = 0; i <  actors.size ; i++ )
-            if (actors.get(i) instanceof Agent)
-                for (int j = i+1; j < actors.size; j++)
-                    if ( actors.get(j) instanceof Agent)
-                        if ( ((Agent) actors.get(i)).interesects((Agent) actors.get(j)) ) {
+            if (actors.get(i) instanceof Agent) {
+                for (int j = i + 1; j < actors.size; j++) {
+                    if (actors.get(j) instanceof Agent) {
+                        if (((Agent) actors.get(i)).interesects((Agent) actors.get(j))) {
                             ((Agent) actors.get(i)).addCollisionWithAgent((Agent) actors.get(j));
                             ((Agent) actors.get(j)).addCollisionWithAgent((Agent) actors.get(i));
                         }
+                    }
+                    else if (actors.get(j) instanceof WorldObject) {
+                        if (((Agent) actors.get(i)).interesects((WorldObject) actors.get(j)) ) {
+                            resolveAgentObjectCollision((WorldObject)actors.get(j), (Agent)actors.get(i));
+                        }
+                    }
+                }
+            } else if ( actors.get(i) instanceof WorldObject) {
+                for (int j = i+1; j < actors.size; j++)
+                    if ( actors.get(j) instanceof Agent)
+                        if ( ((WorldObject) actors.get(i)).interesects((Agent) actors.get(j)) ) {
+                            resolveAgentObjectCollision((WorldObject) actors.get(i), (Agent) actors.get(j));
+                        }
+            }
 
 
+    }
+
+    private void resolveAgentObjectCollision(WorldObject worldObject, Agent agent) {
+        agent.addCollisionWithWorldObject(worldObject);
+        Vector2 line = agent.getPosition().sub(worldObject.getPosition()).nor().scl(agent.getSpeed());
+        do {
+            agent.moveBy(line.x,line.y);
+        } while ( agent.interesects(worldObject) );
+
+        agent.clearCollisionsWithWorld();
+        if ( collideAgentWithWorld(agent) != 0 )
+            do {
+                agent.moveBy(-line.x,-line.y);
+            } while ( agent.interesects(worldObject) );
+
+        if ( collideAgentWithWorld(agent) != 0 )
+            System.out.println("Expect shit!");
     }
 
     private void collideWithWorld() {
@@ -112,8 +151,10 @@ public class World extends Stage {
                 collideAgentWithWorld((Agent)actor);
     }
 
-    private void collideAgentWithWorld(Agent agent) {
+    private int collideAgentWithWorld(Agent agent) {
         BoundingBox agentbb = agent.getBoundingBox();
+
+        int collisions = 0;
 
         if ( agentbb.getMinX() <= worldBoundingBox.getMinX()  ) {
             agent.setX((float) worldBoundingBox.getMinX());
@@ -130,6 +171,8 @@ public class World extends Stage {
             agent.setY((float) (worldBoundingBox.getMaxY() - agentbb.getHeight()));
             agent.addCollisionWithWorld(Agent.COLLIDED_TOP);
         }
+
+        return agent.getCollisionsWithWorld();
     }
 
     @Override

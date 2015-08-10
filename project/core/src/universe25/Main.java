@@ -12,6 +12,7 @@ import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
 import universe25.Agents.SimplisticAnt.ScouterAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.SpeciesAgent;
+import universe25.Objects.WorldObject;
 import universe25.Worlds.World;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.WeightedGoal;
@@ -98,7 +99,11 @@ public class Main extends ApplicationAdapter {
         //stage.addActor(simplisticAnt);
         for (int i = 0; i < 100; i++) {
             PheromoneFollowingAnt ant = new PheromoneFollowingAnt();
-            ant.setPosition(stage.randomPosition());
+            Vector2 p;
+            do {
+                p = stage.randomPosition();
+                ant.setPosition(p);
+            } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );
             stage.addActor(ant);
         }
 

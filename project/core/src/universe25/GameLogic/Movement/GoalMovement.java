@@ -75,4 +75,21 @@ public class GoalMovement {
         return !goals.isEmpty();
     }
 
+    public void removeGoalIfExists(Vector2 runawayFromObjectsVector) {
+        for ( WeightedGoal goal : goals )
+            if ( goal.getGoal().equals(runawayFromObjectsVector)) {
+                goals.remove(goal);
+                return;
+            }
+    }
+
+    public float getHighestWeight() {
+        if ( goals.isEmpty() ) return 1.0f; /* FIXME: is this right? */
+        float highestWeight = goals.get(0).getWeight();
+        for (int i = 1; i < goals.size(); i++)
+            if ( goals.get(i).getWeight() > highestWeight )
+                highestWeight = goals.get(i).getWeight();
+
+        return highestWeight;
+    }
 }
