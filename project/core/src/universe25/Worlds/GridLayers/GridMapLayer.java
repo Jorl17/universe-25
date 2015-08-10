@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import javafx.geometry.BoundingBox;
 import universe25.Agents.ValuePositionPair;
 
 import java.lang.reflect.Array;
@@ -136,7 +137,7 @@ public class GridMapLayer<T> extends Actor {
     protected void drawCell(Batch batch, int col, int row) {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.YELLOW);
+        shapeRenderer.setColor(drawColor);
         shapeRenderer.rect(col*cellSize, row*cellSize, cellSize, cellSize);
         shapeRenderer.end();
 
@@ -178,12 +179,10 @@ public class GridMapLayer<T> extends Actor {
         return shapeRenderer;
     }
 
-    public ArrayList<int[]> getCellsWithinTriangle(Vector2[] triangle) {
-
-        // First get the "rectangular region" that contains this triangle
+    private void getMinMaxRowColsTriangle(Vector2[] triangle, int[]outColsRows) {
         int p0Col = (int) (triangle[0].x / cellSize), p0Row = (int) (triangle[0].y / cellSize),
-            p1Col = (int) (triangle[1].x / cellSize), p1Row = (int) (triangle[1].y / cellSize),
-            p2Col = (int) (triangle[2].x / cellSize), p2Row = (int) (triangle[2].y / cellSize);
+                p1Col = (int) (triangle[1].x / cellSize), p1Row = (int) (triangle[1].y / cellSize),
+                p2Col = (int) (triangle[2].x / cellSize), p2Row = (int) (triangle[2].y / cellSize);
         int minRow, minCol, maxRow, maxCol;
         minCol = Integer.min(p0Col, Integer.min(p1Col, p2Col ));
         maxCol = Integer.max(p0Col, Integer.max(p1Col, p2Col));
@@ -194,6 +193,47 @@ public class GridMapLayer<T> extends Actor {
         minCol = Integer.max(0, minCol);
         maxRow = Integer.min(nRows-1, maxRow);
         maxCol = Integer.min(nCols-1, maxCol);
+
+        outColsRows[0] = minCol;
+        outColsRows[1] = maxCol;
+        outColsRows[2] = minRow;
+        outColsRows[3] = maxRow;
+    }
+    public void getMinMaxRowCols(Vector2[] points, int[] outColsRows ) {
+        assert ( points.length > 0 );
+        if ( points.length == 3 ) {
+            getMinMaxRowColsTriangle(points, outColsRows);
+        } else {
+            int minCol = (int) (points[0].x / cellSize),
+                    minRow = (int) (points[0].y / cellSize),
+                    maxCol = minCol,
+                    maxRow = minRow;
+
+            int col, row;
+            for (int i = 1; i < points.length; i++) {
+                col = (int) (points[i].x / cellSize);
+                row = (int) (points[i].y / cellSize);
+                if (col < minCol) minCol = col;
+                if (col > maxCol) maxCol = col;
+                if (row < minRow) minRow = row;
+                if (row > maxRow) maxRow = row;
+            }
+
+            outColsRows[0] = Integer.max(minCol, 0);
+            outColsRows[1] = Integer.min(maxCol,nCols-1);
+            outColsRows[2] = Integer.max(minRow,0);
+            outColsRows[3] = Integer.min(maxRow,nRows-1);
+        }
+
+    }
+
+    public ArrayList<int[]> getCellsWithinTriangle(Vector2[] triangle) {
+        int[] minMaxRowCol = new int[4];
+        getMinMaxRowCols(triangle, minMaxRowCol);
+        int minCol = minMaxRowCol[0];
+        int maxCol = minMaxRowCol[1];
+        int minRow = minMaxRowCol[2];
+        int maxRow = minMaxRowCol[3];
 
         // Now search in those
         ArrayList<int[]> ret = new ArrayList<>();
@@ -208,6 +248,12 @@ public class GridMapLayer<T> extends Actor {
 
     public Vector2[][] getCellCentres() {
         return cellCentres;
+    }
+
+    public BoundingBox getCellBoundingBox(int col, int row) {
+        Vector2 centre = cellCentres[row][col];
+        float halfCellSize = cellSize/2;
+        return new BoundingBox(centre.x-halfCellSize, centre.y-halfCellSize, centre.x+halfCellSize, centre.y+halfCellSize);
     }
 
     public Vector2 getCellCentre(int col, int row) {

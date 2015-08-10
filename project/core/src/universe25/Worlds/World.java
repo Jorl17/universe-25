@@ -14,10 +14,7 @@ import universe25.Agents.SpeciesAgent;
 import universe25.GameLogic.Time.Ticks;
 import universe25.Objects.Stone;
 import universe25.Objects.WorldObject;
-import universe25.Worlds.GridLayers.BaseEmptyLayer;
-import universe25.Worlds.GridLayers.GridMapLayer;
-import universe25.Worlds.GridLayers.TestFoodLayer;
-import universe25.Worlds.GridLayers.PheromoneMapLayer;
+import universe25.Worlds.GridLayers.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +27,7 @@ public class World extends Stage {
     private static final float TILE_SIZE = 4.0f;
     private BoundingBox worldBoundingBox;
     private Map<String, GridMapLayer> gridLayers;
+    private WorldObjectsLayer objectsLayer;
 
     public World(Viewport viewport) {
         super(viewport);
@@ -48,6 +46,7 @@ public class World extends Stage {
         this.gridLayers = new HashMap<>();
         BaseEmptyLayer baseLayer = new BaseEmptyLayer(getWidth(), getHeight(), TILE_SIZE, "BaseLayer");
         TestFoodLayer foodLayer = new TestFoodLayer(getWidth(), getHeight(), TILE_SIZE, "FoodLayer", 100);
+        objectsLayer = new WorldObjectsLayer(getWidth(), getHeight(), TILE_SIZE, "ObjectsLayer", Color.BLACK, true);
 
         addGridLayer(baseLayer);
         addPheromones();
@@ -64,6 +63,16 @@ public class World extends Stage {
             stone.setPosition(pos.x, pos.y);
             addActor(stone);
         }
+
+        addGridLayer(objectsLayer);
+    }
+
+    @Override
+    public void addActor(Actor actor) {
+        super.addActor(actor);
+        if ( actor instanceof  WorldObject )
+            getWorldObjectsLayer().addWorldObject((WorldObject)actor);
+
     }
 
     private  void addGridLayer(GridMapLayer layer) {
@@ -85,8 +94,10 @@ public class World extends Stage {
 
         checkCollisions();
 
-        for (Pheromone p: getPheromones())
-                p.evaporate();
+        for (Pheromone p: getPheromones()) {
+            p.evaporate();
+            //p.spread();
+        }
 
         super.act(deltaTime);
 
@@ -189,6 +200,10 @@ public class World extends Stage {
 
     public BaseEmptyLayer getBaseLayer() {
         return (BaseEmptyLayer) gridLayers.get("BaseLayer");
+    }
+
+    public WorldObjectsLayer getWorldObjectsLayer() {
+        return objectsLayer;//return (WorldObjectsLayer) gridLayers.get("ObjectsLayer");
     }
 
     public Vector2 randomPosition() {

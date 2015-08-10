@@ -89,4 +89,16 @@ public class BoundingBoxImage extends Image{
     public Vector2 getPosition() {
         return new Vector2(getX(Align.center), getY(Align.center));
     }
+
+    public Vector2[] getBoundingBoxPoints() {
+        Vector2[] ret = new Vector2[4];
+        ret[0] = new Vector2((float)boundingBox.getMinX(),(float)boundingBox.getMinY());
+        ret[1] = new Vector2((float)boundingBox.getMinX(),(float)boundingBox.getMaxY());
+        ret[2] = new Vector2((float)boundingBox.getMaxX(),(float)boundingBox.getMinY());
+        ret[3] = new Vector2((float)boundingBox.getMaxX(),(float)boundingBox.getMaxY());
+
+        return ret;
+    }
+
+
 }
