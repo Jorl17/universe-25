@@ -21,6 +21,7 @@ public class GridMapLayer<T> extends Actor {
     protected float cellSize;
     protected int nRows, nCols;
     protected T[][] cells;
+    protected T[][] nextCells;
     private Class<? extends T> cls;
     private final String name;
     private Color drawColor;
@@ -66,6 +67,7 @@ public class GridMapLayer<T> extends Actor {
 
     private void createCellArray() {
         this.cells = createCells();
+        this.nextCells = createCells();
 
         this.cellCentres = new Vector2[nRows][nCols];
         for (int i = 0; i < cellCentres.length; i++)
@@ -124,11 +126,11 @@ public class GridMapLayer<T> extends Actor {
         if ( x > gridWidth || x < 0 ) return;
         if ( y > gridHeight|| y < 0 ) return;
 
-        cells[(int) (y / cellSize)][(int) (x / cellSize)] = val;
+        nextCells[(int) (y / cellSize)][(int) (x / cellSize)] = val;
     }
 
     public void setValueAtCell(int col, int row, T val) {
-        cells[row][col] = val;
+        nextCells[row][col] = val;
     }
 
     protected void drawCell(Batch batch, int col, int row) {
@@ -236,6 +238,11 @@ public class GridMapLayer<T> extends Actor {
         for (int i = 0; i < nRows; i++)
             System.arraycopy(cells[i], 0, ret[i], 0, nCols);
         return ret;
+    }
+
+    public void onTickFinished() {
+        for (int i = 0; i < nRows; i++)
+            System.arraycopy(nextCells[i], 0, cells[i], 0, nCols);
     }
 
     public void setDrawLayer(boolean drawLayer) {

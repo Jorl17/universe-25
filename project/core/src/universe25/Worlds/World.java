@@ -81,6 +81,10 @@ public class World extends Stage {
                 p.evaporate();
 
         super.act(deltaTime);
+
+        for ( GridMapLayer l: gridLayers.values() ) {
+            l.onTickFinished();
+        }
     }
 
     private void checkCollisions() {
