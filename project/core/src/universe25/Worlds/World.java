@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by jorl17 on 06/08/15.
  */
 public class World extends Stage {
-    private static final float TILE_SIZE = 8.0f;
+    private static final float TILE_SIZE = 4.0f;
     private BoundingBox worldBoundingBox;
     private Map<String, GridMapLayer> gridLayers;
 
