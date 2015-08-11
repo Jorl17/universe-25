@@ -238,6 +238,7 @@ public abstract class Agent extends MovableImage implements Disposable {
 
         if ( debugDrawCellsUnderFov && tmpCellsInFov != null ) {
             Color c = new Color(0.3f,0.3f,0.3f,0.5f);
+            getWorld().getBaseLayer().getShapeRenderer().setProjectionMatrix(batch.getProjectionMatrix());
             for (int[] cell : tmpCellsInFov)
                 // cell[1] has col, cell[0] has row
                 getWorld().getBaseLayer().drawCell(batch, cell[1], cell[0], c);

@@ -175,7 +175,7 @@ public class GridMapLayer<T> extends Actor {
         }
     }
 
-    protected ShapeRenderer getShapeRenderer() {
+    public ShapeRenderer getShapeRenderer() {
         return shapeRenderer;
     }
 
@@ -302,4 +302,6 @@ public class GridMapLayer<T> extends Actor {
     protected Color getDrawColor() {
         return drawColor;
     }
+
+
 }
