@@ -70,11 +70,17 @@ public class CircleForPheromone extends StateWithPriority<SimplisticAnt> {
 
         //FIXME: Hack. Just so they don't get "stuck" so often, let's first try a couple of rotations followed by updates
         // 20 tries.. should
-        for (int i = 0 ; i < 360; i++) {
-            agent.rotateBy(1.0f);
+        float rotation = agent.getRotation();
+        for (int i = 0 ; i < 90; i++) {
+            agent.setRotation(rotation + i);
             agent.updateFov();
             agent.updateCellsInFov();
             if ( agent.areThereCellsWithFood() ) return null;
+            agent.setRotation(rotation - i);
+            agent.updateFov();
+            agent.updateCellsInFov();
+            if ( agent.areThereCellsWithFood() ) return null;
+
         }
 
         makeUnreachable();
