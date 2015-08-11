@@ -42,7 +42,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
 
         if ( orangeSpecies ) {
             setColor(Color.ORANGE);
-            priorityAggregatorStates.addState(new WanderAvoidingObstacles<>(this, "PrecisionWander", 15,
+            priorityAggregatorStates.addState(new WanderAvoidingObstacles<>(this, 15,
                     wanderMaxAllowedChangeDegree, new GaussianFloatProducer(3.0f, 0.25f), false));
         } else
                 priorityAggregatorStates.addState(new Wander<>(this,
@@ -60,7 +60,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
                                                   orangeSpecies ?
                                                                        new Wander<>(this, wanderDirectionChangeIntervalMs,
                                                                                           wanderMaxAllowedChangeDegree)
-                                                  : new WanderAvoidingObstacles<>(this, "PrecisionWanderRampage", 15,
+                                                  : new WanderAvoidingObstacles<>(this, 15,
                                                           wanderMaxAllowedChangeDegree, () -> 1.0f, false),
                                                                        new ChangeColorState<>(this, orangeSpecies ?
                                                                                Color.GREEN :

@@ -14,15 +14,15 @@ public class WanderAvoidingObstacles<T extends Agent> extends  StateWithPriority
     private NumberProducer<Float> weight;
     private boolean alwaysPerturbateMovement;
 
-    public WanderAvoidingObstacles(T agent, String name, int priority, float maxAllowedChangeDeg, NumberProducer<Float> weight, boolean alwaysPerturbateMovement) {
-        super(agent, name, priority);
+    public WanderAvoidingObstacles(T agent, int priority, float maxAllowedChangeDeg, NumberProducer<Float> weight, boolean alwaysPerturbateMovement) {
+        super(agent, "WanderAvoidingObstacles", priority);
         this.maxAllowedChangeDeg = maxAllowedChangeDeg;
         this.weight = weight;
         this.alwaysPerturbateMovement = alwaysPerturbateMovement;
     }
 
-    public WanderAvoidingObstacles(T agent, String name, float maxAllowedChangeDeg, NumberProducer<Float> weight, boolean alwaysPerturbateMovement) {
-        super(agent, name);
+    public WanderAvoidingObstacles(T agent, float maxAllowedChangeDeg, NumberProducer<Float> weight, boolean alwaysPerturbateMovement) {
+        super(agent, "WanderAvoidingObstacles");
         this.maxAllowedChangeDeg = maxAllowedChangeDeg;
         this.weight = weight;
         this.alwaysPerturbateMovement = alwaysPerturbateMovement;
