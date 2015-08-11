@@ -3,6 +3,7 @@ package universe25.GameLogic.Movement;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -94,11 +95,19 @@ public class BoundingBoxImage extends Image{
         Vector2[] ret = new Vector2[4];
         ret[0] = new Vector2((float)boundingBox.getMinX(),(float)boundingBox.getMinY());
         ret[1] = new Vector2((float)boundingBox.getMinX(),(float)boundingBox.getMaxY());
-        ret[2] = new Vector2((float)boundingBox.getMaxX(),(float)boundingBox.getMinY());
-        ret[3] = new Vector2((float)boundingBox.getMaxX(),(float)boundingBox.getMaxY());
+        ret[2] = new Vector2((float)boundingBox.getMaxX(),(float)boundingBox.getMaxY());
+        ret[3] = new Vector2((float)boundingBox.getMaxX(),(float)boundingBox.getMinY());
 
         return ret;
     }
 
 
+    public Polygon getBoundingBoxAsPolygon() {
+        return new Polygon(new float[]{
+                (float) boundingBox.getMinX(), (float) boundingBox.getMinY(),
+                (float) boundingBox.getMinX(), (float) boundingBox.getMaxY(),
+                (float) boundingBox.getMaxX(), (float) boundingBox.getMaxY(),
+                (float) boundingBox.getMaxX(), (float) boundingBox.getMinY()
+        });
+    }
 }

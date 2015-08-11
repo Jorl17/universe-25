@@ -12,6 +12,9 @@ import javafx.geometry.BoundingBox;
 import universe25.Objects.WorldObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by jorl17 on 11/08/15.
@@ -53,12 +56,39 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
 
     @Override
     protected void drawCell(Batch batch, int col, int row) {
-        if ( getValueAtCell(col,row).size() > 0) {
-            System.out.println("hehe");
+        if ( !getValueAtCell(col,row).isEmpty() ) {
             getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);
             getShapeRenderer().setColor(getDrawColor());
             getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
             getShapeRenderer().end();
+        }
+    }
+
+    private boolean rayToCellHasIntersection(Vector2 position, int col, int row, Set<WorldObject> objectsToTest ) {
+        Vector2 cellCentre = getCellCentre(col, row);
+        for ( WorldObject object : objectsToTest )
+            if ( Intersector.intersectSegmentPolygon(position, cellCentre, object.getBoundingBoxAsPolygon()) )
+                return true;
+
+        return false;
+    }
+
+    public void removeInvisibleCells(Vector2 position, ArrayList<int[]> tmpCellsInFov) {
+        int indexesToRemove;
+        Set<WorldObject> objectsToTest = new HashSet<>();
+        for (int[] cell : tmpCellsInFov) {
+            int row = cell[0], col = cell[1];
+            ArrayList<WorldObject> valueAtCell = getValueAtCell(col, row);
+            if (!valueAtCell.isEmpty()) objectsToTest.addAll(valueAtCell);
+        }
+
+        for (int i = 0; i < tmpCellsInFov.size(); i++) {
+            int[] cell = tmpCellsInFov.get(i);
+            int row = cell[0], col = cell[1];
+            if ( rayToCellHasIntersection(position, col, row, objectsToTest) ) {
+                tmpCellsInFov.remove(i);
+                i--;
+            }
         }
     }
 }

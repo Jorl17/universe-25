@@ -76,6 +76,8 @@ public abstract class Agent extends MovableImage implements Disposable {
         BaseEmptyLayer firstFloatLayer = getWorld().getBaseLayer();
         tmpCellsInFov = firstFloatLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
         Vector2 pos = getPosition();
+
+        // Remove the "origin" from it all
         for (int i = 0; i < tmpCellsInFov.size(); i++) {
             int[] cell = tmpCellsInFov.get(i);
             if ( firstFloatLayer.isPointInCell(pos, cell[1], cell[0])) {
@@ -83,6 +85,9 @@ public abstract class Agent extends MovableImage implements Disposable {
                 break;
             }
         }
+
+        // Remove invisible cells (raycasting)
+        getWorld().getWorldObjectsLayer().removeInvisibleCells(getPosition(), tmpCellsInFov);
     }
 
     @Override

@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by jorl17 on 06/08/15.
  */
 public class World extends Stage {
-    private static final float TILE_SIZE = 4.0f;
+    private static final float TILE_SIZE = 8.0f;
     private BoundingBox worldBoundingBox;
     private Map<String, GridMapLayer> gridLayers;
     private WorldObjectsLayer objectsLayer;
@@ -46,22 +46,28 @@ public class World extends Stage {
         this.gridLayers = new HashMap<>();
         BaseEmptyLayer baseLayer = new BaseEmptyLayer(getWidth(), getHeight(), TILE_SIZE, "BaseLayer");
         TestFoodLayer foodLayer = new TestFoodLayer(getWidth(), getHeight(), TILE_SIZE, "FoodLayer", 100);
-        objectsLayer = new WorldObjectsLayer(getWidth(), getHeight(), TILE_SIZE, "ObjectsLayer", Color.BLACK, true);
+        objectsLayer = new WorldObjectsLayer(getWidth(), getHeight(), TILE_SIZE, "ObjectsLayer", Color.BLACK, false);
 
         addGridLayer(baseLayer);
         addPheromones();
         addGridLayer(foodLayer);
 
-        for (int i =0; i < 1 ; i++) {
-            Vector2 pos = randomPosition();
-            foodLayer.putFoodAt(pos.x, pos.y, 100);
-        }
-
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 200; i++) {
             Stone stone = new Stone();
             Vector2 pos = randomPosition();
             stone.setPosition(pos.x, pos.y);
             addActor(stone);
+        }
+
+        for (int i =0; i < 1 ; i++) {
+
+            for(;;) {
+                Vector2 pos = randomPosition();
+                if (!(hit(pos.x, pos.y, false) instanceof WorldObject)) {
+                    foodLayer.putFoodAt(pos.x, pos.y, 100);
+                    break;
+                }
+            }
         }
 
         addGridLayer(objectsLayer);
@@ -147,13 +153,13 @@ public class World extends Stage {
         } while ( agent.interesects(worldObject) );
 
         agent.clearCollisionsWithWorld();
-        if ( collideAgentWithWorld(agent) != 0 )
-            do {
+        if ( collideAgentWithWorld(agent) != 0 ) ;
+        /*    do {
                 agent.moveBy(-line.x,-line.y);
-            } while ( agent.interesects(worldObject) );
+            } while ( agent.interesects(worldObject) );*/
 
-        if ( collideAgentWithWorld(agent) != 0 )
-            System.out.println("Expect shit!");
+        /*if ( collideAgentWithWorld(agent) != 0 )
+            System.out.println("Expect shit!");*/
     }
 
     private void collideWithWorld() {
