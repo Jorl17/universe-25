@@ -56,6 +56,8 @@ public class Main extends ApplicationAdapter {
                     SimplisticAnt.getFoodPheromone().getWorldLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.D ) {
                     SimplisticAnt.getFoodImmediancyPheromone().getWorldLayer().toggleDrawLayer();
+                } else if ( keycode == Input.Keys.L ) {
+                    stage.getWorldObjectsLayer().toggleDrawLayer();
                 }
                 else if (keycode == Input.Keys.DOWN) {
                     Agent agent = (Agent) stage.getActors().get(2);
