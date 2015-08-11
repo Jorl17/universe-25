@@ -5,11 +5,9 @@ import universe25.Agents.States.*;
 import universe25.Agents.States.SimplisticAntStates.CircleForPheromone;
 import universe25.Agents.States.SimplisticAntStates.GoToFood;
 import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
+import universe25.GameLogic.NumberProducers.GaussianFloatProducer;
 import universe25.GameLogic.NumberProducers.GaussianLongProducer;
-import universe25.GameLogic.NumberProducers.UniformLongProducer;
 import universe25.Worlds.GridLayers.FloatLayer;
-
-import java.util.function.BooleanSupplier;
 
 /**
  * Created by jorl17 on 08/08/15.
@@ -18,7 +16,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
     private static float fov=60;
     private static float seeDistance=50;
     private static float speed=1.0f;
-    private static float pathPheromoneIncrease=2/*1*/;
+    private static float pathPheromoneIncrease=1/*1*/;
     private static float floatPheromoneIncreaseWhenSeeingFood=pathPheromoneIncrease*5;
     private static float floatPheromoneIncreaseWhenSeeingFoodPheromone=floatPheromoneIncreaseWhenSeeingFood/50.0f;
     public PheromoneFollowingAnt() {
@@ -39,7 +37,15 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         long rampageDeactivationTimeMean = 1000L;
         long rampageDeactivationTimeStd = 300L;
         PriorityAggregatorState priorityAggregatorStates = new PriorityAggregatorState<>(this, "prioritisedStates");
-        priorityAggregatorStates.addState(new Wander<>(this,
+
+        boolean orangeSpecies = Math.random() > 0.5f;
+
+        if ( orangeSpecies ) {
+            setColor(Color.ORANGE);
+            priorityAggregatorStates.addState(new WanderAvoidingObstacles<>(this, "PrecisionWander", 15,
+                    wanderMaxAllowedChangeDegree, new GaussianFloatProducer(3.0f, 0.25f), false));
+        } else
+                priorityAggregatorStates.addState(new Wander<>(this,
                                                        wanderDirectionChangeIntervalMs,
                                                        wanderMaxAllowedChangeDegree,
                                                        wanderWhenSeeingPathPheromoneProbability, 15));
@@ -51,9 +57,14 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
                                                        wanderWhenSeeingFoodPheromoneProbability, 17));
         priorityAggregatorStates.addState(new TickBasedPriorityStateActivator<>(this, "RampageForFood", 19,
                                           new ParallelPriorityStates<>(this, "RampageAndChangeColor",
+                                                  orangeSpecies ?
                                                                        new Wander<>(this, wanderDirectionChangeIntervalMs,
-                                                                                          wanderMaxAllowedChangeDegree),
-                                                                       new ChangeColorState<>(this, Color.CYAN)),
+                                                                                          wanderMaxAllowedChangeDegree)
+                                                  : new WanderAvoidingObstacles<>(this, "PrecisionWanderRampage", 15,
+                                                          wanderMaxAllowedChangeDegree, () -> 1.0f, false),
+                                                                       new ChangeColorState<>(this, orangeSpecies ?
+                                                                               Color.GREEN :
+                                                                               Color.CYAN)),
                                                                    PheromoneFollowingAnt.this::areThereCellsWithFood,
                                                                    new GaussianLongProducer(rampageActivationTimeMean,
                                                                                             rampageActivationTimeStd),

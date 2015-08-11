@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public abstract class SimplisticAnt extends SpeciesAgent {
     private static final Texture texture = new Texture("ant.png");
 
-    protected static final Pheromone foodPheromone = new Pheromone("Food", getSpecies(), 0.01f, 0.002f, 0.1f, 500, Color.CYAN);
-    protected static final Pheromone pathPheronome = new Pheromone("Path", getSpecies(), 0.4f, 0.002f, 0.1f, 500, Color.YELLOW);
+    protected static final Pheromone foodPheromone = new Pheromone("Food", getSpecies(), 0.001f, 0.002f, 0.1f, 500, Color.CYAN);
+    protected static final Pheromone pathPheronome = new Pheromone("Path", getSpecies(), 0.2f, 0.002f, 0.1f, 500, Color.YELLOW);
     protected static final Pheromone foodImmediancyPheromone = new Pheromone("FoodImmediancePheromone", getSpecies(), 0.001f, 0.002f, 0.1f, 500, Color.MAGENTA);
 
     protected PheromoneController foodPheromoneController, pathPheronomeController, foodImmediancyPheromoneController;
