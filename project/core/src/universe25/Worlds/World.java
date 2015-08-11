@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by jorl17 on 06/08/15.
  */
 public class World extends Stage {
-    private static final float TILE_SIZE = 8.0f;
+    private static final float TILE_SIZE = 4.0f;
     private BoundingBox worldBoundingBox;
     private Map<String, GridMapLayer> gridLayers;
     private WorldObjectsLayer objectsLayer;
@@ -61,6 +61,7 @@ public class World extends Stage {
             addActor(stone);
         }
 
+        /*
         for (int i = 0; i < 15; i++) {
             Wall wall = new Wall();
             Vector2 pos = randomPosition();
@@ -73,7 +74,7 @@ public class World extends Stage {
             Vector2 pos = randomPosition();
             wall.setPosition(pos.x, pos.y);
             addActor(wall);
-        }
+        }*/
 
         for (int i =0; i < 1 ; i++) {
 

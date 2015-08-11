@@ -2,6 +2,7 @@ package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
 import universe25.Agents.States.*;
+import universe25.Agents.States.SimplisticAntStates.CircleForPheromone;
 import universe25.Agents.States.SimplisticAntStates.GoToFood;
 import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
 import universe25.GameLogic.NumberProducers.GaussianLongProducer;
@@ -17,7 +18,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
     private static float fov=60;
     private static float seeDistance=50;
     private static float speed=1.0f;
-    private static float pathPheromoneIncrease=5/*1*/;
+    private static float pathPheromoneIncrease=2/*1*/;
     private static float floatPheromoneIncreaseWhenSeeingFood=pathPheromoneIncrease*5;
     private static float floatPheromoneIncreaseWhenSeeingFoodPheromone=floatPheromoneIncreaseWhenSeeingFood/50.0f;
     public PheromoneFollowingAnt() {
@@ -59,7 +60,10 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
                                                                    new GaussianLongProducer(rampageDeactivationTimeMean,
                                                                                             rampageDeactivationTimeStd),
                                                                    true));
-        priorityAggregatorStates.addState(new GoToFood(this, 20));
+        priorityAggregatorStates.addState(new GoToPheromone(this, 20, foodImmediancyPheromone));
+        priorityAggregatorStates.addState(new CircleForPheromone(this, "CircleLookingForFood", 21,
+                foodImmediancyPheromone, 5, () -> 10L, true, -1/*0.25f*/ /* Because add rate is 1, we remove 25% */));
+        priorityAggregatorStates.addState(new GoToFood(this, 22));
         states.addState(priorityAggregatorStates);
     }
 

@@ -13,6 +13,7 @@ public class ScouterAnt extends SimplisticAnt {
         //super(90, 200, 3, 3, 10);
         super(90, 70, 3, 3, 3*8, 0.5f);
         setColor(new Color(1.0f,0.0f,0.0f,1.0f));
+        foodImmediancyPheromoneController = null;
     }
 
     @Override

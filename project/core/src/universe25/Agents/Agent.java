@@ -73,7 +73,7 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     public abstract void update();
 
-    private void updateCellsInFov() {
+    public void updateCellsInFov() {
         BaseEmptyLayer firstFloatLayer = getWorld().getBaseLayer();
         tmpCellsInFov = firstFloatLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
         Vector2 pos = getPosition();
@@ -94,7 +94,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     @Override
     public void act(float delta) {
         super.act(delta);
-        fieldOfView.update();
+        updateFov();
         updateCellsInFov();
         states.update();
 
@@ -297,5 +297,9 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     public void clearCollisionsWithWorld() {
         collisionsWithWorld = 0;
+    }
+
+    public void updateFov() {
+        fieldOfView.update();
     }
 }

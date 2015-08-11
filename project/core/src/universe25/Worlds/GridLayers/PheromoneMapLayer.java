@@ -77,4 +77,8 @@ public class PheromoneMapLayer extends FloatLayer {
     }*/
 
     public float getMaxPheromone() { return getMaxValue(); }
+
+    public void setPheromoneAt(float x, float y, float val) {
+        setValueAt(0,0,val);
+    }
 }
