@@ -8,16 +8,15 @@ import universe25.Agents.Agent;
  */
 public class ChangeColorState<T extends Agent> extends StateWithPriority<T> {
     private Color c;
-    //private Color originalColor;
+    private Color originalColor;
     public ChangeColorState(T agent, String name, int priority, Color c) {
         super(agent, name, priority);
         this.c = c;
-        //this.originalColor = agent.getColor();
+
     }
     public ChangeColorState(T agent, Color c) {
         super(agent, "ChangeColorState", -1);
         this.c = c;
-        //this.originalColor = agent.getColor();
     }
 
     @Override
@@ -27,11 +26,12 @@ public class ChangeColorState<T extends Agent> extends StateWithPriority<T> {
 
     @Override
     public void leaveState() {
-        agent.setColor(1,1,1,1);
+        agent.setColor(originalColor);
     }
 
     @Override
     public void enterState() {
+        this.originalColor = agent.getColor().cpy();
         agent.setColor(c);
     }
 
