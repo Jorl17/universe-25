@@ -4,14 +4,14 @@ import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.States.StateWithPriority;
+import universe25.Agents.States.ToggablePriorityState;
 import universe25.GameLogic.NumberProducers.NumberProducer;
 import universe25.GameLogic.Time.Ticks;
 
 /**
  * Created by jorl17 on 11/08/15.
  */
-public class CircleForPheromone extends StateWithPriority<SimplisticAnt> {
-    private int priorityWhenInPheromone;
+public class CircleForPheromone extends ToggablePriorityState<SimplisticAnt> {
     private Pheromone pheromone;
     private float maxAllowedDegree;
     private NumberProducer<Long> maximumTicksToTryToFindFood;
@@ -22,16 +22,9 @@ public class CircleForPheromone extends StateWithPriority<SimplisticAnt> {
     private boolean active;
     private float origRotation;
 
-
-    public CircleForPheromone(SimplisticAnt agent, String name, int priorityWhenInPheromone, Pheromone pheromone,
-                              float maxAllowedDegree, NumberProducer<Long> maximumTicksToTryToFindFood) {
-        this(agent, name, priorityWhenInPheromone, pheromone, maxAllowedDegree, maximumTicksToTryToFindFood, false, 0);
-    }
-
     public CircleForPheromone(SimplisticAnt agent, String name, int priorityWhenInPheromone, Pheromone pheromone,
                               float maxAllowedDegree, NumberProducer<Long> maximumTicksToTryToFindFood, boolean decreaseWhenTimeRunsOut, float amountToDecrease) {
-        super(agent, name);
-        this.priorityWhenInPheromone = priorityWhenInPheromone;
+        super(agent, name, priorityWhenInPheromone);
         this.pheromone = pheromone;
         this.maxAllowedDegree = maxAllowedDegree;
         this.maximumTicksToTryToFindFood = maximumTicksToTryToFindFood;
@@ -39,11 +32,18 @@ public class CircleForPheromone extends StateWithPriority<SimplisticAnt> {
         this.amountToDecrease = amountToDecrease;
     }
 
+
+    public CircleForPheromone(SimplisticAnt agent, String name, int priorityWhenInPheromone, Pheromone pheromone,
+                              float maxAllowedDegree, NumberProducer<Long> maximumTicksToTryToFindFood) {
+        this(agent, name, priorityWhenInPheromone, pheromone, maxAllowedDegree, maximumTicksToTryToFindFood, false, 0);
+    }
+
+
     @Override
     public void updatePriority() {
         Vector2 pos = agent.getPosition();
         if ( !active && (pheromone.getWorldLayer().getValueAt(pos.x, pos.y) > 0 /*&& Math.random() > 0.5f*/) ) {
-            setPriority(priorityWhenInPheromone);
+            makeReachable();
         }
 
         if ( active ) {

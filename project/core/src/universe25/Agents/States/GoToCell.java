@@ -9,19 +9,21 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public abstract class GoToCell<T extends Agent> extends StateWithPriority<T> {
-    private int priority;
+public abstract class GoToCell<T extends Agent> extends ToggablePriorityState<T> {
     private ArrayList<ValuePositionPair<Float>> cellsWithValues;
     public GoToCell(T agent, int priority, String name) {
-        super(agent, name, -1);
-        this.priority = priority;
+        super(agent, name, priority);
+        makeUnreachable();
     }
 
     protected  abstract boolean areThereCellsWithValues();
     protected abstract ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValues();
     @Override
     public void updatePriority() {
-        setPriority(areThereCellsWithValues() ? priority : -1);
+        if ( areThereCellsWithValues() )
+            makeReachable();
+        else
+            makeUnreachable();
     }
 
     @Override

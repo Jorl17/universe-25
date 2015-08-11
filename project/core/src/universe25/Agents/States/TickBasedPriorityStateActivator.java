@@ -10,9 +10,8 @@ import java.util.function.BooleanSupplier;
 /**
  * Created by jorl17 on 09/08/15.
  */
-public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithPriority<T> {
+public class TickBasedPriorityStateActivator<T extends Agent> extends ToggablePriorityState<T> {
     private State<T> state;
-    private int priorityToSet;
     private BooleanSupplier shouldTickFunction;
     private NumberProducer<Long> ticksUntilActivation;
     private NumberProducer<Long> ticksUntilDeActivation;
@@ -25,9 +24,8 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
     public TickBasedPriorityStateActivator(T agent, String name, int priorityToSet, State<T> state,
                                            BooleanSupplier shouldTickFunction, NumberProducer<Long> ticksUntilActivation,
                                            NumberProducer<Long> ticksUntilDeActivation, boolean deActiveIfTicks) {
-        super(agent, name, -1);
+        super(agent, name, priorityToSet);
         this.state = state;
-        this.priorityToSet = priorityToSet;
         this.shouldTickFunction = shouldTickFunction;
         this.ticksUntilActivation = ticksUntilActivation;
         this.ticksUntilDeActivation = ticksUntilDeActivation;
@@ -43,7 +41,7 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
         if ( currentlyActive ) {
             if ( ( deActiveIfTicks && shouldTickFunction.getAsBoolean() ) ||
                (Ticks.ticksSince(lastTimeTicked) > ticksUntilDeActivation.produce()) ) {
-                setPriority(0);
+                makeUnreachable();
                 lastTimeTicked = Ticks.getTicks();
                 shouldLeave = true;
                 currentlyActive = false;
@@ -53,7 +51,7 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
 
             if (Ticks.ticksSince(lastTimeTicked) > ticksUntilActivation.produce()) {
                 currentlyActive = true;
-                setPriority(priorityToSet);
+                makeReachable();
                 lastTimeTicked = Ticks.getTicks();
             }
         }
@@ -77,19 +75,5 @@ public class TickBasedPriorityStateActivator<T extends Agent> extends StateWithP
         if ( currentlyActive ) {
             state.enterState();
         }
-    }
-
-    @Override
-    public String toString() {
-        return "TickBasedPriorityStateActivator{" +
-                "state=" + state +
-                ", priorityToSet=" + priorityToSet +
-                ", shouldTickFunction=" + shouldTickFunction +
-                ", ticksUntilActivation=" + ticksUntilActivation +
-                ", ticksUntilDeActivation=" + ticksUntilDeActivation +
-                ", lastTimeTicked=" + lastTimeTicked +
-                ", currentlyActive=" + currentlyActive +
-                ", shouldLeave=" + shouldLeave +
-                '}';
     }
 }

@@ -8,22 +8,21 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public class Wander<T extends Agent> extends StateWithPriority<T> {
+public class Wander<T extends Agent> extends ToggablePriorityState<T> {
     private long directionChangeIntervalMs;
     private float maxAllowedDegreeChange;
     private long lastChangeTime;
     private Vector2 target;
-    private int maxWanderPriority;
     private float dontWanderProb;
 
     public Wander(T agent, long directionChangeIntervalMs, float maxAllowedDegreeChange, float dontWanderProb, int maxWanderPriority) {
-        super(agent, "Wander", 0);
+        super(agent, "Wander", maxWanderPriority);
         this.directionChangeIntervalMs = directionChangeIntervalMs;
         this.lastChangeTime = -1;
         this.maxAllowedDegreeChange = maxAllowedDegreeChange;
         this.target = new Vector2();
         this.dontWanderProb = dontWanderProb;
-        this.maxWanderPriority = maxWanderPriority;
+        giveLowestPriority();
     }
 
     // By default, it wanders permantently (with zero probability)
@@ -86,7 +85,9 @@ public class Wander<T extends Agent> extends StateWithPriority<T> {
 
     @Override
     public void updatePriority() {
-        setPriority(Math.random() > (1-dontWanderProb) ? maxWanderPriority : 0);
-
+        if (Math.random() > (1-dontWanderProb)) {
+            makeReachable();
+        } else
+            giveLowestPriority();
     }
 }
