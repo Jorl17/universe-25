@@ -54,6 +54,8 @@ public class Main extends ApplicationAdapter {
                     SimplisticAnt.getPathPheronome().getWorldLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.S ) {
                     SimplisticAnt.getFoodPheromone().getWorldLayer().toggleDrawLayer();
+                } else if ( keycode == Input.Keys.D ) {
+                    SimplisticAnt.getFoodImmediancyPheromone().getWorldLayer().toggleDrawLayer();
                 }
                 else if (keycode == Input.Keys.DOWN) {
                     Agent agent = (Agent) stage.getActors().get(2);
@@ -97,7 +99,7 @@ public class Main extends ApplicationAdapter {
         simplisticAnt.setPosition(250, 250);
         simplisticAnt.setRotation(90);
         //stage.addActor(simplisticAnt);
-        for (int i = 0; i < 100; i++) {
+        /*for (int i = 0; i < 100; i++) {
             PheromoneFollowingAnt ant = new PheromoneFollowingAnt();
             Vector2 p;
             do {
@@ -105,11 +107,21 @@ public class Main extends ApplicationAdapter {
                 ant.setPosition(p);
             } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );
             stage.addActor(ant);
+        }*/
+
+        Vector2 p;
+        do {
+            p = stage.randomPosition();
+        } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );
+        for (int i = 0; i < 100; i++) {
+            PheromoneFollowingAnt ant = new PheromoneFollowingAnt();
+            ant.setPosition(p.x,p.y);
+            stage.addActor(ant);
         }
 
         for (int i = 0; i < 1; i++) {
             ScouterAnt ant = new ScouterAnt();
-            ant.setPosition(stage.randomPosition());
+            ant.setPosition(0,0);
             stage.addActor(ant);
         }
 
