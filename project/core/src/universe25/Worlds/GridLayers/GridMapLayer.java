@@ -224,7 +224,6 @@ public class GridMapLayer<T> extends Actor {
             outColsRows[2] = Integer.max(minRow,0);
             outColsRows[3] = Integer.min(maxRow,nRows-1);
         }
-
     }
 
     public ArrayList<int[]> getCellsWithinTriangle(Vector2[] triangle) {
