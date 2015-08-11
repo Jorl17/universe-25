@@ -73,13 +73,16 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
         return false;
     }
 
-    public void removeInvisibleCells(Vector2 position, ArrayList<int[]> tmpCellsInFov) {
-        int indexesToRemove;
+    public ArrayList<int[]> removeInvisibleCells(Vector2 position, ArrayList<int[]> tmpCellsInFov) {
+        ArrayList<int[]> ret = new ArrayList<>();
         Set<WorldObject> objectsToTest = new HashSet<>();
         for (int[] cell : tmpCellsInFov) {
             int row = cell[0], col = cell[1];
             ArrayList<WorldObject> valueAtCell = getValueAtCell(col, row);
-            if (!valueAtCell.isEmpty()) objectsToTest.addAll(valueAtCell);
+            if (!valueAtCell.isEmpty()) {
+                objectsToTest.addAll(valueAtCell);
+                ret.add( cell );
+            }
         }
 
         for (int i = 0; i < tmpCellsInFov.size(); i++) {
@@ -90,5 +93,7 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
                 i--;
             }
         }
+
+        return ret;
     }
 }

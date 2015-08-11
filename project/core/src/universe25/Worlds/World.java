@@ -13,6 +13,8 @@ import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.SpeciesAgent;
 import universe25.GameLogic.Time.Ticks;
 import universe25.Objects.Stone;
+import universe25.Objects.Wall;
+import universe25.Objects.Wall2;
 import universe25.Objects.WorldObject;
 import universe25.Worlds.GridLayers.*;
 
@@ -52,11 +54,25 @@ public class World extends Stage {
         addPheromones();
         addGridLayer(foodLayer);
 
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 100; i++) {
             Stone stone = new Stone();
             Vector2 pos = randomPosition();
             stone.setPosition(pos.x, pos.y);
             addActor(stone);
+        }
+
+        for (int i = 0; i < 15; i++) {
+            Wall wall = new Wall();
+            Vector2 pos = randomPosition();
+            wall.setPosition(pos.x, pos.y);
+            addActor(wall);
+        }
+
+        for (int i = 0; i < 20; i++) {
+            Wall2 wall = new Wall2();
+            Vector2 pos = randomPosition();
+            wall.setPosition(pos.x, pos.y);
+            addActor(wall);
         }
 
         for (int i =0; i < 1 ; i++) {

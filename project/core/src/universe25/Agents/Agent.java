@@ -39,6 +39,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     boolean debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing;
     private boolean shouldDisposeTexture;
     private Vector2 runawayFromObjectsVector;
+    private ArrayList<int[]> cellsWithObjects;
 
     protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed) {
         this(texture, shouldDisposeTexture, fov, seeDistance, speed, false, false, false, false);
@@ -87,7 +88,7 @@ public abstract class Agent extends MovableImage implements Disposable {
         }
 
         // Remove invisible cells (raycasting)
-        getWorld().getWorldObjectsLayer().removeInvisibleCells(getPosition(), tmpCellsInFov);
+        cellsWithObjects = getWorld().getWorldObjectsLayer().removeInvisibleCells(getPosition(), tmpCellsInFov);
     }
 
     @Override
@@ -102,6 +103,7 @@ public abstract class Agent extends MovableImage implements Disposable {
         runAwayFromCollidingObjects();
 
         cleanupCollisions();
+        cellsWithObjects.clear();
     }
 
     private void runAwayFromCollidingObjects() {
@@ -160,6 +162,30 @@ public abstract class Agent extends MovableImage implements Disposable {
     protected boolean areThereCellsWithValueAtFloatLayer(String layerName) {
         return areThereCellsWithValueAtFloatLayer((FloatLayer) getWorld().getGridLayers().get(layerName));
 
+    }
+
+    public ArrayList<Vector2> getCenterOfCellsInFieldOfView() {
+        ArrayList<Vector2> ret = new ArrayList<>();
+
+        if (tmpCellsInFov != null )
+            for (int[] cell : tmpCellsInFov) {
+            int row = cell[0], col = cell[1];
+            ret.add(getWorld().getBaseLayer().getCellCentre(col, row));
+        }
+
+        return ret;
+    }
+
+    public ArrayList<Vector2> getCenterOfCellsWithOjects() {
+        ArrayList<Vector2> ret = new ArrayList<>();
+
+        if (cellsWithObjects != null )
+            for (int[] cell : cellsWithObjects) {
+                int row = cell[0], col = cell[1];
+                ret.add(getWorld().getBaseLayer().getCellCentre(col, row));
+            }
+
+        return ret;
     }
 
     protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(FloatLayer layer) {
