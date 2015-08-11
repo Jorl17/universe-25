@@ -33,11 +33,6 @@ public class Wander<T extends Agent> extends StateWithPriority<T> {
 
     private void randomTarget() {
         Vector2 dir = agent.getFacingDirection();
-        Vector2 pos = agent.getPosition();
-        //cSystem.out.println("rnd");
-
-        /*ArrayList<Vector2> directions = agent.getCenterOfCellsWithOjects();
-        for ( Vector2 v : directions ) v.sub(pos);*/
 
         float rotationAngle = (float) (Math.random() * maxAllowedDegreeChange - maxAllowedDegreeChange / 2);
         dir = dir.rotate(rotationAngle);
@@ -60,13 +55,6 @@ public class Wander<T extends Agent> extends StateWithPriority<T> {
             dir.add(new Vector2(-1,0));
             //System.out.println("Collided Right!");
         }
-
-
-        /*for ( Vector2 v : directions) {
-            Vector2 tmpTarget = agent.getPosition().add(dir);
-            if (Math.abs(v.angle(tmpTarget)) < 20)
-                dir.sub(v.scl(0.005f));
-        }*/
 
         this.target.set(agent.getPosition().add(dir.scl(700.0f)));
     }
