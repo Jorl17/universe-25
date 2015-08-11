@@ -1,9 +1,7 @@
 package universe25.Agents.States.SimplisticAntStates;
 
 import com.badlogic.gdx.math.Vector2;
-import universe25.Agents.Agent;
 import universe25.Agents.Pheromones.Pheromone;
-import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.States.StateWithPriority;
 import universe25.GameLogic.NumberProducers.NumberProducer;
@@ -22,8 +20,7 @@ public class CircleForPheromone extends StateWithPriority<SimplisticAnt> {
 
     private long ticksWhenEntered;
     private boolean active;
-
-    private Vector2 originalDirection;
+    private float origRotation;
 
 
     public CircleForPheromone(SimplisticAnt agent, String name, int priorityWhenInPheromone, Pheromone pheromone,
@@ -52,7 +49,6 @@ public class CircleForPheromone extends StateWithPriority<SimplisticAnt> {
         if ( active ) {
             if ( Ticks.ticksSince(ticksWhenEntered) > maximumTicksToTryToFindFood.produce() ) {
                 makeUnreachable();
-                agent.rotateBy(-originalDirection.angle(agent.getFacingDirection()));
                 if (decreaseWhenTimeRunsOut) {
                     if (amountToDecrease == -1) {
                         pheromone.getWorldLayer().setPheromoneAt(pos.x, pos.y, 0);
@@ -67,6 +63,8 @@ public class CircleForPheromone extends StateWithPriority<SimplisticAnt> {
     @Override
     public String update() {
         // Remember: if update is called, then there is no food, because we assume that GoToFood is put at a HIGHER priority.
+        makeUnreachable();
+
 
         //FIXME: Hack. Just so they don't get "stuck" so often, let's first try a couple of rotations followed by updates
         // 20 tries.. should
@@ -83,9 +81,11 @@ public class CircleForPheromone extends StateWithPriority<SimplisticAnt> {
 
         }
 
-        makeUnreachable();
+        agent.updateFov();
+        agent.updateCellsInFov();
+        agent.setRotation(origRotation);
         // Always rotate in the same direction
-        agent.rotateBy((float) (Math.random()*maxAllowedDegree));
+        //agent.rotateBy((float) (Math.random()*maxAllowedDegree));
 
         return null;
     }
@@ -94,12 +94,13 @@ public class CircleForPheromone extends StateWithPriority<SimplisticAnt> {
     public void leaveState() {
         // Generally means that there is now food..or that the time just ran out
         agent.getGoalMovement().clearGoals();
+        agent.setRotation(origRotation);
         active = false;
     }
 
     @Override
     public void enterState() {
-        originalDirection = agent.getFacingDirection();
+        origRotation = agent.getRotation();
         ticksWhenEntered = Ticks.getTicks();
         agent.getGoalMovement().clearGoals();
         active = true;
