@@ -271,6 +271,10 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     }
 
+    public ArrayList<int[]> getCellsInFov() {
+        return tmpCellsInFov;
+    }
+
     public void setPosition(Vector2 pos) {
         setPosition(pos.x, pos.y);
     }
