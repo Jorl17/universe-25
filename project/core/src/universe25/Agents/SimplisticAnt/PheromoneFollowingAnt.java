@@ -17,7 +17,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
     private static float seeDistance=50;
     private static float speed=1.0f;
     private static int   movesMemorySize=500;
-    private static float pathPheromoneIncrease=1/*1*/;
+    private static float pathPheromoneIncrease=5/*1*/;
     private static float floatPheromoneIncreaseWhenSeeingFood=pathPheromoneIncrease*5;
     private static float floatPheromoneIncreaseWhenSeeingFoodPheromone=floatPheromoneIncreaseWhenSeeingFood/50.0f;
     public PheromoneFollowingAnt() {

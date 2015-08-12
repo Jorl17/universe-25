@@ -34,9 +34,10 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         foodPheromoneController = new AlternativeOrderedPheromoneController(
                                     new ConditionalIncreasePheromoneController(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFood,
                                     (agent) -> ((SimplisticAnt)agent).areThereCellsWithFood()),
-                                    new ConditionalIncreasePheromoneController(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFoodPheromone,
-                                    (agent) -> ((SimplisticAnt)agent).areThereCellsWithPheromone(foodPheromone))
-                                );
+                                   /* new ConditionalIncreasePheromoneController(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFoodPheromone,
+                                    (agent) -> ((SimplisticAnt)agent).areThereCellsWithPheromone(foodPheromone)*/
+                                    new ProportionalPheromoneController(this, foodPheromone, 0.10f, 10, true, 100)
+                                 );
 
         pathPheronomeController = new IncreasePheromoneController(this, pathPheronome, pathPheronomeIncrease);
 

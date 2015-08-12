@@ -3,6 +3,7 @@ package universe25;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -12,6 +13,7 @@ import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
 import universe25.Agents.SimplisticAnt.ScouterAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.SpeciesAgent;
+import universe25.GameLogic.Movement.MoveSequence.GridMoveSequence;
 import universe25.Objects.WorldObject;
 import universe25.Worlds.World;
 import universe25.GameLogic.Movement.GoalMovement;
@@ -127,6 +129,15 @@ public class Main extends ApplicationAdapter {
             stage.addActor(ant);
         }
 
+        /*
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("hehe");
+                stage.getAllAgents().get(0).testDoMovesBackwards();
+                return false;
+            }
+        });*/
     }
 
     @Override
