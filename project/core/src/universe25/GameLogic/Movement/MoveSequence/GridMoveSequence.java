@@ -33,6 +33,7 @@ public class GridMoveSequence extends MoveSequence {
 
     public void addMove(int[] cell) {
         addMove(grid.getCellCentre(cell[1], cell[0]));
+        this.cells.add(cell);
     }
 
     public ArrayList<int[]> getCells() {
