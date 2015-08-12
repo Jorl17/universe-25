@@ -10,6 +10,17 @@ import java.util.ArrayList;
 public class FixedGridMoveSequence extends GridMoveSequence {
     private int maxSize;
     private boolean discardFromBeginning;
+
+    public FixedGridMoveSequence(int maxSize, boolean discardFromBeginning) {
+        super();
+        this.maxSize = maxSize;
+        this.discardFromBeginning = discardFromBeginning;
+    }
+
+    public FixedGridMoveSequence(int maxSize) {
+        this(maxSize, true);
+    }
+
     public FixedGridMoveSequence(GridMapLayer grid, int maxSize, boolean discardFromBeginning) {
         super(grid);
         this.maxSize = maxSize;
@@ -49,5 +60,9 @@ public class FixedGridMoveSequence extends GridMoveSequence {
         if ( !discardFromBeginning && getMoves().size() == maxSize) return; //Already full
         super.addMove(cell);
         forceSize();
+    }
+
+    public int getMaxMoves() {
+        return maxSize;
     }
 }

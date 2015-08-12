@@ -56,4 +56,8 @@ public class MoveSequence {
     public ArrayList<Vector2> getMoves() {
         return this.moves;
     }
+
+    public void reverse() {
+        Collections.reverse(moves);
+    }
 }

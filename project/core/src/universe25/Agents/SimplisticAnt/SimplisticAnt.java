@@ -26,8 +26,8 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         addSpeciesPheromone(foodImmediancyPheromone);
     }
 
-    protected SimplisticAnt(float fov, float seeDistance, float speed, float pathPheronomeIncrease, float foodPheromoneIncreaseWhenSeeingFood, float foodPheromoneIncreaseWhenSeeingFoodPheromone) {
-        super(texture, false, fov, seeDistance, speed, "SimplisticAnt");
+    protected SimplisticAnt(float fov, float seeDistance, float speed, int movesMemorySize, float pathPheronomeIncrease, float foodPheromoneIncreaseWhenSeeingFood, float foodPheromoneIncreaseWhenSeeingFoodPheromone) {
+        super(texture, false, fov, seeDistance, speed, movesMemorySize, "SimplisticAnt");
         setSize(8,8);
         setOriginX(4);
         setOriginY(4);

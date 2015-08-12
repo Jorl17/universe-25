@@ -54,6 +54,7 @@ public class World extends Stage {
         addPheromones();
         addGridLayer(foodLayer);
 
+
         for (int i = 0; i < 100; i++) {
             Stone stone = new Stone();
             Vector2 pos = randomPosition();
@@ -95,7 +96,8 @@ public class World extends Stage {
         super.addActor(actor);
         if ( actor instanceof  WorldObject )
             getWorldObjectsLayer().addWorldObject((WorldObject)actor);
-
+        else if ( actor instanceof  Agent )
+            ((Agent) actor).onAddedToWorld();
     }
 
     private  void addGridLayer(GridMapLayer layer) {

@@ -303,4 +303,7 @@ public class GridMapLayer<T> extends Actor {
     }
 
 
+    public int[] getCell(float x, float y) {
+        return new int[] {(int) (y / cellSize), (int) (x / cellSize)};
+    }
 }

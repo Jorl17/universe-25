@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
-import javafx.geometry.BoundingBox;
+import universe25.Agents.States.DoMoveSequence;
 import universe25.Agents.States.StateManager;
 import universe25.GameLogic.Movement.GoalMovement;
+import universe25.GameLogic.Movement.MoveSequence.FixedGridMoveSequence;
+import universe25.GameLogic.Movement.MoveSequence.GridMoveSequence;
 import universe25.Objects.WorldObject;
 import universe25.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Worlds.GridLayers.FloatLayer;
@@ -41,11 +41,13 @@ public abstract class Agent extends MovableImage implements Disposable {
     private Vector2 runawayFromObjectsVector;
     private ArrayList<int[]> cellsWithObjects;
 
-    protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed) {
-        this(texture, shouldDisposeTexture, fov, seeDistance, speed, false, false, false, false);
+    private FixedGridMoveSequence movesMemory;
+
+    protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed, int movesMemorySize) {
+        this(texture, shouldDisposeTexture, fov, seeDistance, speed, movesMemorySize, false, false, false, false);
     }
 
-    protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed, boolean debugDrawFov, boolean debugDrawCellsUnderFov, boolean debugDrawGoals, boolean debugDrawfacing) {
+    protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed, int movesMemorySize, boolean debugDrawFov, boolean debugDrawCellsUnderFov, boolean debugDrawGoals, boolean debugDrawfacing) {
         super(texture, speed);
         this.texture = texture;
         this.shouldDisposeTexture = shouldDisposeTexture;
@@ -59,7 +61,10 @@ public abstract class Agent extends MovableImage implements Disposable {
         shapeRenderer = new ShapeRenderer();
         fieldOfView = new FieldOfView(this, fov, seeDistance);
         this.runawayFromObjectsVector  = new Vector2(0, 0);
+        this.movesMemory = new FixedGridMoveSequence(movesMemorySize);
     }
+
+
 
     private void cleanupCollisions() {
         clearCollisionsWithWorld();
@@ -91,9 +96,14 @@ public abstract class Agent extends MovableImage implements Disposable {
         cellsWithObjects = getWorld().getWorldObjectsLayer().removeInvisibleCells(getPosition(), tmpCellsInFov);
     }
 
+    public void onAddedToWorld() {
+            this.movesMemory.setGrid(getWorld().getBaseLayer());
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
+        updateMovesMemory();
         updateFov();
         updateCellsInFov();
         states.update();
@@ -104,6 +114,15 @@ public abstract class Agent extends MovableImage implements Disposable {
 
         cleanupCollisions();
         cellsWithObjects.clear();
+    }
+
+    private void updateMovesMemory() {
+        Vector2 pos = getPosition();
+        int[] cell = getWorld().getBaseLayer().getCell(pos.x, pos.y);
+
+        int[] lastCell = movesMemory.getLastCell();
+        if (lastCell == null || lastCell[0] != cell[0] ||  lastCell[1] != cell[1] )
+            movesMemory.addMove(cell);
     }
 
     private void runAwayFromCollidingObjects() {
@@ -302,5 +321,9 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     public void updateFov() {
         fieldOfView.update();
+    }
+
+    public FixedGridMoveSequence getMovesMemory() {
+        return movesMemory;
     }
 }

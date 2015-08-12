@@ -11,13 +11,16 @@ import java.util.ArrayList;
 public abstract class SpeciesAgent extends Agent {
     private static String species;
     private static ArrayList<Pheromone> pheromones = new ArrayList<>();
-    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed, String species) {
-        super(texture, shouldDisposeTexture, fov, seeDistance, speed);
+    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed,
+                           int movesMemorySize, String species) {
+        super(texture, shouldDisposeTexture, fov, seeDistance, speed, movesMemorySize);
         SpeciesAgent.species = species;
     }
 
-    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed, boolean debugDrawFov, boolean debugDrawCellsUnderFov, boolean debugDrawGoals, boolean debugDrawfacing, String species) {
-        super(texture, shouldDisposeTexture, fov, seeDistance, speed, debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing);
+    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed,
+                           int movesMemorySize, boolean debugDrawFov, boolean debugDrawCellsUnderFov,
+                           boolean debugDrawGoals, boolean debugDrawfacing, String species) {
+        super(texture, shouldDisposeTexture, fov, seeDistance, speed, movesMemorySize, debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing);
         SpeciesAgent.species = species;
     }
 
