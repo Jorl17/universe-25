@@ -28,7 +28,7 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
 
     @Override
     public String update() {
-        if ( currentMove  == this.moveSequence.numMoves()) {
+        if ( currentMove  == this.moveSequence.numMoves()-1) {
             makeUnreachable();
             return null;
         }
@@ -50,6 +50,8 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
 
     @Override
     public void leaveState() {
+        if ( restartIfLeftUnfinished && currentMove  == this.moveSequence.numMoves()-1)
+            currentMove = 0;
     }
 
     @Override
