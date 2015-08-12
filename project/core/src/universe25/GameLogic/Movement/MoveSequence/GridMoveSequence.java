@@ -54,4 +54,14 @@ public class GridMoveSequence extends MoveSequence {
     public void setGrid(GridMapLayer grid) {
         this.grid = grid;
     }
+
+    public boolean containsMove(int[] agentCell) {
+        //FIXME: THIS IS SO GOD DAMNED SLOW FOR SURE
+        for ( int[] cell : cells )
+            if ( cell[0] == agentCell[0] && cell[1] == agentCell[1])
+                return true;
+
+        return false;
+        //return cells.contains(agentCell);   //FIXME: Is this right??
+    }
 }
