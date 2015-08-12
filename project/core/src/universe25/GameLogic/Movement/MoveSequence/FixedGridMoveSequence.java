@@ -62,6 +62,10 @@ public class FixedGridMoveSequence extends GridMoveSequence {
         forceSize();
     }
 
+    public void addMoveIfUnique(int[] cell) {
+        if ( !containsMove(cell) ) addMove(cell);
+    }
+
     public int getMaxMoves() {
         return maxSize;
     }
