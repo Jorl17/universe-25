@@ -260,7 +260,7 @@ public abstract class GridMapLayer<T> extends Actor {
     public BoundingBox getCellBoundingBox(int col, int row) {
         Vector2 centre = cellCentres[row][col];
         float halfCellSize = cellSize/2;
-        return new BoundingBox(centre.x-halfCellSize, centre.y-halfCellSize, centre.x+halfCellSize, centre.y+halfCellSize);
+        return new BoundingBox(centre.x-halfCellSize, centre.y-halfCellSize, cellSize, cellSize);
     }
 
     public Vector2 getCellCentre(int col, int row) {
