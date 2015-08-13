@@ -3,6 +3,7 @@ package universe25.Agents.States;
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
 
 /**
  * Created by jorl17 on 12/08/15.
@@ -38,8 +39,10 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
         }
         Vector2 pos = agent.getPosition();
         Vector2 destination = this.moveSequence.getMoveAt(currentMove);
+        GridCell posGrid = agent.getWorld().getWorldObjectsLayer().getCell(pos.x,pos.y);
+        GridCell destGrid = agent.getWorld().getWorldObjectsLayer().getCell(destination.x,destination.y);
 
-        if ( pos.epsilonEquals(destination, agent.getWorld().getWorldObjectsLayer().getCellSize()*0.5f) ) {
+        if ( posGrid.equals(destGrid) /*pos.epsilonEquals(destination, agent.getWorld().getWorldObjectsLayer().getCellSize()*0.1f)*/ ) {
             if (++currentMove == this.moveSequence.numMoves()) {
                 makeUnreachable();
                 return null; // All done!
