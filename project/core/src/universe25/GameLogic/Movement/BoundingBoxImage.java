@@ -18,7 +18,7 @@ import javafx.geometry.BoundingBox;
  */
 public class BoundingBoxImage extends Image{
     protected BoundingBox boundingBox;
-    private float boundingBoxThreshold = 2.0f;
+    private float boundingBoxThreshold = 0.0f;
 
     public BoundingBoxImage(NinePatch patch) {
         super(patch);

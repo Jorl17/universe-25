@@ -51,7 +51,7 @@ public class GoalMovement {
     }
 
     public Vector2 getMovementDirection() {
-        return goalDirection;
+        return goalDirection.cpy();
     }
 
     public Vector2 getMovementSpeedVector(float speed) {

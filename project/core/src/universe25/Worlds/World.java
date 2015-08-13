@@ -148,17 +148,24 @@ public class World extends Stage {
                         }
                     }
                     else if (actors.get(j) instanceof WorldObject) {
-                        if (((Agent) actors.get(i)).interesects((WorldObject) actors.get(j)) ) {
+                        Vector2 pos = ((Agent) actors.get(i)).getPosition();
+                        float occlusionPercentage = getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
+                        if (((Agent) actors.get(i)).interesects((WorldObject) actors.get(j)) &&
+                                occlusionPercentage > 0.25) {
                             resolveAgentObjectCollision((WorldObject)actors.get(j), (Agent)actors.get(i));
                         }
                     }
                 }
             } else if ( actors.get(i) instanceof WorldObject) {
                 for (int j = i+1; j < actors.size; j++)
-                    if ( actors.get(j) instanceof Agent)
-                        if ( ((WorldObject) actors.get(i)).interesects((Agent) actors.get(j)) ) {
+                    if ( actors.get(j) instanceof Agent) {
+                        Vector2 pos = ((Agent) actors.get(j)).getPosition();
+                        float occlusionPercentage = getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
+                        if (((WorldObject) actors.get(i)).interesects((Agent) actors.get(j)) &&
+                                occlusionPercentage > 0.30) {
                             resolveAgentObjectCollision((WorldObject) actors.get(i), (Agent) actors.get(j));
                         }
+                    }
             }
 
 
@@ -166,10 +173,13 @@ public class World extends Stage {
 
     private void resolveAgentObjectCollision(WorldObject worldObject, Agent agent) {
         agent.addCollisionWithWorldObject(worldObject);
-        Vector2 line = agent.getPosition().sub(worldObject.getPosition()).nor().scl(agent.getSpeed());
+        Vector2 line = agent.getPosition().sub(worldObject.getPosition()).nor().scl(agent.getSpeed()/2);
+        float occlusionPercentage;
         do {
             agent.moveBy(line.x,line.y);
-        } while ( agent.interesects(worldObject) );
+            Vector2 pos = agent.getPosition();
+            occlusionPercentage = getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
+        } while ( agent.interesects(worldObject) && occlusionPercentage > 0.30 );
 
         agent.clearCollisionsWithWorld();
         if ( collideAgentWithWorld(agent) != 0 ) ;

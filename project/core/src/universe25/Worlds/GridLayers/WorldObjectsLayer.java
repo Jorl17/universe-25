@@ -1,19 +1,15 @@
 package universe25.Worlds.GridLayers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import javafx.geometry.BoundingBox;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.WorldObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,7 +63,7 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
     protected void drawCell(Batch batch, int col, int row) {
         if ( !getValueAtCell(col,row).isEmpty() ) {
             getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
-            getShapeRenderer().setColor(getDrawColor().cpy().sub(0.0f,0.0f,0.0f,1-occlusionPercentage(col, row)));
+            getShapeRenderer().setColor(getDrawColor().cpy().sub(0.0f,0.0f,0.0f,1- getOcclusionPercentage(col, row)));
             getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
             getShapeRenderer().end();
 
@@ -121,8 +117,14 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
         return !getValueAtCell(cell).isEmpty();
     }
 
-    public float occlusionPercentage(int col, int row) {
+    public float getOcclusionPercentage(int col, int row) {
         return occlusionPercentages[row][col];
+    }
+    public float getOcclusionPercentage(GridCell c) {
+        return getOcclusionPercentage(c.getCol(), c.getRow());
+    }
+    public float getOcclusionPercentage(float x, float y) {
+        return occlusionPercentages[((int) (y / cellSize))][ (int) (x / cellSize)];
     }
 
     public void recalculateOcclusionPercentage(int col, int row) {
@@ -143,6 +145,6 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
 
     @Override
     public float getMoveCost(int col, int row) {
-        return occlusionPercentage(col, row) < 0.5f ? 1 : -1; //FIXME Make this more flexible
+        return getOcclusionPercentage(col, row) < 0.30f ? 1 : -1; //FIXME Make this more flexible
     }
 }
