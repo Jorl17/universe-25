@@ -21,14 +21,21 @@ import java.util.Set;
  * Created by jorl17 on 11/08/15.
  */
 public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
+    private float[][] occlusionPercentages;
     public WorldObjectsLayer(float gridWidth, float gridHeight, float cellSize, String name, Color drawColor, boolean drawLayer) {
         super(ArrayList.class, gridWidth, gridHeight, cellSize, name, drawColor, drawLayer);
         this.nextCells = this.cells;
+        createOcclusionPercentagesArray();
     }
 
     public WorldObjectsLayer(float cellSize, int nRows, int nCols, String name) {
         super(ArrayList.class, cellSize, nRows, nCols, name);
         this.nextCells = this.cells;
+        createOcclusionPercentagesArray();
+    }
+
+    public void createOcclusionPercentagesArray() {
+        this.occlusionPercentages = new float[nRows][nCols];
     }
 
     @Override
@@ -51,6 +58,7 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
                 BoundingBox cellBB = getCellBoundingBox(j,i);
                 if (bb.intersects(cellBB) || bb.contains(cellBB) || cellBB.contains(bb)) {
                     getValueAtCell(j, i).add(o);
+                    recalculateOcclusionPercentage(j,i);
                 }
             }
     }
@@ -58,10 +66,19 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
     @Override
     protected void drawCell(Batch batch, int col, int row) {
         if ( !getValueAtCell(col,row).isEmpty() ) {
-            getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);
-            getShapeRenderer().setColor(getDrawColor());
+            getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
+            getShapeRenderer().setColor(getDrawColor().cpy().sub(0.0f,0.0f,0.0f,1-occlusionPercentage(col, row)));
             getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
             getShapeRenderer().end();
+
+            /*for (WorldObject o : (ArrayList<WorldObject>)getValueAtCell(col, row)) {
+                BoundingBox b= o.getBoundingBox();
+                getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
+                getShapeRenderer().setColor(Color.YELLOW.cpy().sub(0.0f,0.0f,0.0f,0.95f));
+                getShapeRenderer().rect((float)b.getMinX(), (float)b.getMinY(), (float)b.getWidth(), (float)b.getHeight());
+                getShapeRenderer().end();
+            }*/
+
         }
     }
 
@@ -104,8 +121,28 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
         return !getValueAtCell(cell).isEmpty();
     }
 
+    public float occlusionPercentage(int col, int row) {
+        return occlusionPercentages[row][col];
+    }
+
+    public void recalculateOcclusionPercentage(int col, int row) {
+        ArrayList<WorldObject> objectsAtCell = getValueAtCell(col, row);
+        BoundingBox cellBB = getCellBoundingBox(col,row);
+        occlusionPercentages[row][col] = 0;
+        for ( WorldObject o : objectsAtCell) {
+            BoundingBox objBB = o.getBoundingBox();
+            occlusionPercentages[row][col] +=
+                    ((Math.min(cellBB.getMaxX(), objBB.getMaxX())) - (Math.max(cellBB.getMinX(), objBB.getMinX()))) *
+                        ((Math.min(cellBB.getMaxY(), objBB.getMaxY())) - (Math.max(cellBB.getMinY(), objBB.getMinY())))
+                    / (cellSize * cellSize) ;
+        }
+
+        if ( occlusionPercentages[row][col] > 1.0f ) occlusionPercentages[row][col] = 1.0f;
+
+    }
+
     @Override
     public float getMoveCost(int col, int row) {
-        return hasObjects(col, row) ? -1 : 1; //FIXME Make this more flexible
+        return occlusionPercentage(col, row) < 0.5f ? 1 : -1; //FIXME Make this more flexible
     }
 }
