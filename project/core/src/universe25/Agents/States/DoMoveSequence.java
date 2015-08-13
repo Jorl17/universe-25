@@ -29,12 +29,16 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
 
     @Override
     public String update() {
+        System.out.println();
+        System.out.println(this.moveSequence.numMoves());
+        System.out.println(currentMove);
         if ( this.moveSequence.numMoves() == 0 ) {
             makeUnreachable();
             return null;
         }
-        if ( currentMove  == this.moveSequence.numMoves()-1) {
+        if ( currentMove  == this.moveSequence.numMoves()) {
             makeUnreachable();
+            agent.getGoalMovement().clearGoals();
             return null;
         }
         Vector2 pos = agent.getPosition();
@@ -42,7 +46,10 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
         GridCell posGrid = agent.getWorld().getWorldObjectsLayer().getCell(pos.x,pos.y);
         GridCell destGrid = agent.getWorld().getWorldObjectsLayer().getCell(destination.x,destination.y);
 
-        if ( posGrid.equals(destGrid) /*pos.epsilonEquals(destination, agent.getWorld().getWorldObjectsLayer().getCellSize()*0.1f)*/ ) {
+        float cellSize = agent.getWorld().getWorldObjectsLayer().getCellSize();
+        if ( //posGrid.equals(destGrid)
+        pos.epsilonEquals(destination, cellSize *1.5f)
+        ) {
             if (++currentMove == this.moveSequence.numMoves()) {
                 makeUnreachable();
                 return null; // All done!
@@ -51,7 +58,8 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
                 destination = this.moveSequence.getMoveAt(currentMove);
         }
 
-        agent.getGoalMovement().setGoal(destination);
+        agent.getGoalMovement().setGoal(destination.cpy().add((float) Math.random() * cellSize * 2 - cellSize,
+                (float) Math.random() * cellSize * 2 - cellSize));
 
         return null;
     }
