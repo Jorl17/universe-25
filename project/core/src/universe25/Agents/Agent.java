@@ -11,6 +11,7 @@ import universe25.Agents.States.StateManager;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.MoveSequence.FixedGridMoveSequence;
 import universe25.GameLogic.Movement.MoveSequence.GridMoveSequence;
+import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.Objects.WorldObject;
 import universe25.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Worlds.GridLayers.FloatLayer;
@@ -329,5 +330,11 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     public FixedGridMoveSequence getMovesMemory() {
         return movesMemory;
+    }
+
+    public void testDoMoveSequence(MoveSequence pathMoveSequence) {
+        getGoalMovement().clearGoals();
+        states.clearStates();
+        states.addState(new DoMoveSequence<>(this, "Test", 1, pathMoveSequence, true));
     }
 }

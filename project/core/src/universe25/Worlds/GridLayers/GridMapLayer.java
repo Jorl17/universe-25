@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.ValuePositionPair;
+import universe25.GameLogic.Movement.Pathfinding.Cell;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class GridMapLayer<T> extends Actor {
     private boolean projectionMatrixSet;
 
     private Vector2[][] cellCentres;
+
+    private Cell[][] graphCells;
 
     public GridMapLayer(Class<? extends T> cls, float gridWidth, float gridHeight, float cellSize, String name, Color drawColor, boolean drawLayer) {
         this.cls = cls;
@@ -74,6 +77,11 @@ public class GridMapLayer<T> extends Actor {
         for (int i = 0; i < cellCentres.length; i++)
             for (int j = 0; j < cellCentres[0].length; j++)
                 this.cellCentres[i][j] = new Vector2(j * cellSize + cellSize*0.5f, i * cellSize+ cellSize*0.5f);
+
+        this.graphCells = new Cell[nRows][nCols];
+        for (int i = 0; i < graphCells.length; i++)
+            for (int j = 0; j < graphCells[0].length; j++)
+                this.graphCells[i][j] = new Cell(this, j, i);
 
     }
 
@@ -305,5 +313,25 @@ public class GridMapLayer<T> extends Actor {
 
     public int[] getCell(float x, float y) {
         return new int[] {(int) (y / cellSize), (int) (x / cellSize)};
+    }
+
+    public int getIndex(int col, int row) {
+        return row*getNumCols() + col;
+    }
+
+    public float getCellSize() {
+        return cellSize;
+    }
+
+    public int getNumCols() {
+        return nCols;
+    }
+
+    public int getNumRows() {
+        return nRows;
+    }
+
+    public Cell[][] getGraphCells() {
+        return graphCells;
     }
 }

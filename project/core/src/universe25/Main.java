@@ -14,6 +14,8 @@ import universe25.Agents.SimplisticAnt.ScouterAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.SpeciesAgent;
 import universe25.GameLogic.Movement.MoveSequence.GridMoveSequence;
+import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
+import universe25.GameLogic.Movement.Pathfinding.PathFinder;
 import universe25.Objects.WorldObject;
 import universe25.Worlds.World;
 import universe25.GameLogic.Movement.GoalMovement;
@@ -117,27 +119,29 @@ public class Main extends ApplicationAdapter {
         do {
             p = stage.randomPosition();
         } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
             PheromoneFollowingAnt ant = new PheromoneFollowingAnt();
             ant.setPosition(p.x,p.y);
             stage.addActor(ant);
-        }
+        }/*
 
         for (int i = 0; i < 1; i++) {
             ScouterAnt ant = new ScouterAnt();
             ant.setPosition(0,0);
             stage.addActor(ant);
-        }
+        }*/
 
-        /*
+
         stage.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("hehe");
-                stage.getAllAgents().get(0).testDoMovesBackwards();
+                PathFinder pathFinder = new PathFinder(stage.getBaseLayer());
+                Agent agent = stage.getAllAgents().get(0);
+                MoveSequence pathMoveSequence = pathFinder.getPathMoveSequence(agent.getPosition(), new Vector2(x,y));
+                agent.testDoMoveSequence(pathMoveSequence);
                 return false;
             }
-        });*/
+        });
     }
 
     @Override

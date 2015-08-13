@@ -60,4 +60,11 @@ public class MoveSequence {
     public void reverse() {
         Collections.reverse(moves);
     }
+
+    @Override
+    public String toString() {
+        return "MoveSequence{" +
+                "moves=" + moves +
+                '}';
+    }
 }
