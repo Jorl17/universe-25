@@ -67,6 +67,11 @@ public class FloatLayer extends GridMapLayer<Float> {
         }
     }
 
+    @Override
+    public float getMoveCost(int col, int row) {
+        return 1;
+    }
+
     public float getMaxValue() {
         return floatMax;
     }

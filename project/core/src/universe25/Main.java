@@ -119,7 +119,7 @@ public class Main extends ApplicationAdapter {
         do {
             p = stage.randomPosition();
         } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 100; i++) {
             PheromoneFollowingAnt ant = new PheromoneFollowingAnt();
             ant.setPosition(p.x,p.y);
             stage.addActor(ant);
@@ -135,10 +135,11 @@ public class Main extends ApplicationAdapter {
         stage.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                PathFinder pathFinder = new PathFinder(stage.getBaseLayer());
-                Agent agent = stage.getAllAgents().get(0);
-                MoveSequence pathMoveSequence = pathFinder.getPathMoveSequence(agent.getPosition(), new Vector2(x,y));
-                agent.testDoMoveSequence(pathMoveSequence);
+                PathFinder pathFinder = new PathFinder(stage.getWorldObjectsLayer());
+                for ( Agent agent : stage.getAllAgents()) {
+                    MoveSequence pathMoveSequence = pathFinder.getPathMoveSequence(agent.getPosition(), new Vector2(x, y));
+                    agent.testDoMoveSequence(pathMoveSequence);
+                }
                 return false;
             }
         });

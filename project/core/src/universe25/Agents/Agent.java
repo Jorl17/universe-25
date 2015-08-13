@@ -16,6 +16,7 @@ import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.WorldObject;
 import universe25.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Worlds.GridLayers.FloatLayer;
+import universe25.Worlds.GridLayers.WorldObjectsLayer;
 import universe25.Worlds.World;
 import universe25.GameLogic.Movement.MovableImage;
 import universe25.GameLogic.Movement.WeightedGoal;
@@ -81,8 +82,8 @@ public abstract class Agent extends MovableImage implements Disposable {
     public abstract void update();
 
     public void updateCellsInFov() {
-        BaseEmptyLayer firstFloatLayer = getWorld().getBaseLayer();
-        tmpCellsInFov = firstFloatLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
+        WorldObjectsLayer objectsLayer = getWorld().getWorldObjectsLayer();
+        tmpCellsInFov = objectsLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
         Vector2 pos = getPosition();
 
         // Remove the "origin" from it all
@@ -99,7 +100,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     }
 
     public void onAddedToWorld() {
-            this.movesMemory.setGrid(getWorld().getBaseLayer());
+            this.movesMemory.setGrid(getWorld().getWorldObjectsLayer());
     }
 
     @Override
@@ -120,7 +121,7 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     private void updateMovesMemory() {
         Vector2 pos = getPosition();
-        GridCell cell = getWorld().getBaseLayer().getCell(pos.x, pos.y);
+        GridCell cell = getWorld().getWorldObjectsLayer().getCell(pos.x, pos.y);
 
         GridCell lastCell = movesMemory.getLastCell();
         if (lastCell == null || lastCell == cell )
@@ -265,6 +266,13 @@ public abstract class Agent extends MovableImage implements Disposable {
         if ( debugDrawFov )
             fieldOfView.draw(batch);
 
+        /*
+        if ( movesToTake != null ) {
+            for (Vector2 move : movesToTake.getMoves() )
+                getWorld().getBaseLayer().drawCell(batch, getWorld().getBaseLayer().getCell(move.x, move.y), Color.GREEN.cpy().sub(0,0,0,0.5f));
+        }*/
+
+
 
     }
 
@@ -328,9 +336,12 @@ public abstract class Agent extends MovableImage implements Disposable {
         return movesMemory;
     }
 
+
+    private MoveSequence movesToTake;
     public void testDoMoveSequence(MoveSequence pathMoveSequence) {
         getGoalMovement().clearGoals();
         states.clearStates();
         states.addState(new DoMoveSequence<>(this, "Test", 1, pathMoveSequence, true));
+        movesToTake = pathMoveSequence;
     }
 }

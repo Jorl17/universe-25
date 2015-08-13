@@ -95,4 +95,17 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
 
         return ret;
     }
+
+    public boolean hasObjects(int col, int row) {
+        return !getValueAtCell(col, row).isEmpty();
+    }
+
+    public boolean hasObjects(GridCell cell) {
+        return !getValueAtCell(cell).isEmpty();
+    }
+
+    @Override
+    public float getMoveCost(int col, int row) {
+        return hasObjects(col, row) ? -1 : 1; //FIXME Make this more flexible
+    }
 }

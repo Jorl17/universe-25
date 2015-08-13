@@ -47,8 +47,8 @@ public class ProportionalPheromoneController implements PheromoneController {
 
         if ( sum > threshold ) {
             if ( dontRepeat ) {
-                memory.setGrid(agent.getWorld().getBaseLayer());
-                GridCell agentCell = agent.getWorld().getBaseLayer().getCell(position.x, position.y);
+                memory.setGrid(agent.getWorld().getWorldObjectsLayer());
+                GridCell agentCell = agent.getWorld().getWorldObjectsLayer().getCell(position.x, position.y);
                 if (memory.containsMove(agentCell) && pheromone.getWorldLayer().getValueAt(position.x, position.y) > 0) {
                     //System.out.println("Hehe, not adding!");
                     return false;

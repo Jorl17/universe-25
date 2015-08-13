@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 07/08/15.
  */
-public class GridMapLayer<T> extends Actor {
+public abstract class GridMapLayer<T> extends Actor {
     protected float gridWidth, gridHeight;
     protected float cellSize;
     protected int nRows, nCols;
@@ -355,5 +355,11 @@ public class GridMapLayer<T> extends Actor {
 
     public void drawCell(Batch batch, GridCell cell, Color c) {
         drawCell(batch, cell.getCol(), cell.getRow(), c);
+    }
+
+    public abstract float getMoveCost(int col, int row);
+
+    public float getMoveCost(GridCell cell) {
+        return getMoveCost(cell.getCol(), cell.getRow());
     }
 }

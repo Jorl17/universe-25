@@ -7,14 +7,16 @@ import com.badlogic.gdx.ai.pfa.Connection;
  */
 public class CellConnection implements Connection<GridCell> {
     private GridCell from, to;
-    public CellConnection(GridCell from, GridCell to) {
+    private float cost;
+    public CellConnection(GridCell from, GridCell to, float cost) {
         this.from = from;
         this.to = to;
+        this.cost = cost;
     }
 
     @Override
     public float getCost() {
-        return 1; //FIXME: Not dealing with diagonals on purpose
+        return cost;
     }
 
     @Override

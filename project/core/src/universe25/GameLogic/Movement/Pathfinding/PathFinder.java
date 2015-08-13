@@ -31,16 +31,18 @@ public class PathFinder {
         GridCell cell = layer.getCell(pos1.x, pos1.y);
         GridCell cell2 = layer.getCell(pos2.x, pos2.y);
 
-        System.out.println(pathFinder.searchNodePath(cell, cell2, new ManhattanDistanceHeuristic(), out));
+        pathFinder.searchNodePath(cell, cell2, new ManhattanDistanceHeuristic(), out);
         return out;
     }
 
     public MoveSequence getPathMoveSequence(Vector2 pos1, Vector2 pos2) {
         DefaultGraphPath<GridCell> path = getPath(pos1, pos2);
+
+        //FIXME: Could force this to use GridMoveSequence
         MoveSequence moveSequence = new MoveSequence();
         for ( GridCell c : path )
             moveSequence.addMove(layer.getCellCentre(c.getCol(), c.getRow()));
-        System.out.println(moveSequence);
+
         return moveSequence;
     }
 }

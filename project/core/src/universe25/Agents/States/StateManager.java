@@ -71,4 +71,8 @@ public class StateManager {
     public void clearStates() {
         states.clear();
     }
+
+    public State getCurrentState() {
+        return states.get(currState);
+    }
 }

@@ -54,15 +54,15 @@ public class World extends Stage {
         addPheromones();
         addGridLayer(foodLayer);
 
-/*
+
         for (int i = 0; i < 100; i++) {
             Stone stone = new Stone();
             Vector2 pos = randomPosition();
             stone.setPosition(pos.x, pos.y);
             addActor(stone);
-        }*/
+        }
 
-/*
+
         for (int i = 0; i < 15; i++) {
             Wall wall = new Wall();
             Vector2 pos = randomPosition();
@@ -75,7 +75,7 @@ public class World extends Stage {
             Vector2 pos = randomPosition();
             wall.setPosition(pos.x, pos.y);
             addActor(wall);
-        }*/
+        }
 
         for (int i =0; i < 1 ; i++) {
 

@@ -33,15 +33,33 @@ public class GridCell implements IndexedNode<GridCell> {
         if ( this.connections == null ) {
             GridCell[][] graphCells = layer.getGraphCells();
             this.connections = new Array<>();
-            if (getRow() > 0)
-                connections.add(new CellConnection(this, graphCells [this.getRow() - 1] [this.getCol()]));
-            if (getCol() > 0)
-                connections.add(new CellConnection(this, graphCells [this.getRow()] [this.getCol() - 1]));
-            if (getCol() < layer.getNumCols() - 1)
-                connections.add(new CellConnection(this, graphCells [this.getRow()] [this.getCol() + 1]));
-            if (getRow() < layer.getNumRows() - 1)
-                connections.add(new CellConnection(this, graphCells [this.getRow() + 1] [this.getCol()]));
+            if (getRow() > 0) {
+                GridCell c = graphCells [this.getRow() - 1] [this.getCol()];
+                float cost = layer.getMoveCost(c);
+                if ( cost > 0 )
+                connections.add(new CellConnection(this, c, cost));
+            }
+            if (getCol() > 0) {
+                GridCell c = graphCells [this.getRow()] [this.getCol() - 1];
+                float cost = layer.getMoveCost(c);
+                if ( cost > 0 )
+                    connections.add(new CellConnection(this, c, cost));
+            }
+            if (getCol() < layer.getNumCols() - 1) {
+                GridCell c = graphCells [this.getRow()] [this.getCol() + 1];
+                float cost = layer.getMoveCost(c);
+                if ( cost > 0 )
+                    connections.add(new CellConnection(this, c, cost));
+            }
+            if (getRow() < layer.getNumRows() - 1) {
+                GridCell c = graphCells [this.getRow() + 1] [this.getCol()];
+                float cost = layer.getMoveCost(c);
+                if ( cost > 0 )
+                    connections.add(new CellConnection(this, c, cost));
+            }
+
         }
+
         return connections;
     }
 

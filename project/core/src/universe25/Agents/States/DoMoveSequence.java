@@ -38,7 +38,8 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
         }
         Vector2 pos = agent.getPosition();
         Vector2 destination = this.moveSequence.getMoveAt(currentMove);
-        if ( pos.epsilonEquals(pos, 1E-1f) ) {
+
+        if ( pos.epsilonEquals(destination, agent.getWorld().getWorldObjectsLayer().getCellSize()*0.5f) ) {
             if (++currentMove == this.moveSequence.numMoves()) {
                 makeUnreachable();
                 return null; // All done!
