@@ -28,6 +28,10 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
 
     @Override
     public String update() {
+        if ( this.moveSequence.numMoves() == 0 ) {
+            makeUnreachable();
+            return null;
+        }
         if ( currentMove  == this.moveSequence.numMoves()-1) {
             makeUnreachable();
             return null;
