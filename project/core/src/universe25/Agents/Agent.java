@@ -12,6 +12,7 @@ import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.MoveSequence.FixedGridMoveSequence;
 import universe25.GameLogic.Movement.MoveSequence.GridMoveSequence;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.WorldObject;
 import universe25.Worlds.GridLayers.BaseEmptyLayer;
 import universe25.Worlds.GridLayers.FloatLayer;
@@ -36,11 +37,11 @@ public abstract class Agent extends MovableImage implements Disposable {
     private ShapeRenderer shapeRenderer;
 
     private FieldOfView fieldOfView;
-    private ArrayList<int[]> tmpCellsInFov;
+    private ArrayList<GridCell> tmpCellsInFov;
     boolean debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing;
     private boolean shouldDisposeTexture;
     private Vector2 runawayFromObjectsVector;
-    private ArrayList<int[]> cellsWithObjects;
+    private ArrayList<GridCell> cellsWithObjects;
 
     private FixedGridMoveSequence movesMemory;
 
@@ -86,8 +87,8 @@ public abstract class Agent extends MovableImage implements Disposable {
 
         // Remove the "origin" from it all
         for (int i = 0; i < tmpCellsInFov.size(); i++) {
-            int[] cell = tmpCellsInFov.get(i);
-            if ( firstFloatLayer.isPointInCell(pos, cell[1], cell[0])) {
+            GridCell cell = tmpCellsInFov.get(i);
+            if ( cell.isPointInCell(pos)) {
                 tmpCellsInFov.remove(i);
                 break;
             }
@@ -119,10 +120,10 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     private void updateMovesMemory() {
         Vector2 pos = getPosition();
-        int[] cell = getWorld().getBaseLayer().getCell(pos.x, pos.y);
+        GridCell cell = getWorld().getBaseLayer().getCell(pos.x, pos.y);
 
-        int[] lastCell = movesMemory.getLastCell();
-        if (lastCell == null || lastCell[0] != cell[0] ||  lastCell[1] != cell[1] )
+        GridCell lastCell = movesMemory.getLastCell();
+        if (lastCell == null || lastCell == cell )
             movesMemory.addMove(cell);
     }
 
@@ -170,9 +171,8 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     protected boolean areThereCellsWithValueAtFloatLayer(FloatLayer layer) {
         if ( tmpCellsInFov != null ) {
-            for ( int[] cell : tmpCellsInFov) {
-                int row = cell[0], col = cell[1];
-                ValuePositionPair<Float> cellCentreAndValue = layer.getCellCentreAndValue(col, row);
+            for ( GridCell cell : tmpCellsInFov) {
+                ValuePositionPair<Float> cellCentreAndValue = layer.getCellCentreAndValue(cell);
                 if ( cellCentreAndValue.getValue() > 0 ) return true;
             }
         }
@@ -188,10 +188,8 @@ public abstract class Agent extends MovableImage implements Disposable {
         ArrayList<Vector2> ret = new ArrayList<>();
 
         if (tmpCellsInFov != null )
-            for (int[] cell : tmpCellsInFov) {
-            int row = cell[0], col = cell[1];
-            ret.add(getWorld().getBaseLayer().getCellCentre(col, row));
-        }
+            for (GridCell cell : tmpCellsInFov)
+                ret.add(cell.getCentre());
 
         return ret;
     }
@@ -200,10 +198,8 @@ public abstract class Agent extends MovableImage implements Disposable {
         ArrayList<Vector2> ret = new ArrayList<>();
 
         if (cellsWithObjects != null )
-            for (int[] cell : cellsWithObjects) {
-                int row = cell[0], col = cell[1];
-                ret.add(getWorld().getBaseLayer().getCellCentre(col, row));
-            }
+            for (GridCell cell : cellsWithObjects)
+                ret.add(cell.getCentre());
 
         return ret;
     }
@@ -212,10 +208,10 @@ public abstract class Agent extends MovableImage implements Disposable {
         ArrayList<ValuePositionPair<Float>> ret = new ArrayList<>();
 
         if (tmpCellsInFov != null ) {
-            for ( int[] cell : tmpCellsInFov) {
-                int row = cell[0], col = cell[1];
-                ValuePositionPair<Float> cellCentreAndValue = layer.getCellCentreAndValue(col, row);
-                if ( cellCentreAndValue.getValue() > 0 ) ret.add(cellCentreAndValue);
+            for ( GridCell cell : tmpCellsInFov) {
+                ValuePositionPair<Float> cellCentreAndValue = layer.getCellCentreAndValue(cell);
+                if ( cellCentreAndValue.getValue() > 0 )
+                    ret.add(cellCentreAndValue);
             }
         }
 
@@ -259,9 +255,9 @@ public abstract class Agent extends MovableImage implements Disposable {
         if ( debugDrawCellsUnderFov && tmpCellsInFov != null ) {
             Color c = new Color(0.3f,0.3f,0.3f,0.5f);
             getWorld().getBaseLayer().getShapeRenderer().setProjectionMatrix(batch.getProjectionMatrix());
-            for (int[] cell : tmpCellsInFov)
+            for (GridCell cell : tmpCellsInFov)
                 // cell[1] has col, cell[0] has row
-                getWorld().getBaseLayer().drawCell(batch, cell[1], cell[0], c);
+                getWorld().getBaseLayer().drawCell(batch, cell, c);
         }
 
         batch.begin();
@@ -272,7 +268,7 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     }
 
-    public ArrayList<int[]> getCellsInFov() {
+    public ArrayList<GridCell> getCellsInFov() {
         return tmpCellsInFov;
     }
 

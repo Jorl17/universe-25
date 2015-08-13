@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
 import universe25.GameLogic.Movement.MoveSequence.FixedGridMoveSequence;
 import universe25.GameLogic.Movement.MoveSequence.GridMoveSequence;
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Worlds.GridLayers.PheromoneMapLayer;
 
 import java.util.ArrayList;
@@ -35,19 +36,19 @@ public class ProportionalPheromoneController implements PheromoneController {
     public boolean update() {
         Vector2 position = agent.getPosition();
 
-        ArrayList<int[]> cellsInFov = agent.getCellsInFov();
+        ArrayList<GridCell> cellsInFov = agent.getCellsInFov();
         PheromoneMapLayer worldLayer = pheromone.getWorldLayer();
 
         float sum = 0;
-        for (int[] cell : cellsInFov)
-            sum += worldLayer.getValueAtCell(cell[1], cell[0]);
+        for (GridCell cell : cellsInFov)
+            sum += worldLayer.getValueAtCell(cell);
 
         sum /= cellsInFov.size();
 
         if ( sum > threshold ) {
             if ( dontRepeat ) {
                 memory.setGrid(agent.getWorld().getBaseLayer());
-                int[] agentCell = agent.getWorld().getBaseLayer().getCell(position.x, position.y);
+                GridCell agentCell = agent.getWorld().getBaseLayer().getCell(position.x, position.y);
                 if (memory.containsMove(agentCell) && pheromone.getWorldLayer().getValueAt(position.x, position.y) > 0) {
                     //System.out.println("Hehe, not adding!");
                     return false;

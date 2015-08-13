@@ -1,6 +1,7 @@
 package universe25.GameLogic.Movement.MoveSequence;
 
 import com.badlogic.gdx.math.Vector2;
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Worlds.GridLayers.GridMapLayer;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Collections;
  * Created by jorl17 on 11/08/15.
  */
 public class GridMoveSequence extends MoveSequence {
-    private ArrayList<int[]> cells; // [0]-> row, [1]-> col
+    private ArrayList<GridCell> cells; // [0]-> row, [1]-> col
     private GridMapLayer grid;
 
     public GridMoveSequence() {
@@ -22,25 +23,25 @@ public class GridMoveSequence extends MoveSequence {
         this.grid = grid;
     }
 
-    public GridMoveSequence(GridMapLayer grid, ArrayList<int[]> cells ) {
+    public GridMoveSequence(GridMapLayer grid, ArrayList<GridCell> cells ) {
         super();
         this.cells = new ArrayList<>();
         this.cells.addAll(cells);
         this.grid = grid;
-        for ( int[] cell : cells )
-            addMove(grid.getCellCentre(cell[1], cell[0]));
+        for ( GridCell cell : cells )
+            addMove(cell.getCentre());
     }
 
-    public void addMove(int[] cell) {
-        addMove(grid.getCellCentre(cell[1], cell[0]));
+    public void addMove(GridCell cell) {
+        addMove(cell.getCentre());
         this.cells.add(cell);
     }
 
-    public ArrayList<int[]> getCells() {
+    public ArrayList<GridCell> getCells() {
         return cells;
     }
 
-    public int[] getLastCell() {
+    public GridCell getLastCell() {
         if ( cells.isEmpty() ) return null;
         return cells.get(cells.size()-1);
     }
@@ -55,13 +56,15 @@ public class GridMoveSequence extends MoveSequence {
         this.grid = grid;
     }
 
-    public boolean containsMove(int[] agentCell) {
+    public boolean containsMove(GridCell agentCell) {
         //FIXME: THIS IS SO GOD DAMNED SLOW FOR SURE
-        for ( int[] cell : cells )
-            if ( cell[0] == agentCell[0] && cell[1] == agentCell[1])
+        /*for ( GridCell cell : cells )
+            if ( cell.equals(agentCell))
                 return true;
 
-        return false;
-        //return cells.contains(agentCell);   //FIXME: Is this right??
+        return false;*/
+
+        //FIXME Never forget that this forces us to always fetch cells from the same GridLayerMap!! References!
+        return cells.contains(agentCell);
     }
 }

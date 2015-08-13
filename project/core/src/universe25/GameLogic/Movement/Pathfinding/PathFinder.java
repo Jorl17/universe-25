@@ -28,10 +28,10 @@ public class PathFinder {
 
     public DefaultGraphPath<GridCell> getPath(Vector2 pos1, Vector2 pos2) {
         DefaultGraphPath<GridCell> out = new DefaultGraphPath<>();
-        int[] cell = layer.getCell(pos1.x, pos1.y);
-        int[] cell2 = layer.getCell(pos2.x, pos2.y);
+        GridCell cell = layer.getCell(pos1.x, pos1.y);
+        GridCell cell2 = layer.getCell(pos2.x, pos2.y);
         GridCell[][] graphCells = layer.getGraphCells();
-        System.out.println(pathFinder.searchNodePath(graphCells[cell[0]][cell[1]], graphCells[cell2[0]][cell2[1]], new ManhattanDistanceHeuristic(), out));
+        System.out.println(pathFinder.searchNodePath(cell, cell2, new ManhattanDistanceHeuristic(), out));
         return out;
     }
 

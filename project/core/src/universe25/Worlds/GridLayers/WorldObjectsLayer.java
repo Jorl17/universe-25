@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import javafx.geometry.BoundingBox;
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.WorldObject;
 
 import java.util.ArrayList;
@@ -64,8 +65,8 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
         }
     }
 
-    private boolean rayToCellHasIntersection(Vector2 position, int col, int row, Set<WorldObject> objectsToTest ) {
-        Vector2 cellCentre = getCellCentre(col, row);
+    private boolean rayToCellHasIntersection(Vector2 position, GridCell cell, Set<WorldObject> objectsToTest ) {
+        Vector2 cellCentre = cell.getCentre();
         for ( WorldObject object : objectsToTest )
             if ( Intersector.intersectSegmentPolygon(position, cellCentre, object.getBoundingBoxAsPolygon()) )
                 return true;
@@ -73,12 +74,11 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
         return false;
     }
 
-    public ArrayList<int[]> removeInvisibleCells(Vector2 position, ArrayList<int[]> tmpCellsInFov) {
-        ArrayList<int[]> ret = new ArrayList<>();
+    public ArrayList<GridCell> removeInvisibleCells(Vector2 position, ArrayList<GridCell> tmpCellsInFov) {
+        ArrayList<GridCell> ret = new ArrayList<>();
         Set<WorldObject> objectsToTest = new HashSet<>();
-        for (int[] cell : tmpCellsInFov) {
-            int row = cell[0], col = cell[1];
-            ArrayList<WorldObject> valueAtCell = getValueAtCell(col, row);
+        for (GridCell cell : tmpCellsInFov) {
+            ArrayList<WorldObject> valueAtCell = getValueAtCell(cell);
             if (!valueAtCell.isEmpty()) {
                 objectsToTest.addAll(valueAtCell);
                 ret.add( cell );
@@ -86,9 +86,8 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
         }
 
         for (int i = 0; i < tmpCellsInFov.size(); i++) {
-            int[] cell = tmpCellsInFov.get(i);
-            int row = cell[0], col = cell[1];
-            if ( rayToCellHasIntersection(position, col, row, objectsToTest) ) {
+            GridCell cell = tmpCellsInFov.get(i);
+            if ( rayToCellHasIntersection(position, cell, objectsToTest) ) {
                 tmpCellsInFov.remove(i);
                 i--;
             }

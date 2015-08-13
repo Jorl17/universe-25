@@ -1,5 +1,6 @@
 package universe25.GameLogic.Movement.MoveSequence;
 
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Worlds.GridLayers.GridMapLayer;
 
 import java.util.ArrayList;
@@ -32,14 +33,14 @@ public class FixedGridMoveSequence extends GridMoveSequence {
         this(grid, maxSize, true);
     }
 
-    public FixedGridMoveSequence(GridMapLayer grid, ArrayList<int[]> cells, int maxSize, boolean discardFromBeginning) {
+    public FixedGridMoveSequence(GridMapLayer grid, ArrayList<GridCell> cells, int maxSize, boolean discardFromBeginning) {
         super(grid, cells);
         this.maxSize = maxSize;
         this.discardFromBeginning = discardFromBeginning;
         forceSize();
     }
 
-    public FixedGridMoveSequence(GridMapLayer grid, ArrayList<int[]> cells, int maxSize) {
+    public FixedGridMoveSequence(GridMapLayer grid, ArrayList<GridCell> cells, int maxSize) {
         this(grid, cells, maxSize, true);
     }
 
@@ -56,13 +57,13 @@ public class FixedGridMoveSequence extends GridMoveSequence {
     }
 
     @Override
-    public void addMove(int[] cell) {
+    public void addMove(GridCell cell) {
         if ( !discardFromBeginning && getMoves().size() == maxSize) return; //Already full
         super.addMove(cell);
         forceSize();
     }
 
-    public void addMoveIfUnique(int[] cell) {
+    public void addMoveIfUnique(GridCell cell) {
         if ( !containsMove(cell) ) addMove(cell);
     }
 

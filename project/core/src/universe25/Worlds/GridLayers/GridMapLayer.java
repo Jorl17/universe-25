@@ -120,7 +120,7 @@ public class GridMapLayer<T> extends Actor {
         return getValueAt(pos.x,pos.y);
     }
 
-    public T getValueAtCell(int col, int row,T[][] cells) {
+    public T getValueAtCell(int col, int row, T[][] cells) {
         if ( col < 0 || col > nCols ) return null;
         if ( row < 0 || row > nRows ) return null;
 
@@ -234,7 +234,7 @@ public class GridMapLayer<T> extends Actor {
         }
     }
 
-    public ArrayList<int[]> getCellsWithinTriangle(Vector2[] triangle) {
+    public ArrayList<GridCell> getCellsWithinTriangle(Vector2[] triangle) {
         int[] minMaxRowCol = new int[4];
         getMinMaxRowCols(triangle, minMaxRowCol);
         int minCol = minMaxRowCol[0];
@@ -243,11 +243,11 @@ public class GridMapLayer<T> extends Actor {
         int maxRow = minMaxRowCol[3];
 
         // Now search in those
-        ArrayList<int[]> ret = new ArrayList<>();
+        ArrayList<GridCell> ret = new ArrayList<>();
         for (int i = minRow; i <= maxRow; i++)
             for (int j = minCol; j <= maxCol; j++)
                 if (Intersector.isPointInTriangle(cellCentres[i][j], triangle[0], triangle[1], triangle[2]))
-                    ret.add(new int[] { i, j});
+                    ret.add(graphCells[i][j]);
 
 
         return ret;
@@ -311,8 +311,10 @@ public class GridMapLayer<T> extends Actor {
     }
 
 
-    public int[] getCell(float x, float y) {
-        return new int[] {(int) (y / cellSize), (int) (x / cellSize)};
+    public GridCell getCell(float x, float y) {
+        if ( x > gridWidth || x < 0 ) return null;
+        if ( y > gridHeight|| y < 0 ) return null;
+        return this.graphCells[(int) (y / cellSize)][(int) (x / cellSize)];
     }
 
     public int getIndex(int col, int row) {
@@ -333,5 +335,25 @@ public class GridMapLayer<T> extends Actor {
 
     public GridCell[][] getGraphCells() {
         return graphCells;
+    }
+
+    public Vector2 getCellCentre(GridCell gridCell) {
+        return getCellCentre(gridCell.getCol(), gridCell.getRow());
+    }
+
+    public boolean isPointInCell(Vector2 pos, GridCell cell) {
+        return isPointInCell(pos, cell.getCol(), cell.getRow());
+    }
+
+    public T getValueAtCell(GridCell cell) {
+        return getValueAtCell(cell.getCol(), cell.getRow());
+    }
+
+    public ValuePositionPair<T> getCellCentreAndValue(GridCell cell) {
+        return getCellCentreAndValue(cell.getCol(), cell.getRow());
+    }
+
+    public void drawCell(Batch batch, GridCell cell, Color c) {
+        drawCell(batch, cell.getCol(), cell.getRow(), c);
     }
 }

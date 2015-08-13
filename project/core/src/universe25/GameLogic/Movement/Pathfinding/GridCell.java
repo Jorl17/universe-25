@@ -2,6 +2,7 @@ package universe25.GameLogic.Movement.Pathfinding;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedNode;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import universe25.Worlds.GridLayers.GridMapLayer;
 
@@ -62,6 +63,14 @@ public class GridCell implements IndexedNode<GridCell> {
             return ((GridCell) obj).getCol() == getCol() && ((GridCell) obj).getRow() == getRow();
         else
             return super.equals(obj);
+    }
+
+    public Vector2 getCentre() {
+        return layer.getCellCentre(this);
+    }
+
+    public boolean isPointInCell(Vector2 pos) {
+        return layer.isPointInCell(pos, this);
     }
 
     //FIXME more stuff
