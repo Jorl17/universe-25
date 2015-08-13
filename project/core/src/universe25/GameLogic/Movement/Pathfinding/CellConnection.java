@@ -5,9 +5,9 @@ import com.badlogic.gdx.ai.pfa.Connection;
 /**
  * Created by jorl17 on 13/08/15.
  */
-public class CellConnection implements Connection<Cell> {
-    private Cell from, to;
-    public CellConnection(Cell from, Cell to) {
+public class CellConnection implements Connection<GridCell> {
+    private GridCell from, to;
+    public CellConnection(GridCell from, GridCell to) {
         this.from = from;
         this.to = to;
     }
@@ -18,12 +18,12 @@ public class CellConnection implements Connection<Cell> {
     }
 
     @Override
-    public Cell getFromNode() {
+    public GridCell getFromNode() {
         return from;
     }
 
     @Override
-    public Cell getToNode() {
+    public GridCell getToNode() {
         return to;
     }
 }

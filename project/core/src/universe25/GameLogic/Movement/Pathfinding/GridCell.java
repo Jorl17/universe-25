@@ -2,20 +2,19 @@ package universe25.GameLogic.Movement.Pathfinding;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedNode;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import universe25.Worlds.GridLayers.GridMapLayer;
 
 /**
  * Created by jorl17 on 13/08/15.
  */
-public class Cell implements IndexedNode<Cell> {
-    private Array<Connection<Cell>> connections;
+public class GridCell implements IndexedNode<GridCell> {
+    private Array<Connection<GridCell>> connections;
     private GridMapLayer layer;
     private int col, row;
     private int index;
 
-    public Cell(GridMapLayer layer, int col, int row) {
+    public GridCell(GridMapLayer layer, int col, int row) {
         this.layer = layer;
         this.col = col;
         this.row = row;
@@ -29,9 +28,9 @@ public class Cell implements IndexedNode<Cell> {
     }
 
     @Override
-    public Array<Connection<Cell>> getConnections() {
+    public Array<Connection<GridCell>> getConnections() {
         if ( this.connections == null ) {
-            Cell[][] graphCells = layer.getGraphCells();
+            GridCell[][] graphCells = layer.getGraphCells();
             this.connections = new Array<>();
             if (getRow() > 0)
                 connections.add(new CellConnection(this, graphCells [this.getRow() - 1] [this.getCol()]));
@@ -59,8 +58,8 @@ public class Cell implements IndexedNode<Cell> {
 
     @Override
     public boolean equals(Object obj) {
-        if ( obj instanceof Cell )
-            return ((Cell) obj).getCol() == getCol() && ((Cell) obj).getRow() == getRow();
+        if ( obj instanceof GridCell)
+            return ((GridCell) obj).getCol() == getCol() && ((GridCell) obj).getRow() == getRow();
         else
             return super.equals(obj);
     }

@@ -8,7 +8,7 @@ import universe25.Worlds.GridLayers.GridMapLayer;
 /**
  * Created by jorl17 on 13/08/15.
  */
-public class GridMapLayerIndexedGraph implements IndexedGraph<Cell> {
+public class GridMapLayerIndexedGraph implements IndexedGraph<GridCell> {
     private final GridMapLayer layer;
 
     public GridMapLayerIndexedGraph(GridMapLayer layer) {
@@ -21,7 +21,7 @@ public class GridMapLayerIndexedGraph implements IndexedGraph<Cell> {
     }
 
     @Override
-    public Array<Connection<Cell>> getConnections(Cell fromNode) {
+    public Array<Connection<GridCell>> getConnections(GridCell fromNode) {
         return fromNode.getConnections();
     }
 }
