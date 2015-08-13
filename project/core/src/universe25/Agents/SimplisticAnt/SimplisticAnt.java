@@ -32,17 +32,20 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         setOriginX(4);
         setOriginY(4);
         foodPheromoneController = new AlternativeOrderedPheromoneController(
-                                    new ConditionalIncreasePheromoneController(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFood,
-                                    (agent) -> ((SimplisticAnt)agent).areThereCellsWithFood()),
+                                    new ConditionalIncreasePheromoneController<>(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFood,
+                                            SimplisticAnt::areThereCellsWithFood),
                                    /* new ConditionalIncreasePheromoneController(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFoodPheromone,
                                     (agent) -> ((SimplisticAnt)agent).areThereCellsWithPheromone(foodPheromone)*/
-                                    new ProportionalPheromoneController(this, foodPheromone, 0.10f, 10, true, 100)
+                                    new ProportionalPheromoneController(this, foodPheromone, 0.20f, 1, true, 100)
                                  );
 
-        pathPheronomeController = new IncreasePheromoneController(this, pathPheronome, pathPheronomeIncrease);
+        pathPheronomeController = /*new AlternativeOrderedPheromoneController( new ConditionalIncreasePheromoneController(this, pathPheronome, pathPheronomeIncrease,
+                (agent) -> !((SimplisticAnt)agent).areThereCellsWithPheromone(pathPheronome)),
+                new ProportionalPheromoneController(this, pathPheronome, 0.5f, pathPheronomeIncrease, true, 100));*/
+                new IncreasePheromoneController(this, pathPheronome, pathPheronomeIncrease);
 
-        foodImmediancyPheromoneController = new ConditionalIncreasePheromoneController(this, foodImmediancyPheromone, 1,
-                (agent) -> ((SimplisticAnt)agent).areThereCellsWithFood());
+        foodImmediancyPheromoneController = new ConditionalIncreasePheromoneController<>(this, foodImmediancyPheromone, 1,
+                SimplisticAnt::areThereCellsWithFood);
 
         prepareStates();
     }

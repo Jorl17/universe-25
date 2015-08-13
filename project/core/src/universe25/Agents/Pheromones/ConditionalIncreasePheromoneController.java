@@ -8,13 +8,13 @@ import java.util.function.Function;
 /**
  * Created by jorl17 on 09/08/15.
  */
-public class ConditionalIncreasePheromoneController implements PheromoneController {
-    private Agent agent;
+public class ConditionalIncreasePheromoneController<T extends Agent> implements PheromoneController {
+    private T agent;
     private Pheromone pheromone;
     private float amountToIncrease;
-    private Function<Agent, Boolean> verifier;
+    private Function<T, Boolean> verifier;
 
-    public ConditionalIncreasePheromoneController(Agent agent, Pheromone pheromone, float amountToIncrease, Function<Agent, Boolean> verifier) {
+    public ConditionalIncreasePheromoneController(T agent, Pheromone pheromone, float amountToIncrease, Function<T, Boolean> verifier) {
         this.agent = agent;
         this.pheromone = pheromone;
         this.amountToIncrease = amountToIncrease;
