@@ -193,18 +193,18 @@ public class World extends Stage {
         int collisions = 0;
 
         if ( agentbb.getMinX() <= worldBoundingBox.getMinX()  ) {
-            agent.setX((float) worldBoundingBox.getMinX());
+            agent.setX((float) worldBoundingBox.getMinX()  + agent.getBoundingBoxThreshold());
             agent.addCollisionWithWorld(Agent.COLLIDED_LEFT);
         } else if ( agentbb.getMaxX() >= worldBoundingBox.getMaxX() ) {
-            agent.setX((float) (worldBoundingBox.getMaxX() -  agentbb.getWidth()));
+            agent.setX((float) (worldBoundingBox.getMaxX() -  agentbb.getWidth()  - agent.getBoundingBoxThreshold()));
             agent.addCollisionWithWorld(Agent.COLLIDED_RIGHT);
         }
 
         if ( agentbb.getMinY() <= worldBoundingBox.getMinY()  ) {
-            agent.setY((float) worldBoundingBox.getMinY());
+            agent.setY((float) worldBoundingBox.getMinY() + agent.getBoundingBoxThreshold());
             agent.addCollisionWithWorld(Agent.COLLIDED_BOTTOM);
         } else if ( agentbb.getMaxY() >= worldBoundingBox.getMaxY() ) {
-            agent.setY((float) (worldBoundingBox.getMaxY() - agentbb.getHeight()));
+            agent.setY((float) (worldBoundingBox.getMaxY() - agentbb.getHeight() - agent.getBoundingBoxThreshold()));
             agent.addCollisionWithWorld(Agent.COLLIDED_TOP);
         }
 

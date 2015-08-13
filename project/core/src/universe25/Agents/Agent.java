@@ -65,6 +65,7 @@ public abstract class Agent extends MovableImage implements Disposable {
         fieldOfView = new FieldOfView(this, fov, seeDistance);
         this.runawayFromObjectsVector  = new Vector2(0, 0);
         this.movesMemory = new FixedGridMoveSequence(movesMemorySize);
+        setBoundingBoxThreshold(0.0f);
     }
 
 
@@ -266,12 +267,12 @@ public abstract class Agent extends MovableImage implements Disposable {
         if ( debugDrawFov )
             fieldOfView.draw(batch);
 
-        /*
+/*
         if ( movesToTake != null ) {
             for (Vector2 move : movesToTake.getMoves() )
                 getWorld().getBaseLayer().drawCell(batch, getWorld().getBaseLayer().getCell(move.x, move.y), Color.GREEN.cpy().sub(0,0,0,0.5f));
-        }*/
-
+        }
+*/
 
 
     }

@@ -18,6 +18,7 @@ import javafx.geometry.BoundingBox;
  */
 public class BoundingBoxImage extends Image{
     protected BoundingBox boundingBox;
+    private float boundingBoxThreshold = 2.0f;
 
     public BoundingBoxImage(NinePatch patch) {
         super(patch);
@@ -64,19 +65,22 @@ public class BoundingBoxImage extends Image{
     @Override
     public void setBounds(float x, float y, float width, float height) {
         super.setBounds(x, y, width, height);
-        boundingBox = new BoundingBox(x, y, width, height);
+        boundingBox = new BoundingBox(getX()+boundingBoxThreshold, getY()+boundingBoxThreshold,
+                                      getWidth()-boundingBoxThreshold, getHeight()-boundingBoxThreshold);
     }
 
     @Override
     protected void positionChanged() {
         super.positionChanged();
-        boundingBox = new BoundingBox(getX(), getY(), getWidth(), getHeight());
+        boundingBox = new BoundingBox(getX()+boundingBoxThreshold, getY()+boundingBoxThreshold,
+                getWidth()-boundingBoxThreshold, getHeight()-boundingBoxThreshold);
     }
 
     @Override
     protected void sizeChanged() {
         super.sizeChanged();
-        boundingBox = new BoundingBox(getX(), getY(), getWidth(), getHeight());
+        boundingBox = new BoundingBox(getX()+boundingBoxThreshold, getY()+boundingBoxThreshold,
+                getWidth()-boundingBoxThreshold, getHeight()-boundingBoxThreshold);
     }
 
     public boolean interesects(BoundingBoxImage o) {
@@ -109,5 +113,15 @@ public class BoundingBoxImage extends Image{
                 (float) boundingBox.getMaxX(), (float) boundingBox.getMaxY(),
                 (float) boundingBox.getMaxX(), (float) boundingBox.getMinY()
         });
+    }
+
+    public void setBoundingBoxThreshold(float boundingBoxThreshold) {
+        this.boundingBoxThreshold = boundingBoxThreshold;
+        boundingBox = new BoundingBox(getX()+boundingBoxThreshold, getY()+boundingBoxThreshold,
+                getWidth()-boundingBoxThreshold, getHeight()-boundingBoxThreshold);
+    }
+
+    public float getBoundingBoxThreshold() {
+        return boundingBoxThreshold;
     }
 }

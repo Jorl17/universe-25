@@ -29,9 +29,9 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
 
     @Override
     public String update() {
-        System.out.println();
+        /*System.out.println();
         System.out.println(this.moveSequence.numMoves());
-        System.out.println(currentMove);
+        System.out.println(currentMove);*/
         if ( this.moveSequence.numMoves() == 0 ) {
             makeUnreachable();
             return null;
@@ -47,9 +47,13 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
         GridCell destGrid = agent.getWorld().getWorldObjectsLayer().getCell(destination.x,destination.y);
 
         float cellSize = agent.getWorld().getWorldObjectsLayer().getCellSize();
-        if ( //posGrid.equals(destGrid)
-        pos.epsilonEquals(destination, cellSize *1.5f)
-        ) {
+
+        boolean reached;
+        if ( currentMove  == this.moveSequence.numMoves()-1 )
+            reached = posGrid.equals(destGrid);
+        else
+        reached = pos.epsilonEquals(destination, cellSize *1.5f);
+        if ( reached ) {
             if (++currentMove == this.moveSequence.numMoves()) {
                 makeUnreachable();
                 return null; // All done!

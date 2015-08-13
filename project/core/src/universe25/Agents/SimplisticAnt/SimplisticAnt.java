@@ -31,6 +31,7 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         setSize(8,8);
         setOriginX(4);
         setOriginY(4);
+        setBoundingBoxThreshold(1.0f);
         foodPheromoneController = new AlternativeOrderedPheromoneController(
                                     new ConditionalIncreasePheromoneController<>(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFood,
                                             SimplisticAnt::areThereCellsWithFood),

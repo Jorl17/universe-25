@@ -58,6 +58,35 @@ public class GridCell implements IndexedNode<GridCell> {
                     connections.add(new CellConnection(this, c, cost));
             }
 
+            float diagonalCostDifference = -(float) (1 - Math.sqrt(2));
+            if (getRow() > 0 && getCol() > 0) {
+                GridCell c = graphCells [this.getRow() - 1] [this.getCol() -1];
+                float cost = layer.getMoveCost(c);
+                if ( cost > 0 )
+                    connections.add(new CellConnection(this, c, cost + diagonalCostDifference));
+            }
+
+            if (getRow() < layer.getNumRows() - 1 && getCol() < layer.getNumCols() - 1) {
+                GridCell c = graphCells [this.getRow() + 1] [this.getCol() + 1];
+                float cost = layer.getMoveCost(c);
+                if ( cost > 0 )
+                    connections.add(new CellConnection(this, c, cost + diagonalCostDifference));
+            }
+
+            if (getRow() > 0 && getCol() > layer.getNumCols() - 1) {
+                GridCell c = graphCells [this.getRow() - 1] [this.getCol() + 1];
+                float cost = layer.getMoveCost(c);
+                if ( cost > 0 )
+                    connections.add(new CellConnection(this, c, cost + diagonalCostDifference));
+            }
+
+            if (getRow() < layer.getNumRows() - 1 && getCol() > 0) {
+                GridCell c = graphCells [this.getRow() + 1] [this.getCol() - 1];
+                float cost = layer.getMoveCost(c);
+                if ( cost > 0 )
+                    connections.add(new CellConnection(this, c, cost + diagonalCostDifference));
+            }
+
         }
 
         return connections;
