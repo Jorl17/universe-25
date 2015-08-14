@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Disposable;
 import universe25.Agents.States.DoMoveSequence;
 import universe25.Agents.States.StateManager;
@@ -33,6 +35,8 @@ public abstract class Agent extends MovableImage implements Disposable {
     protected ArrayList<Agent> collidedAgents;
     protected ArrayList<WorldObject> collidedObjects;
     protected StateManager states;
+
+    private Group stack;
 
     //FIXME: Temporary
     private ShapeRenderer shapeRenderer;
@@ -66,6 +70,8 @@ public abstract class Agent extends MovableImage implements Disposable {
         this.runawayFromObjectsVector  = new Vector2(0, 0);
         this.movesMemory = new FixedGridMoveSequence(movesMemorySize);
         setBoundingBoxThreshold(0.0f);
+        this.stack = new Group();
+
     }
 
 
@@ -125,8 +131,9 @@ public abstract class Agent extends MovableImage implements Disposable {
         GridCell cell = getWorld().getWorldObjectsLayer().getCell(pos.x, pos.y);
 
         GridCell lastCell = movesMemory.getLastCell();
-        if (lastCell == null || lastCell == cell )
+        if (lastCell == null || lastCell != cell ) {
             movesMemory.addMove(cell);
+        }
     }
 
     private void runAwayFromCollidingObjects() {

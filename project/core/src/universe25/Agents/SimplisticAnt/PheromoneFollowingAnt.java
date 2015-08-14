@@ -79,11 +79,17 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         states.addState(priorityAggregatorStates);
     }
 
+    private boolean first = true;
     @Override
     public void update() {
         super.update();
-        if ( ((FloatLayer)getWorld().getGridLayers().get("FoodLayer")).getValueAt(getPosition()) > 0) {
-            getWorld().getActors().removeValue(this, false);
+        if ( ((FloatLayer)getWorld().getGridLayers().get("FoodLayer")).getValueAt(getPosition()) > 0 && first) {
+            //getWorld().getActors().removeValue(this, false);
+
+            //System.out.println(getMovesMemory().cpy().reverse());
+            testDoMoveSequence(getMovesMemory().cpy().reverse());
+
+            first = false;
             //getGoalMovement().clearGoals();
             //states.clearStates();
         }

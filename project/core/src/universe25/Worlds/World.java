@@ -55,7 +55,7 @@ public class World extends Stage {
         addGridLayer(foodLayer);
 
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 160; i++) {
             Stone stone = new Stone();
             Vector2 pos = randomPosition();
             stone.setPosition(pos.x, pos.y);
