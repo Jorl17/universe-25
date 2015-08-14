@@ -16,6 +16,7 @@ import universe25.Agents.SpeciesAgent;
 import universe25.GameLogic.Movement.MoveSequence.GridMoveSequence;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.PathFinder;
+import universe25.Objects.Stone;
 import universe25.Objects.WorldObject;
 import universe25.Worlds.World;
 import universe25.GameLogic.Movement.GoalMovement;
@@ -135,10 +136,16 @@ public class Main extends ApplicationAdapter {
         stage.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                PathFinder pathFinder = new PathFinder(stage.getWorldObjectsLayer());
-                for ( Agent agent : stage.getAllAgents()) {
-                    MoveSequence pathMoveSequence = pathFinder.getPathMoveSequence(agent.getPosition(), new Vector2(x, y));
-                    agent.testDoMoveSequence(pathMoveSequence);
+                if ( button == Input.Buttons.LEFT ) {
+                    Stone s = new Stone();
+                    s.setPosition(x-s.getWidth()/2,y-s.getHeight()/2);
+                    stage.addActor(s);
+                } else {
+                    PathFinder pathFinder = new PathFinder(stage.getWorldObjectsLayer());
+                    for (Agent agent : stage.getAllAgents()) {
+                        MoveSequence pathMoveSequence = pathFinder.getPathMoveSequence(agent.getPosition(), new Vector2(x, y));
+                        agent.testDoMoveSequence(pathMoveSequence);
+                    }
                 }
                 return false;
             }
