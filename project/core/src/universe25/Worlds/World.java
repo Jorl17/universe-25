@@ -98,6 +98,9 @@ public class World extends Stage {
             getWorldObjectsLayer().addWorldObject((WorldObject)actor);
         else if ( actor instanceof  Agent )
             ((Agent) actor).onAddedToWorld();
+
+        if ( getWorldObjectsLayer() != null )
+            getWorldObjectsLayer().toFront();
     }
 
     private  void addGridLayer(GridMapLayer layer) {
