@@ -57,8 +57,9 @@ public class MoveSequence {
         return this.moves;
     }
 
-    public void reverse() {
+    public MoveSequence reverse() {
         Collections.reverse(moves);
+        return this;
     }
 
     @Override
@@ -66,5 +67,9 @@ public class MoveSequence {
         return "MoveSequence{" +
                 "moves=" + moves +
                 '}';
+    }
+
+    public MoveSequence cpy() {
+        return new MoveSequence(moves);
     }
 }

@@ -47,13 +47,23 @@ public class GridMoveSequence extends MoveSequence {
     }
 
     @Override
-    public void reverse() {
+    public MoveSequence cpy() {
+        return new GridMoveSequence(grid, cells);
+    }
+
+    @Override
+    public GridMoveSequence reverse() {
         super.reverse();
         Collections.reverse(cells);
+        return this;
     }
 
     public void setGrid(GridMapLayer grid) {
         this.grid = grid;
+    }
+
+    protected GridMapLayer getGrid() {
+        return grid;
     }
 
     public boolean containsMove(GridCell agentCell) {
