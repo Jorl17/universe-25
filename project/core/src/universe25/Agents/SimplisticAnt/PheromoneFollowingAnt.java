@@ -7,6 +7,7 @@ import universe25.Agents.States.SimplisticAntStates.GoToFood;
 import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
 import universe25.GameLogic.NumberProducers.GaussianFloatProducer;
 import universe25.GameLogic.NumberProducers.GaussianLongProducer;
+import universe25.Objects.Crumbs;
 import universe25.Worlds.GridLayers.FloatLayer;
 
 /**
@@ -88,6 +89,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
 
             //System.out.println(getMovesMemory().cpy().reverse());
             testDoMoveSequence(getMovesMemory().cpy().reverse());
+            getStack().add(new Crumbs());
 
             first = false;
             //getGoalMovement().clearGoals();

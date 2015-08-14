@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import universe25.Agents.States.DoMoveSequence;
 import universe25.Agents.States.StateManager;
@@ -36,7 +37,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     protected ArrayList<WorldObject> collidedObjects;
     protected StateManager states;
 
-    private Group stack;
+    private ObjectStack stack;
 
     //FIXME: Temporary
     private ShapeRenderer shapeRenderer;
@@ -69,9 +70,8 @@ public abstract class Agent extends MovableImage implements Disposable {
         fieldOfView = new FieldOfView(this, fov, seeDistance);
         this.runawayFromObjectsVector  = new Vector2(0, 0);
         this.movesMemory = new FixedGridMoveSequence(movesMemorySize);
+        this.stack = new ObjectStack();
         setBoundingBoxThreshold(0.0f);
-        this.stack = new Group();
-
     }
 
 
@@ -108,11 +108,13 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     public void onAddedToWorld() {
             this.movesMemory.setGrid(getWorld().getWorldObjectsLayer());
+            stack.onAddedToWorld(getWorld());
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
+        stack.act(delta);
         updateMovesMemory();
         updateFov();
         updateCellsInFov();
@@ -231,11 +233,22 @@ public abstract class Agent extends MovableImage implements Disposable {
         return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer((FloatLayer)getWorld().getGridLayers().get(layername));
     }
 
+    @Override
+    protected void sizeChanged() {
+        super.sizeChanged();
+        //FIXME: Do something to stack?
+    }
 
+    @Override
+    protected void positionChanged() {
+        super.positionChanged();
+        stack.setPosition(getX(Align.center), getY(Align.center), Align.center);
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+        stack.draw(batch, parentAlpha);
 
 
         batch.end();
@@ -351,5 +364,9 @@ public abstract class Agent extends MovableImage implements Disposable {
         states.clearStates();
         states.addState(new DoMoveSequence<>(this, "Test", 1, pathMoveSequence, true));
         movesToTake = pathMoveSequence;
+    }
+
+    public ObjectStack getStack() {
+        return stack;
     }
 }
