@@ -1,4 +1,4 @@
-package universe25.Worlds.GridLayers;
+package universe25.World.GridLayers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -70,21 +70,10 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
     }
 
     @Override
-    protected void drawCell(Batch batch, int col, int row) {
+    protected void drawCellBody(Batch batch, int col, int row) {
         if ( !getValueAtCell(col,row).isEmpty() ) {
-            getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
             getShapeRenderer().setColor(getDrawColor().cpy().sub(0.0f,0.0f,0.0f,1- getOcclusionPercentage(col, row)));
             getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
-            getShapeRenderer().end();
-
-            /*for (WorldObject o : (ArrayList<WorldObject>)getValueAtCell(col, row)) {
-                BoundingBox b= o.getBoundingBox();
-                getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
-                getShapeRenderer().setColor(Color.YELLOW.cpy().sub(0.0f,0.0f,0.0f,0.95f));
-                getShapeRenderer().rect((float)b.getMinX(), (float)b.getMinY(), (float)b.getWidth(), (float)b.getHeight());
-                getShapeRenderer().end();
-            }*/
-
         }
     }
 
@@ -156,5 +145,10 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
     @Override
     public float getMoveCost(int col, int row) {
         return getOcclusionPercentage(col, row) < 0.30f ? 1 : -1; //FIXME Make this more flexible
+    }
+
+    @Override
+    protected void drawCellGrids(Batch batch) {
+        // Empty
     }
 }

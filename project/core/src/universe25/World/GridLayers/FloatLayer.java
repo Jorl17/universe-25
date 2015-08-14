@@ -1,4 +1,4 @@
-package universe25.Worlds.GridLayers;
+package universe25.World.GridLayers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -50,21 +50,22 @@ public class FloatLayer extends GridMapLayer<Float> {
 
 
     @Override
-    protected void drawCell(Batch batch, int col, int row) {
+    protected void drawCellBody(Batch batch, int col, int row) {
         float valueAtCell = getValueAtCell(col, row);
         if ( valueAtCell > 0 ) {
-            getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);
-            getShapeRenderer().setColor(getDrawColor());
-            getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
-            getShapeRenderer().end();
             Color cpy = getDrawColor().cpy();
 
             cpy.a = normalizeValue(valueAtCell);
-            getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
             getShapeRenderer().setColor(cpy);
             getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
-            getShapeRenderer().end();
         }
+    }
+
+    @Override
+    protected void drawCellGrid(Batch batch, int col, int row) {
+        float valueAtCell = getValueAtCell(col, row);
+        if ( valueAtCell > 0 )
+            getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
     }
 
     @Override

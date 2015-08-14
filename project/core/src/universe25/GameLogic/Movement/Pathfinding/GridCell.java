@@ -4,7 +4,7 @@ import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedNode;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import universe25.Worlds.GridLayers.GridMapLayer;
+import universe25.World.GridLayers.GridMapLayer;
 
 /**
  * Created by jorl17 on 13/08/15.

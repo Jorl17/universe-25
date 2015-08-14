@@ -2,7 +2,7 @@ package universe25.Agents;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import universe25.Worlds.World;
+import universe25.World.World;
 
 /**
  * Created by jorl17 on 14/08/15.

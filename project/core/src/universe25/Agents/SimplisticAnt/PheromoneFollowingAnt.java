@@ -8,7 +8,7 @@ import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
 import universe25.GameLogic.NumberProducers.GaussianFloatProducer;
 import universe25.GameLogic.NumberProducers.GaussianLongProducer;
 import universe25.Objects.Crumbs;
-import universe25.Worlds.GridLayers.FloatLayer;
+import universe25.World.GridLayers.FloatLayer;
 
 /**
  * Created by jorl17 on 08/08/15.

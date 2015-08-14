@@ -1,4 +1,4 @@
-package universe25.Worlds;
+package universe25.World;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
@@ -16,7 +16,8 @@ import universe25.Objects.Stone;
 import universe25.Objects.Wall;
 import universe25.Objects.Wall2;
 import universe25.Objects.WorldObject;
-import universe25.Worlds.GridLayers.*;
+import universe25.Utils.Scene2DShapeRenderer;
+import universe25.World.GridLayers.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class World extends Stage {
     public World(Viewport viewport) {
         super(viewport);
         create();
+        Scene2DShapeRenderer.updateProjectionMatrix(getBatch());
     }
 
     public void create() {
@@ -132,6 +134,7 @@ public class World extends Stage {
         for ( GridMapLayer l: gridLayers.values() ) {
             l.onTickFinished();
         }
+
     }
 
     private void checkCollisions() {

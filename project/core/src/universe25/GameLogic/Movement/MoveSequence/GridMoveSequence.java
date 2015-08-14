@@ -1,8 +1,7 @@
 package universe25.GameLogic.Movement.MoveSequence;
 
-import com.badlogic.gdx.math.Vector2;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
-import universe25.Worlds.GridLayers.GridMapLayer;
+import universe25.World.GridLayers.GridMapLayer;
 
 import java.util.ArrayList;
 import java.util.Collections;

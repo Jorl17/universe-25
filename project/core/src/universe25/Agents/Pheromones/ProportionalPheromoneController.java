@@ -3,12 +3,10 @@ package universe25.Agents.Pheromones;
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
 import universe25.GameLogic.Movement.MoveSequence.FixedGridMoveSequence;
-import universe25.GameLogic.Movement.MoveSequence.GridMoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
-import universe25.Worlds.GridLayers.PheromoneMapLayer;
+import universe25.World.GridLayers.PheromoneMapLayer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by jorl17 on 09/08/15.

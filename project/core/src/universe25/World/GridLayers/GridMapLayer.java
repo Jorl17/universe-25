@@ -1,4 +1,4 @@
-package universe25.Worlds.GridLayers;
+package universe25.World.GridLayers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,8 +9,10 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import javafx.geometry.BoundingBox;
+import javafx.scene.control.Cell;
 import universe25.Agents.ValuePositionPair;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
+import universe25.Utils.Scene2DShapeRenderer;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
  * Created by jorl17 on 07/08/15.
  */
 public abstract class GridMapLayer<T> extends Actor {
+    private final ShapeRenderer shapeRenderer;
     protected float gridWidth, gridHeight;
     protected float cellSize;
     protected int nRows, nCols;
@@ -28,10 +31,6 @@ public abstract class GridMapLayer<T> extends Actor {
     private final String name;
     private Color drawColor;
     private boolean drawLayer;
-
-    //FIXME: The first of these could probably be made static. They both probably could
-    private ShapeRenderer shapeRenderer;
-    private boolean projectionMatrixSet;
 
     private Vector2[][] cellCentres;
 
@@ -49,7 +48,6 @@ public abstract class GridMapLayer<T> extends Actor {
         this.drawLayer = drawLayer;
 
         shapeRenderer = new ShapeRenderer();
-        projectionMatrixSet = false;
 
         createCellArray();
     }
@@ -63,8 +61,7 @@ public abstract class GridMapLayer<T> extends Actor {
         this.gridHeight = this.nRows * cellSize;
         this.name = name;
 
-        shapeRenderer = new ShapeRenderer();
-        projectionMatrixSet = false;
+        shapeRenderer = Scene2DShapeRenderer.getShapeRenderer();
 
         createCellArray();
     }
@@ -142,45 +139,61 @@ public abstract class GridMapLayer<T> extends Actor {
         nextCells[row][col] = val;
     }
 
-    protected void drawCell(Batch batch, int col, int row) {
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(drawColor);
-        shapeRenderer.rect(col*cellSize, row*cellSize, cellSize, cellSize);
-        shapeRenderer.end();
-
-    }
-
-    // Always do batch.end() before!!
-    public void drawCell(Batch batch, int col, int row, Color c) {
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(c);
-        shapeRenderer.rect(col*cellSize, row*cellSize, cellSize, cellSize);
-        shapeRenderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-
-    }
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if ( drawLayer ) {
             batch.end();
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            if (!projectionMatrixSet) {
-                shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-                projectionMatrixSet = true;
-            }
 
-            for (int i = 0; i < nRows; i++)
-                for (int j = 0; j < nCols; j++)
-                    drawCell(batch, j, i);
+            drawCellGrids(batch);
+            drawCellBodies(batch);
 
-            Gdx.gl.glDisable(GL20.GL_BLEND);
             batch.begin();
         }
+    }
+
+    public void drawCellBodies(Batch batch, ArrayList<GridCell> cells, Color c) {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        getShapeRenderer().setColor(c);
+        getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
+        for ( GridCell cell : cells )
+                drawCellBody(batch, cell.getCol(), cell.getRow());
+
+        getShapeRenderer().end();
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    protected void drawCellBodies(Batch batch) {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
+        for (int i = 0; i < nRows; i++)
+            for (int j = 0; j < nCols; j++)
+                drawCellBody(batch, j, i);
+
+        getShapeRenderer().end();
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    protected void drawCellBody(Batch batch, int j, int i) {
+        // Empty
+    }
+
+    protected void drawCellGrids(Batch batch) {
+        getShapeRenderer().begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(drawColor);
+        for (int i = 0; i < nRows; i++)
+            for (int j = 0; j < nCols; j++)
+                drawCellGrid(batch, j, i);
+        getShapeRenderer().end();
+    }
+
+    protected void drawCellGrid(Batch batch, int col, int row) {
+        shapeRenderer.rect(col*cellSize, row*cellSize, cellSize, cellSize);
     }
 
     public ShapeRenderer getShapeRenderer() {
@@ -351,10 +364,6 @@ public abstract class GridMapLayer<T> extends Actor {
 
     public ValuePositionPair<T> getCellCentreAndValue(GridCell cell) {
         return getCellCentreAndValue(cell.getCol(), cell.getRow());
-    }
-
-    public void drawCell(Batch batch, GridCell cell, Color c) {
-        drawCell(batch, cell.getCol(), cell.getRow(), c);
     }
 
     public abstract float getMoveCost(int col, int row);

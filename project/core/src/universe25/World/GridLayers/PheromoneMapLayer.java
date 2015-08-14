@@ -1,4 +1,4 @@
-package universe25.Worlds.GridLayers;
+package universe25.World.GridLayers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -55,10 +55,6 @@ public class PheromoneMapLayer extends FloatLayer {
                             }
     }
 
-    @Override
-    protected void drawCell(Batch batch, int col, int row) {
-        super.drawCell(batch, col, row);
-    }
     /*
         float valueAtCell = getValueAtCell(col, row);
         if ( valueAtCell > 0 ) {

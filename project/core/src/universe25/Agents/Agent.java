@@ -5,22 +5,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import universe25.Agents.States.DoMoveSequence;
 import universe25.Agents.States.StateManager;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.MoveSequence.FixedGridMoveSequence;
-import universe25.GameLogic.Movement.MoveSequence.GridMoveSequence;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.WorldObject;
-import universe25.Worlds.GridLayers.BaseEmptyLayer;
-import universe25.Worlds.GridLayers.FloatLayer;
-import universe25.Worlds.GridLayers.WorldObjectsLayer;
-import universe25.Worlds.World;
+import universe25.World.GridLayers.FloatLayer;
+import universe25.World.GridLayers.WorldObjectsLayer;
+import universe25.World.World;
 import universe25.GameLogic.Movement.MovableImage;
 import universe25.GameLogic.Movement.WeightedGoal;
 
@@ -277,9 +273,9 @@ public abstract class Agent extends MovableImage implements Disposable {
         if ( debugDrawCellsUnderFov && tmpCellsInFov != null ) {
             Color c = new Color(0.3f,0.3f,0.3f,0.5f);
             getWorld().getBaseLayer().getShapeRenderer().setProjectionMatrix(batch.getProjectionMatrix());
-            for (GridCell cell : tmpCellsInFov)
-                // cell[1] has col, cell[0] has row
-                getWorld().getBaseLayer().drawCell(batch, cell, c);
+            // FIXME: is the above needed?
+            getWorld().getBaseLayer().drawCellBodies(batch, tmpCellsInFov, c);
+
         }
 
         batch.begin();
