@@ -57,6 +57,16 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
                     recalculateOcclusionPercentage(j,i);
                 }
             }
+
+        // Need to invalidate connections around the modified cells
+        if ( minRow > 0 ) minRow--;
+        if ( maxRow < nRows-1 ) maxRow++;
+        if ( maxCol > 0 ) maxCol--;
+        if ( maxCol < nCols-1 ) maxCol++;
+
+        for (int i = minRow; i <= maxRow; i++)
+            for (int j = minCol; j <= maxCol; j++)
+                graphCells[i][j].invalidateConnections();
     }
 
     @Override

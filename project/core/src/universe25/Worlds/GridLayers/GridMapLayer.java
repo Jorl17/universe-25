@@ -35,7 +35,7 @@ public abstract class GridMapLayer<T> extends Actor {
 
     private Vector2[][] cellCentres;
 
-    private GridCell[][] graphCells;
+    protected GridCell[][] graphCells;
 
     public GridMapLayer(Class<? extends T> cls, float gridWidth, float gridHeight, float cellSize, String name, Color drawColor, boolean drawLayer) {
         this.cls = cls;

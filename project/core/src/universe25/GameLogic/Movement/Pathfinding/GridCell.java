@@ -120,5 +120,9 @@ public class GridCell implements IndexedNode<GridCell> {
         return layer.isPointInCell(pos, this);
     }
 
+    public void invalidateConnections() {
+        this.connections = null;
+    }
+
     //FIXME more stuff
 }
