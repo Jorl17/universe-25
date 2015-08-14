@@ -178,7 +178,10 @@ public class World extends Stage {
         do {
             agent.moveBy(line.x,line.y);
             Vector2 pos = agent.getPosition();
-            occlusionPercentage = getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
+            if ( getWorldObjectsLayer().getCell(pos.x,pos.y) == null )
+                occlusionPercentage = 1.0f;
+            else
+                occlusionPercentage = getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
         } while ( agent.interesects(worldObject) && occlusionPercentage > 0.30 );
 
         agent.clearCollisionsWithWorld();
