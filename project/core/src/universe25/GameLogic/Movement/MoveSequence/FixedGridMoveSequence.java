@@ -46,7 +46,7 @@ public class FixedGridMoveSequence extends GridMoveSequence {
 
     private void forceSize() {
         int diff = getMoves().size() - maxSize;
-        if ( getMoves().size() > 0 ) {
+        if ( diff > 0 ) {
             if (discardFromBeginning)
                 while (diff-- > 0)
                     getMoves().remove(0);
