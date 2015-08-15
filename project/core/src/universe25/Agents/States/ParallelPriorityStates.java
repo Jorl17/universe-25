@@ -10,6 +10,11 @@ public class ParallelPriorityStates<T extends Agent> extends CompositeStateWithP
         super(agent, name);
     }
 
+    @Override
+    public void updatePriority() {
+        //FIXME
+    }
+
     public ParallelPriorityStates(T agent, String name, StateWithPriority... states) {
         super(agent, name, states);
     }

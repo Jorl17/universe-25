@@ -7,17 +7,23 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 09/08/15.
  */
-public abstract class CompositeStateWithPriority<T extends Agent> extends State<T> {
+public abstract class CompositeStateWithPriority<T extends Agent> extends ToggablePriorityState<T> {
     private ArrayList<StateWithPriority> subStates = new ArrayList<>();
+    protected CompositeStateWithPriority(T agent, String name, int priorityWhenToggled) {
+        super(agent, name, priorityWhenToggled);
+    }
     protected CompositeStateWithPriority(T agent, String name) {
-        super(agent, name);
+        this(agent, name, -1);
     }
 
-    protected CompositeStateWithPriority(T agent, String name, StateWithPriority... states) {
-        super(agent, name);
+    protected CompositeStateWithPriority(T agent, String name, int priorityWhenToggled, StateWithPriority... states) {
+        super(agent, name, priorityWhenToggled);
 
         for ( StateWithPriority s : states )
             addState(s);
+    }
+    protected CompositeStateWithPriority(T agent, String name, StateWithPriority... states) {
+        this(agent, name, -1, states);
     }
 
     public void addState(StateWithPriority state) {

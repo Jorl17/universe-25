@@ -16,6 +16,11 @@ public class PriorityAggregatorState<T extends Agent> extends CompositeStateWith
         currentState = -1;
     }
 
+    @Override
+    public void updatePriority() {
+        //FIXME
+    }
+
     public PriorityAggregatorState(T agent, String name, StateWithPriority... states) {
         super(agent, name, states);
     }

@@ -83,6 +83,19 @@ public class GoalMovement {
             }
     }
 
+    public void removeGoalIfExists(WeightedGoal goal) {
+        for ( WeightedGoal g : goals )
+            if ( g == goal) {
+                goals.remove(goal);
+                return;
+            }
+    }
+
+    public void removeGoalsIfExist(ArrayList<WeightedGoal> goals) {
+        for ( WeightedGoal g : goals)
+            removeGoalIfExists(g);
+    }
+
     public float getHighestWeight() {
         if ( goals.isEmpty() ) return 1.0f; /* FIXME: is this right? */
         float highestWeight = goals.get(0).getWeight();
@@ -91,5 +104,10 @@ public class GoalMovement {
                 highestWeight = goals.get(i).getWeight();
 
         return highestWeight;
+    }
+
+    public void addWeightedGoals(ArrayList<WeightedGoal> goals) {
+        for ( WeightedGoal goal : goals)
+            addGoal(goal);
     }
 }

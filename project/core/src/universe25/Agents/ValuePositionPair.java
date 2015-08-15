@@ -19,6 +19,6 @@ public class ValuePositionPair<T> {
     }
 
     public Vector2 getPosition() {
-        return position;
+        return position.cpy();
     }
 }
