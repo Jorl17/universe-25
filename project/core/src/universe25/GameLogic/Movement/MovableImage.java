@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Scaling;
 public class MovableImage extends BoundingBoxImage {
     private final GoalMovement goalMovement;
     private float speed;
+    private Vector2 lastMove;
 
     public MovableImage(NinePatch patch, float speed) {
         super(patch);
@@ -69,6 +70,7 @@ public class MovableImage extends BoundingBoxImage {
     private void move() {
         goalMovement.updateGoalDirection();
         Vector2 movementSpeedVector = goalMovement.getMovementSpeedVector(speed);
+        lastMove = movementSpeedVector;
         if ( !movementSpeedVector.isZero() ) {
 
             moveBy(movementSpeedVector.x, movementSpeedVector.y);
@@ -103,6 +105,7 @@ public class MovableImage extends BoundingBoxImage {
 
     }
 
-
-
+    public Vector2 getLastMove() {
+        return lastMove;
+    }
 }

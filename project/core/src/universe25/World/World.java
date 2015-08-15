@@ -227,6 +227,7 @@ public class World extends Stage {
         Vector2 line = agent.getPosition().sub(worldObject.getPosition()).nor().scl(agent.getSpeed()/2);
         float occlusionPercentage;
 
+        if ( false )
         do {
             agent.moveBy(line.x,line.y);
             Vector2 pos = agent.getPosition();
@@ -252,7 +253,7 @@ public class World extends Stage {
                 collideAgentWithWorld((Agent)actor);
     }
 
-    private int collideAgentWithWorld(Agent agent) {
+    public int collideAgentWithWorld(Agent agent) {
         BoundingBox agentbb = agent.getBoundingBox();
 
         int collisions = 0;
@@ -325,5 +326,15 @@ public class World extends Stage {
 
     public FoodLayer getFoodLayer() {
         return foodLayer;
+    }
+
+    public ArrayList<WorldObject> getAllObjects() {
+        Array<Actor> actors = getActors();
+        ArrayList<WorldObject> ret = new ArrayList<>();
+        for (Actor a : actors)
+            if (a instanceof WorldObject)
+                ret.add((WorldObject) a);
+
+        return ret;
     }
 }

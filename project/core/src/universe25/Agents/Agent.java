@@ -112,6 +112,7 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     @Override
     public void act(float delta) {
+        Vector2 lastMove = getLastMove();
         super.act(delta);
         stack.act(delta);
         updateMovesMemory();
@@ -119,9 +120,10 @@ public abstract class Agent extends MovableImage implements Disposable {
         updateCellsInFov();
         states.update();
 
-        update();
 
-        runAwayFromCollidingObjects();
+        runAwayFromCollidingObjects(lastMove);
+        update();
+        getWorld().collideAgentWithWorld(this);
 
         cleanupCollisions();
         cellsWithObjects.clear();
@@ -137,7 +139,8 @@ public abstract class Agent extends MovableImage implements Disposable {
         }
     }
 
-    private void runAwayFromCollidingObjects() {
+    private void runAwayFromCollidingObjects(Vector2 lastMove) {
+        if ( lastMove == null ) lastMove = new Vector2(0,0);
         GoalMovement goalMovement = getGoalMovement();
 
         // First remove the goal, as there may actually be no object anymore
@@ -148,7 +151,38 @@ public abstract class Agent extends MovableImage implements Disposable {
             runawayFromObjectsVector.set(getPosition());
             for (WorldObject o : collidedObjects)
                 runawayFromObjectsVector.add(getPosition().sub(o.getPosition()).scl(500));
-            goalMovement.addGoal(new WeightedGoal(runawayFromObjectsVector, goalMovement.getHighestWeight()*10));
+            goalMovement.addGoal(new WeightedGoal(runawayFromObjectsVector, goalMovement.getHighestWeight() * 10));
+
+            moveBy(-lastMove.x, -lastMove.y);
+
+            boolean collision = true;
+
+            Vector2 move = new Vector2();//runawayFromObjectsVector.cpy().sub(getPosition()).nor().scl(getSpeed() / 2.0f);
+            int tries = 0;
+            while (collision && tries < 30) {
+                move.set(0,0);
+                collision = false;
+                float occlusionPercentage;
+                Vector2 pos = getPosition();
+                if (getWorld().getWorldObjectsLayer().getCell(pos.x, pos.y) == null)
+                    occlusionPercentage = 1.0f;
+                else
+                    occlusionPercentage = getWorld().getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
+
+                if (occlusionPercentage > 0.30) {
+                    for (WorldObject o : getWorld().getAllObjects())
+                        if (o.interesects(this))
+                            move.add(pos.cpy().sub(o.getPosition()));
+                    move.nor().scl(getSpeed() / 2.0f);
+                    moveBy(move.x, move.y);
+                    getWorld().collideAgentWithWorld(this);
+                    for (WorldObject o : collidedObjects)
+                        if (o.interesects(this))
+                            collision = true;
+                }
+                tries++;
+            }
+
         }
     }
 
