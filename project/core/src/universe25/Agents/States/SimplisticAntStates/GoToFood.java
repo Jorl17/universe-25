@@ -16,12 +16,12 @@ public class GoToFood extends GoToCells<SimplisticAnt> {
     }
 
     @Override
-    protected boolean areThereCellsWithValues() {
+    protected boolean areThereCellsToAvoid() {
         return agent.areThereCellsWithFood();
     }
 
     @Override
-    protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValues() {
+    protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsToAvoid() {
         ArrayList<ValuePositionPair<FoodQuantityPair>> centerOfCellsInFieldOfViewWithFood = agent.getCenterOfCellsInFieldOfViewWithFood();
 
         // Need to convert the array above into an array with just the densities (floats)

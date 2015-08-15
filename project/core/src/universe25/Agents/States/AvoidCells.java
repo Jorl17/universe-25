@@ -2,7 +2,6 @@ package universe25.Agents.States;
 
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
-import universe25.Agents.States.SimplisticAntStates.GoToFood;
 import universe25.Agents.ValuePositionPair;
 import universe25.GameLogic.Movement.WeightedGoal;
 
@@ -27,11 +26,11 @@ public abstract class AvoidCells<T extends Agent> extends ToggablePriorityState<
         this(agent, priority, name, 1.0f);
     }
 
-    protected  abstract boolean areThereCellsWithValues();
-    protected abstract ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValues();
+    protected  abstract boolean areThereCellsToAvoid();
+    protected abstract ArrayList<ValuePositionPair<Float>> getCenterOfCellsToAvoid();
     @Override
     public void updatePriority() {
-        if ( areThereCellsWithValues() )
+        if ( areThereCellsToAvoid() )
             makeReachable();
         else
             makeUnreachable();
@@ -39,7 +38,7 @@ public abstract class AvoidCells<T extends Agent> extends ToggablePriorityState<
 
     @Override
     public String update() {
-        cellsWithValues = getCenterOfCellsInFieldOfViewWithValues();//agent.getCenterOfCellsInFieldOfViewWithPheromone();
+        cellsWithValues = getCenterOfCellsToAvoid();//agent.getCenterOfCellsInFieldOfViewWithPheromone();
 
         agent.getGoalMovement().removeGoalsIfExist(goals);
         goals.clear();

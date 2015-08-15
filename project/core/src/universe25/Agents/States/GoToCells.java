@@ -16,11 +16,11 @@ public abstract class GoToCells<T extends Agent> extends ToggablePriorityState<T
         makeUnreachable();
     }
 
-    protected  abstract boolean areThereCellsWithValues();
-    protected abstract ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValues();
+    protected  abstract boolean areThereCellsToGoTo();
+    protected abstract ArrayList<ValuePositionPair<Float>> getCenterOfCellsToGoTo();
     @Override
     public void updatePriority() {
-        if ( areThereCellsWithValues() )
+        if ( areThereCellsToGoTo() )
             makeReachable();
         else
             makeUnreachable();
@@ -28,7 +28,7 @@ public abstract class GoToCells<T extends Agent> extends ToggablePriorityState<T
 
     @Override
     public String update() {
-        cellsWithValues = getCenterOfCellsInFieldOfViewWithValues();//agent.getCenterOfCellsInFieldOfViewWithPheromone();
+        cellsWithValues = getCenterOfCellsToGoTo();//agent.getCenterOfCellsInFieldOfViewWithPheromone();
         ArrayList<WeightedGoal> goals = new ArrayList<>();
 
         for ( ValuePositionPair<Float> cell : cellsWithValues)

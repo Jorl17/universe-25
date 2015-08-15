@@ -18,12 +18,12 @@ public class GoToPheromone extends GoToCells<SimplisticAnt> {
     }
 
     @Override
-    protected boolean areThereCellsWithValues() {
+    protected boolean areThereCellsToGoTo() {
         return agent.areThereCellsWithPheromone(pheromone);
     }
 
     @Override
-    protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithValues() {
+    protected ArrayList<ValuePositionPair<Float>> getCenterOfCellsToGoTo() {
         return agent.getCenterOfCellsInFieldOfViewWithPheromone(pheromone);
     }
 }
