@@ -9,9 +9,9 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public abstract class GoToCell<T extends Agent> extends ToggablePriorityState<T> {
+public abstract class GoToCells<T extends Agent> extends ToggablePriorityState<T> {
     private ArrayList<ValuePositionPair<Float>> cellsWithValues;
-    public GoToCell(T agent, int priority, String name) {
+    public GoToCells(T agent, int priority, String name) {
         super(agent, name, priority);
         makeUnreachable();
     }

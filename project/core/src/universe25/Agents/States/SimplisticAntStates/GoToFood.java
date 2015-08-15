@@ -1,7 +1,7 @@
 package universe25.Agents.States.SimplisticAntStates;
 
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
-import universe25.Agents.States.GoToCell;
+import universe25.Agents.States.GoToCells;
 import universe25.Agents.ValuePositionPair;
 import universe25.Food.FoodQuantityPair;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 08/08/15.
  */
-public class GoToFood extends GoToCell<SimplisticAnt> {
+public class GoToFood extends GoToCells<SimplisticAnt> {
     public GoToFood(SimplisticAnt agent, int priority) {
         super(agent, priority, "GoToFood");
     }
