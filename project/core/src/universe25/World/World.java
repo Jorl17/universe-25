@@ -191,6 +191,7 @@ public class World extends Stage {
         agent.addCollisionWithWorldObject(worldObject);
         Vector2 line = agent.getPosition().sub(worldObject.getPosition()).nor().scl(agent.getSpeed()/2);
         float occlusionPercentage;
+
         do {
             agent.moveBy(line.x,line.y);
             Vector2 pos = agent.getPosition();
