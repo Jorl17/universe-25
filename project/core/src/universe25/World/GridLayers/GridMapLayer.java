@@ -362,6 +362,13 @@ public abstract class GridMapLayer<T> extends Actor {
         return getValueAtCell(cell.getCol(), cell.getRow());
     }
 
+
+    public GridCell getCellAt(int col, int row) {
+        if ( col < 0 || col >= nCols) return null;
+        if ( row < 0 || row >= nRows) return null;
+        return graphCells[row][col];
+    }
+
     public ValuePositionPair<T> getCellCentreAndValue(GridCell cell) {
         return getCellCentreAndValue(cell.getCol(), cell.getRow());
     }
