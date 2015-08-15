@@ -2,6 +2,7 @@ package universe25.Agents.States;
 
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
+import universe25.GameLogic.Movement.WeightedGoal;
 
 import java.util.ArrayList;
 
@@ -62,8 +63,11 @@ public class Wander<T extends Agent> extends ToggablePriorityState<T> {
     public String update() {
         long currentTime = System.currentTimeMillis();
         if ( (lastChangeTime == -1) || (currentTime - lastChangeTime > directionChangeIntervalMs)) {
+            //agent.getGoalMovement().removeGoalIfExists(target);
             randomTarget();
             lastChangeTime = currentTime;
+
+            //agent.getGoalMovement().addGoal(new WeightedGoal(target, 1));
             agent.getGoalMovement().setGoal(target);
         }
         return sameState();

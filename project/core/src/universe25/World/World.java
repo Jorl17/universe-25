@@ -11,6 +11,7 @@ import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
 import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.SpeciesAgent;
+import universe25.Food.AntPoison;
 import universe25.Food.Bread;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.GameLogic.Time.Ticks;
@@ -99,6 +100,40 @@ public class World extends Stage {
             }
         }
         new Bread(foodLayer, breadCells).putInLayer();
+
+        ArrayList<GridCell> antCells = new ArrayList<>();
+        for(;;) {
+            Vector2 pos = randomPosition();
+            if (!(hit(pos.x, pos.y, false) instanceof WorldObject)) {
+                GridCell firstCell = foodLayer.getCell(pos.x, pos.y);
+                for (int row = 0; row < 5; row++)
+                    for (int col = 0; col < 5; col++) {
+                        GridCell cell = foodLayer.getCellAt(firstCell.getCol()+col, firstCell.getRow()+row);
+                        if (cell != null)
+                            antCells.add(cell);
+                    }
+
+                break;
+            }
+        }
+        new AntPoison(foodLayer, antCells).putInLayer();
+
+        antCells.clear();
+        for(;;) {
+            Vector2 pos = randomPosition();
+            if (!(hit(pos.x, pos.y, false) instanceof WorldObject)) {
+                GridCell firstCell = foodLayer.getCell(pos.x, pos.y);
+                for (int row = 0; row < 5; row++)
+                    for (int col = 0; col < 5; col++) {
+                        GridCell cell = foodLayer.getCellAt(firstCell.getCol()+col, firstCell.getRow()+row);
+                        if (cell != null)
+                            antCells.add(cell);
+                    }
+
+                break;
+            }
+        }
+        new AntPoison(foodLayer, antCells).putInLayer();
 
         addGridLayer(objectsLayer);
     }

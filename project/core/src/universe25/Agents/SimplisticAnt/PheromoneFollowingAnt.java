@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import universe25.Agents.States.*;
+import universe25.Agents.States.SimplisticAntStates.AvoidAntPoison;
 import universe25.Agents.States.SimplisticAntStates.CircleForPheromone;
 import universe25.Agents.States.SimplisticAntStates.GoToFood;
 import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
@@ -80,7 +81,9 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         priorityAggregatorStates.addState(new CircleForPheromone(this, "CircleLookingForFood", 21,
                 foodImmediancyPheromone, 5, () -> 10L, true, -1/*0.25f*/ /* Because add rate is 1, we remove 25% */));
         priorityAggregatorStates.addState(new GoToFood(this, 22));
-        states.addState(priorityAggregatorStates);
+        //states.addState(priorityAggregatorStates);
+        states.addState(new ParallelPriorityStates<>(this, "Parallel States",
+                priorityAggregatorStates,new AvoidAntPoison(this, 22)));
     }
 
     private boolean first = true;

@@ -23,7 +23,7 @@ public abstract class AvoidCells<T extends Agent> extends ToggablePriorityState<
     }
 
     public AvoidCells(T agent, int priority, String name) {
-        this(agent, priority, name, 1.0f);
+        this(agent, priority, name, 10.0f);
     }
 
     protected  abstract boolean areThereCellsToAvoid();
@@ -45,11 +45,15 @@ public abstract class AvoidCells<T extends Agent> extends ToggablePriorityState<
         Vector2 pos = agent.getPosition();
         for ( ValuePositionPair<Float> cell : cellsWithValues) {
             float dist = cell.getPosition().sub(pos).len();
-            goals.add(new WeightedGoal(cell.getPosition(), -runAwayFactor/dist));
+            if ( dist < agent.getWorld().getWorldObjectsLayer().getCellSize()*2f)
+                goals.add(new WeightedGoal(cell.getPosition(), -runAwayFactor/dist));
 
         }
 
-        agent.getGoalMovement().addWeightedGoals(goals);
+        if ( !goals.isEmpty() ) {
+            goals.add(new WeightedGoal(agent.getGoalMovement().getMovementDirection(), -agent.getGoalMovement().getHighestWeight()*agent.getGoalMovement().numGoals()));
+            agent.getGoalMovement().addWeightedGoals(goals);
+        }
 
         return null;
     }

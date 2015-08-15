@@ -85,7 +85,7 @@ public class GoalMovement {
 
     public void removeGoalIfExists(WeightedGoal goal) {
         for ( WeightedGoal g : goals )
-            if ( g == goal) {
+            if ( g == goal || g.getGoal().equals(goal.getGoal())) {
                 goals.remove(goal);
                 return;
             }
@@ -109,5 +109,9 @@ public class GoalMovement {
     public void addWeightedGoals(ArrayList<WeightedGoal> goals) {
         for ( WeightedGoal goal : goals)
             addGoal(goal);
+    }
+
+    public int numGoals() {
+        return goals.size();
     }
 }

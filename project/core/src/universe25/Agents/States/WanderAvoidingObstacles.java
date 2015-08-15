@@ -2,6 +2,7 @@ package universe25.Agents.States;
 
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
+import universe25.GameLogic.Movement.WeightedGoal;
 import universe25.GameLogic.NumberProducers.NumberProducer;
 
 import java.util.ArrayList;
@@ -13,12 +14,14 @@ public class WanderAvoidingObstacles<T extends Agent> extends  StateWithPriority
     private float maxAllowedChangeDeg;
     private NumberProducer<Float> weight;
     private boolean alwaysPerturbateMovement;
+    private Vector2 target;
 
     public WanderAvoidingObstacles(T agent, int priority, float maxAllowedChangeDeg, NumberProducer<Float> weight, boolean alwaysPerturbateMovement) {
         super(agent, "WanderAvoidingObstacles", priority);
         this.maxAllowedChangeDeg = maxAllowedChangeDeg;
         this.weight = weight;
         this.alwaysPerturbateMovement = alwaysPerturbateMovement;
+        this.target = new Vector2();
     }
 
     public WanderAvoidingObstacles(T agent, float maxAllowedChangeDeg, NumberProducer<Float> weight, boolean alwaysPerturbateMovement) {
@@ -26,6 +29,7 @@ public class WanderAvoidingObstacles<T extends Agent> extends  StateWithPriority
         this.maxAllowedChangeDeg = maxAllowedChangeDeg;
         this.weight = weight;
         this.alwaysPerturbateMovement = alwaysPerturbateMovement;
+        this.target = new Vector2();
     }
 
     @Override
@@ -49,7 +53,10 @@ public class WanderAvoidingObstacles<T extends Agent> extends  StateWithPriority
             dir = agent.getFacingDirection().rotate(rotationAngle);
         }
 
-        agent.getGoalMovement().setGoal(pos.add(dir.scl(700.0f)));
+        //agent.getGoalMovement().removeGoalIfExists(target);
+        target.set(pos.add(dir.scl(700.0f)));
+        //agent.getGoalMovement().addGoal(new WeightedGoal(target, 1.0f));
+        agent.getGoalMovement().setGoal(target);
 
         return null;
     }

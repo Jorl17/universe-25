@@ -148,7 +148,7 @@ public abstract class Agent extends MovableImage implements Disposable {
             runawayFromObjectsVector.set(getPosition());
             for (WorldObject o : collidedObjects)
                 runawayFromObjectsVector.add(getPosition().sub(o.getPosition()).scl(500));
-            goalMovement.addGoal(new WeightedGoal(runawayFromObjectsVector, goalMovement.getHighestWeight()));
+            goalMovement.addGoal(new WeightedGoal(runawayFromObjectsVector, goalMovement.getHighestWeight()*10));
         }
     }
 

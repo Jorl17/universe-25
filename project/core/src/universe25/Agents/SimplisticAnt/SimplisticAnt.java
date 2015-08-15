@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import universe25.Agents.Pheromones.*;
 import universe25.Agents.SpeciesAgent;
 import universe25.Agents.ValuePositionPair;
+import universe25.Food.AntPoison;
 import universe25.Food.FoodQuantityPair;
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
+import universe25.World.GridLayers.FoodLayer;
 
 import java.util.ArrayList;
 
@@ -73,7 +76,27 @@ public abstract class SimplisticAnt extends SpeciesAgent {
     }
 
     public boolean areThereCellsWithFood() {
-        return areThereCellsWithFoodAtFoodLayer(getWorld().getFoodLayer());
+        FoodLayer layer = getWorld().getFoodLayer();
+        if ( getCellsInFov() != null ) {
+            for ( GridCell cell : getCellsInFov()) {
+                FoodQuantityPair quantityPair = layer.getValueAtCell(cell);
+                if ( quantityPair.hasFood() && !(quantityPair.getSource() instanceof AntPoison)) return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean areThereCellsWithAntPoison() {
+        FoodLayer layer = getWorld().getFoodLayer();
+        if ( getCellsInFov() != null ) {
+            for ( GridCell cell : getCellsInFov()) {
+                FoodQuantityPair quantityPair = layer.getValueAtCell(cell);
+                if ( quantityPair.hasFood() && quantityPair.getSource() instanceof AntPoison) return true;
+            }
+        }
+
+        return false;
     }
 
     public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithPheromone(Pheromone pheromoneType) {
