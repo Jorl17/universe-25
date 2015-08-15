@@ -293,7 +293,7 @@ public abstract class Agent extends MovableImage implements Disposable {
             ArrayList<WeightedGoal> goals = getGoalMovement().getGoals();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             for (WeightedGoal g : goals) {
-                shapeRenderer.setColor(Color.NAVY);
+                shapeRenderer.setColor(g.getWeight() >= 0 ? Color.NAVY : Color.RED);
                 shapeRenderer.line(pos.x, pos.y, g.getGoal().x, g.getGoal().y);
             }
             shapeRenderer.end();
