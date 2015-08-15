@@ -1,10 +1,13 @@
 package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import universe25.Agents.States.*;
 import universe25.Agents.States.SimplisticAntStates.CircleForPheromone;
 import universe25.Agents.States.SimplisticAntStates.GoToFood;
 import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
+import universe25.Food.FoodQuantityPair;
 import universe25.GameLogic.NumberProducers.GaussianFloatProducer;
 import universe25.GameLogic.NumberProducers.GaussianLongProducer;
 import universe25.Objects.Crumbs;
@@ -81,15 +84,19 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
     }
 
     private boolean first = true;
+    private Vector2 tmpPos = new Vector2();
     @Override
     public void update() {
         super.update();
-        if ( ((FloatLayer)getWorld().getGridLayers().get("FoodLayer")).getValueAt(getPosition()) > 0 && first) {
+        tmpPos.set(getX(Align.center), getY(Align.center));
+        FoodQuantityPair food = getWorld().getFoodLayer().getValueAt(tmpPos.x, tmpPos.y);
+        if ( food.hasFood() && first) {
+            getWorld().getFoodLayer().decreaseQuantityAt(tmpPos.x, tmpPos.y, 10);
             //getWorld().getActors().removeValue(this, false);
 
             //System.out.println(getMovesMemory().cpy().reverse());
             testDoMoveSequence(getMovesMemory().cpy().reverse());
-            getStack().add(new Crumbs());
+            getStack().add(new Crumbs(food.getSource(), 10));
 
             first = false;
             //getGoalMovement().clearGoals();

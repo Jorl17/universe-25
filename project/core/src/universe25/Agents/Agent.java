@@ -9,12 +9,15 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import universe25.Agents.States.DoMoveSequence;
 import universe25.Agents.States.StateManager;
+import universe25.Food.Food;
+import universe25.Food.FoodQuantityPair;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.MoveSequence.FixedGridMoveSequence;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.WorldObject;
 import universe25.World.GridLayers.FloatLayer;
+import universe25.World.GridLayers.FoodLayer;
 import universe25.World.GridLayers.WorldObjectsLayer;
 import universe25.World.World;
 import universe25.GameLogic.Movement.MovableImage;
@@ -179,13 +182,25 @@ public abstract class Agent extends MovableImage implements Disposable {
     protected boolean areThereCellsWithValueAtFloatLayer(FloatLayer layer) {
         if ( tmpCellsInFov != null ) {
             for ( GridCell cell : tmpCellsInFov) {
-                ValuePositionPair<Float> cellCentreAndValue = layer.getCellCentreAndValue(cell);
-                if ( cellCentreAndValue.getValue() > 0 ) return true;
+                Float value = layer.getValueAtCell(cell);
+                if ( value > 0 ) return true;
             }
         }
 
         return false;
     }
+
+    protected boolean areThereCellsWithFoodAtFoodLayer(FoodLayer layer) {
+        if ( tmpCellsInFov != null ) {
+            for ( GridCell cell : tmpCellsInFov) {
+                FoodQuantityPair quantityPair = layer.getValueAtCell(cell);
+                if ( quantityPair.hasFood() ) return true;
+            }
+        }
+
+        return false;
+    }
+
     protected boolean areThereCellsWithValueAtFloatLayer(String layerName) {
         return areThereCellsWithValueAtFloatLayer((FloatLayer) getWorld().getGridLayers().get(layerName));
 
@@ -218,6 +233,21 @@ public abstract class Agent extends MovableImage implements Disposable {
             for ( GridCell cell : tmpCellsInFov) {
                 ValuePositionPair<Float> cellCentreAndValue = layer.getCellCentreAndValue(cell);
                 if ( cellCentreAndValue.getValue() > 0 )
+                    ret.add(cellCentreAndValue);
+            }
+        }
+
+        return ret;
+    }
+
+    public ArrayList<ValuePositionPair<FoodQuantityPair>> getCenterOfCellsInFieldOfViewWithFood() {
+        FoodLayer layer = getWorld().getFoodLayer();
+        ArrayList<ValuePositionPair<FoodQuantityPair>> ret = new ArrayList<>();
+
+        if (tmpCellsInFov != null ) {
+            for ( GridCell cell : tmpCellsInFov) {
+                ValuePositionPair<FoodQuantityPair> cellCentreAndValue = layer.getCellCentreAndValue(cell);
+                if ( cellCentreAndValue.getValue().hasFood() )
                     ret.add(cellCentreAndValue);
             }
         }

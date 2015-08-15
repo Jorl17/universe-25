@@ -125,4 +125,15 @@ public class GridCell implements IndexedNode<GridCell> {
     }
 
     //FIXME more stuff
+
+    @Override
+    public String toString() {
+        return "GridCell{" +
+                "connections=" + connections +
+                ", layer=" + layer +
+                ", col=" + col +
+                ", row=" + row +
+                ", index=" + index +
+                '}';
+    }
 }
