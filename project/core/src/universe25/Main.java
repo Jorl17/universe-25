@@ -95,12 +95,10 @@ public class Main extends ApplicationAdapter {
 
 
         });
-
-        PheromoneFollowingAnt simplisticAnt = new PheromoneFollowingAnt();
+        
         //simplisticAnt.setPosition(250,250);
 
-        simplisticAnt.setPosition(250, 250);
-        simplisticAnt.setRotation(90);
+
         //stage.addActor(simplisticAnt);
         /*for (int i = 0; i < 100; i++) {
             PheromoneFollowingAnt ant = new PheromoneFollowingAnt();
