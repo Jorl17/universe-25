@@ -94,5 +94,16 @@ public class Region {
             regionsLayer.putRegionAt(cell, this);
     }
 
+    public boolean hasCell(GridCell cell) {
+        // FIXME: prolyl slow
+        for ( GridCell c : getCells() )
+            if ( c.equals(cell) )
+                return true;
 
+        return false;
+    }
+
+    public boolean hasCell(int col, int row) {
+        return hasCell(new GridCell(getRegionsLayer(), col, row));
+    }
 }
