@@ -2,7 +2,7 @@ package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
 import universe25.Agents.States.*;
-import universe25.Agents.States.SimplisticAntStates.GoToFood;
+import universe25.Agents.SimplisticAnt.States.GoToFood;
 
 /**
  * Created by jorl17 on 06/08/15.

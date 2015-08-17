@@ -1,4 +1,4 @@
-package universe25.Agents.States.SimplisticAntStates;
+package universe25.Agents.SimplisticAnt.States;
 
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;

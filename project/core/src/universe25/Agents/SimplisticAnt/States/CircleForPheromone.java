@@ -1,9 +1,8 @@
-package universe25.Agents.States.SimplisticAntStates;
+package universe25.Agents.SimplisticAnt.States;
 
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
-import universe25.Agents.States.StateWithPriority;
 import universe25.Agents.States.ToggablePriorityState;
 import universe25.GameLogic.NumberProducers.NumberProducer;
 import universe25.GameLogic.Time.Ticks;
