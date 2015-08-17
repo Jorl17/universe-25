@@ -2,7 +2,6 @@ package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import universe25.Agents.Agent;
 import universe25.Agents.Pheromones.*;
 import universe25.Agents.Regions.Hive;
 import universe25.Agents.Regions.Region;
@@ -54,7 +53,9 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         pathPheronomeController = /*new AlternativeOrderedPheromoneController( new ConditionalIncreasePheromoneController(this, pathPheronome, pathPheronomeIncrease,
                 (agent) -> !((SimplisticAnt)agent).areThereCellsWithPheromone(pathPheronome)),
                 new ProportionalPheromoneController(this, pathPheronome, 0.5f, pathPheronomeIncrease, true, 100));*/
-                new IncreasePheromoneController(this, pathPheronome, (float)getParameter("pathPheromoneIncrease").get());
+                new ConditionalIncreasePheromoneController<>(this, pathPheronome,
+                        (float)getParameter("pathPheromoneIncrease").get(),
+                        (agent) -> isOutsideHive());
 
         foodImmediancyPheromoneController = new ConditionalIncreasePheromoneController<>(this, foodImmediancyPheromone, 1,
                 SimplisticAnt::areThereCellsWithFood);
@@ -62,10 +63,10 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         hivePheromoneController = new AlternativeOrderedPheromoneController(
                 new ConditionalIncreasePheromoneController<>(this, hivePheromone,
                         (float)getParameter("hivePheromoneIncreaseWhenSeeingHive").get(),
-                        this::areThereHiveCellsAndWereNotInHive),
+                        (agent) -> isOutsideHive() && areThereHiveCells()),
                 new ConditionalPheromoneController<>(this,
                         new ProportionalPheromoneController(this, hivePheromone, 0.05f, 5, true, 100),
-                        (agent) -> isAgentOutsideHive() )
+                        (agent) -> isOutsideHive() )
 
         );
 
@@ -115,9 +116,8 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         return false;
     }
 
-    public boolean areThereHiveCellsAndWereNotInHive(Agent agent) {
+    public boolean areThereHiveCells() {
         RegionsLayer layer = getWorld().getRegionsLayer();
-        if ( !isAgentOutsideHive() ) return false;
 
         if ( getCellsInFov() != null ) {
             for ( GridCell cell : getCellsInFov()) {
@@ -132,7 +132,7 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         return false;
     }
 
-    private boolean isAgentOutsideHive() {
+    public boolean isOutsideHive() {
         RegionsLayer layer = getWorld().getRegionsLayer();
         Vector2 position = getPosition();
         Region ourCell = layer.getValueAt(position.x, position.y);
@@ -141,5 +141,20 @@ public abstract class SimplisticAnt extends SpeciesAgent {
 
     public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithPheromone(Pheromone pheromoneType) {
         return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(pheromoneType.getWorldLayer());
+    }
+
+    public ArrayList<ValuePositionPair<Region>> getHiveCellsInFieldOfView() {
+        RegionsLayer layer = getWorld().getRegionsLayer();
+        ArrayList<ValuePositionPair<Region>> ret = new ArrayList<>();
+
+        if (getCellsInFov() != null ) {
+            for ( GridCell cell : getCellsInFov()) {
+                ValuePositionPair<Region> cellCentreAndValue = layer.getCellCentreAndValue(cell);
+                if ( cellCentreAndValue.getValue() instanceof Hive &&  cellCentreAndValue.getValue().ownedBy(this) )
+                    ret.add(cellCentreAndValue);
+            }
+        }
+
+        return ret;
     }
 }
