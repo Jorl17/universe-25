@@ -25,7 +25,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
             /*speed*/1.0f,
             /*pathPheromoneIncrease*/5,
             /*foodPheromoneIncreaseWhenSeeingFood*/5*5,
-            /*hivePheromoneIncreaseWhenSeeingHive*/10
+            /*hivePheromoneIncreaseWhenSeeingHive*/2
     );
 
     public PheromoneFollowingAnt(SimplisticAntSpecies species, SimplisticAntSpeciesParameters parameters) {
