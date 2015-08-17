@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class Hive<S extends Species> extends Region {
     private int startCol, startRow, width, height;
-    private SubRegion foodStackRegion;
+    private FoodStackSubRegion foodStackRegion;
 
     public Hive(RegionsLayer regionsLayer, S regionSpecies, int startCol, int startRow, int width, int height) {
         super(regionsLayer, regionSpecies, regionsLayer.getGridCellsRectangle(startCol, startRow, width, height));
@@ -22,7 +22,7 @@ public class Hive<S extends Species> extends Region {
         this.startRow = startRow;
         this.width = width;
         this.height = height;
-        this.foodStackRegion = new SubRegion(this);
+        this.foodStackRegion = new FoodStackSubRegion(this);
         foodStackRegion.randomlyExpand();
     }
 
@@ -35,7 +35,7 @@ public class Hive<S extends Species> extends Region {
         this.startRow = startRow;
         this.width = width;
         this.height = height;
-        this.foodStackRegion = new SubRegion(this);
+        this.foodStackRegion = new FoodStackSubRegion(this);
         foodStackRegion.randomlyExpand();
     }
 
