@@ -1,7 +1,9 @@
 package universe25.Agents.Regions;
 
 import universe25.Agents.NoSpecies;
+import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.Species;
+import universe25.Agents.SpeciesAgent;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.World.GridLayers.PheromoneMapLayer;
 import universe25.World.GridLayers.RegionsLayer;
@@ -105,5 +107,11 @@ public class Region {
 
     public boolean hasCell(int col, int row) {
         return hasCell(new GridCell(getRegionsLayer(), col, row));
+    }
+
+    public boolean ownedBy(SpeciesAgent agent) {
+        if ( isEmptyRegion() ) return false;
+
+        return regionSpecies == agent.getSpecies();
     }
 }
