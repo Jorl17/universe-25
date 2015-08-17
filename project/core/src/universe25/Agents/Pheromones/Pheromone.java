@@ -41,7 +41,7 @@ public class Pheromone {
     }
 
     public String getWorldLayerName() {
-        return getFullPheromoneName() + "Layer";
+        return getFullPheromoneName() + " Layer";
     }
 
     public PheromoneMapLayer getWorldLayer() {
@@ -54,5 +54,20 @@ public class Pheromone {
 
     public void spread() {
         this.layer.spread(spreadRate, spreadProbability);
+    }
+
+    @Override
+    public String toString() {
+        return "Pheromone{worldLayerName=" + getWorldLayerName() +
+                ", world=" + world +
+                ", pheromoneName='" + pheromoneName + '\'' +
+                ", species=" + species +
+                ", evaporationRate=" + evaporationRate +
+                ", spreadRate=" + spreadRate +
+                ", spreadProbability=" + spreadProbability +
+                ", pheromoneLayerMax=" + pheromoneLayerMax +
+                ", layer=" + layer +
+                ", color=" + color +
+                '}';
     }
 }

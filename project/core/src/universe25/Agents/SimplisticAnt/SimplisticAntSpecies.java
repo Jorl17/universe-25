@@ -13,7 +13,7 @@ public class SimplisticAntSpecies extends Species {
     protected final Pheromone foodImmediancyPheromone;
 
     public SimplisticAntSpecies(String subname) {
-        super("SimplisticAnt" + "(" + subname + ")");
+        super("SimplisticAnt " + "(" + subname + ")");
         foodPheromone = new Pheromone("Food", this, 0.001f, 0.002f, 0.1f, 500, Color.CYAN);
         pathPheromone = new Pheromone("Path", this, 0.2f, 0.002f, 0.1f, 500, Color.YELLOW);
         foodImmediancyPheromone = new Pheromone("FoodImmediancePheromone", this, 0.001f, 0.002f, 0.1f, 500, Color.MAGENTA);
