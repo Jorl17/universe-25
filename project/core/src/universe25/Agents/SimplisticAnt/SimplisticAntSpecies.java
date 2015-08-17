@@ -2,6 +2,7 @@ package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
 import universe25.Agents.Pheromones.Pheromone;
+import universe25.Agents.Regions.Hive;
 import universe25.Agents.Species;
 import universe25.Agents.SpeciesAgent;
 
@@ -13,6 +14,8 @@ public class SimplisticAntSpecies extends Species<SimplisticAnt> {
     protected final Pheromone pathPheromone;
     protected final Pheromone foodImmediancyPheromone;
 
+    //protected final Hive<SimplisticAntSpecies> hive;
+
     public SimplisticAntSpecies(String subname) {
         super("SimplisticAnt " + "(" + subname + ")");
         //FIXME: Add the below parameters to the species parameters as well
@@ -22,6 +25,8 @@ public class SimplisticAntSpecies extends Species<SimplisticAnt> {
         addSpeciesPheromone(foodPheromone);
         addSpeciesPheromone(pathPheromone);
         addSpeciesPheromone(foodImmediancyPheromone);
+
+        //hive = new Hive<>();
     }
 
     @Override

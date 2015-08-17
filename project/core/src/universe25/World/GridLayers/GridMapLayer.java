@@ -224,6 +224,22 @@ public abstract class GridMapLayer<T> extends Actor {
         outColsRows[2] = minRow;
         outColsRows[3] = maxRow;
     }
+
+    public ArrayList<GridCell> getGridCellsRectangle(int firstCol, int firstRow, int w, int h ) {
+        ArrayList<GridCell> ret = new ArrayList<>();
+        int startCol = Integer.max(firstCol, 0);
+        int startRow = Integer.max(firstRow, 0);
+        int lastCol = Integer.min(firstCol + w, nCols - 1);
+        int lastRow = Integer.min(firstRow + h, nRows - 1);
+
+        for (int i = startRow; i <= lastRow; i++)
+            for (int j = startCol; j <= lastCol; j++)
+                ret.add(getCellAt(j, i));
+
+        //System.out.println(ret);
+        return ret;
+    }
+
     public void getMinMaxRowCols(Vector2[] points, int[] outColsRows ) {
         assert ( points.length > 0 );
         if ( points.length == 3 ) {

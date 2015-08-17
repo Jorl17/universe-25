@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import universe25.Agents.Agent;
+import universe25.Agents.Regions.Hive;
 import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAntSpecies;
@@ -24,10 +25,15 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create () {
+
         SimplisticAntSpecies species = new SimplisticAntSpecies("Species1");
 
         stage = new World(new FitViewport(640, 480));
         Gdx.input.setInputProcessor(stage);
+
+
+        Hive<SimplisticAntSpecies> hive = new Hive<>(stage.getRegionsLayer(), species, 10, 10);
+        hive.putInLayer();
 
         stage.addListener(new InputListener() {
             @Override
@@ -41,6 +47,8 @@ public class Main extends ApplicationAdapter {
                 //return super.touchDown(event, x, y, pointer, button);
                 return false;
             }
+
+
 
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
@@ -58,6 +66,10 @@ public class Main extends ApplicationAdapter {
                     species.getFoodPheromone().getWorldLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.D ) {
                     species.getFoodImmediancyPheromone().getWorldLayer().toggleDrawLayer();
+                } else if ( keycode == Input.Keys.J ) {
+                    stage.getStacksLayer().toggleDrawLayer();
+                } else if ( keycode == Input.Keys.K ) {
+                    stage.getRegionsLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.L ) {
                     stage.getWorldObjectsLayer().toggleDrawLayer();
                 }
@@ -78,10 +90,12 @@ public class Main extends ApplicationAdapter {
             stage.addActor(ant);
         }*/
 
-        Vector2 p;
-        do {
+
+
+        Vector2 p = hive.getHiveCenter();
+        /*do {
             p = stage.randomPosition();
-        } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );
+        } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );*/
         for (int i = 0; i < 100; i++) {
             SimplisticAnt ant = species.newIndividual();
             ant.setPosition(p.x,p.y);

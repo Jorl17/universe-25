@@ -36,6 +36,7 @@ public class World extends Stage {
     private Map<String, GridMapLayer> gridLayers;
     private WorldObjectsLayer objectsLayer;
     private StackablesLayer stacksLayer;
+    private RegionsLayer regionsLayer;
 
     public World(Viewport viewport) {
         super(viewport);
@@ -56,9 +57,11 @@ public class World extends Stage {
         BaseEmptyLayer baseLayer = new BaseEmptyLayer(getWidth(), getHeight(), TILE_SIZE, "BaseLayer");
         stacksLayer = new StackablesLayer(getWidth(), getHeight(), TILE_SIZE, "Stackslayer", Color.MAROON, true, 100);
         objectsLayer = new WorldObjectsLayer(getWidth(), getHeight(), TILE_SIZE, "ObjectsLayer", Color.BLACK, false);
+        regionsLayer = new RegionsLayer(getWidth(), getHeight(), TILE_SIZE, "RegionsLayer", Color.BLUE, true);
 
         addGridLayer(baseLayer);
         addPheromones();
+        addGridLayer(regionsLayer);
         addGridLayer(stacksLayer);
 
 
@@ -336,5 +339,9 @@ public class World extends Stage {
                 ret.add((WorldObject) a);
 
         return ret;
+    }
+
+    public RegionsLayer getRegionsLayer() {
+        return regionsLayer;
     }
 }

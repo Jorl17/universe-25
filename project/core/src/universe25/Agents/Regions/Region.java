@@ -25,7 +25,12 @@ public class Region {
         this.regionsLayer = regionsLayer;
         this.regionSpecies = regionSpecies;
         this.cells = new ArrayList<>();
-        addCells(cells);
+        if ( cells != null )
+            addCells(cells);
+    }
+
+    public Region(RegionsLayer regionsLayer, Species regionSpecies) {
+        this(regionsLayer, regionSpecies, null);
     }
 
     public void removeCell(GridCell cell) {
@@ -49,8 +54,9 @@ public class Region {
             regionsLayer.setValueAtCell(cell, this);
     }
 
-    public void addCells(ArrayList<GridCell> cell) {
-        this.cells.addAll(cells);
+    public void addCells(ArrayList<GridCell> cells) {
+        for ( GridCell cell : cells)
+            addCell(cell);
     }
 
 
@@ -82,4 +88,11 @@ public class Region {
         // Note that we intend to have ONE single static region that has all free cells...so this is redundant I guess
         setRegionSpecies(new NoSpecies());
     }
+
+    public void putInLayer() {
+        for ( GridCell cell : getCells() )
+            regionsLayer.putRegionAt(cell, this);
+    }
+
+
 }
