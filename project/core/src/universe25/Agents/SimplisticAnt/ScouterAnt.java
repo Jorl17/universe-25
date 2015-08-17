@@ -13,7 +13,8 @@ public class ScouterAnt extends SimplisticAnt {
             /*seeDistance*/70,
             /*speed*/3,
             /*pathPheromoneIncrease*/3,
-            /*floatPheromoneIncreaseWhenSeeingFood*/3*8
+            /*foodPheromoneIncreaseWhenSeeingFood*/3*8,
+            /*hivePheromoneIncreaseWhenSeeingHive*/10
     );
 
     protected ScouterAnt(SimplisticAntSpecies species, SimplisticAntSpeciesParameters parameters) {

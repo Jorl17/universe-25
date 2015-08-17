@@ -16,13 +16,16 @@ public class SimplisticAntSpeciesParameters extends SpeciesParameters {
     }
 
     public SimplisticAntSpeciesParameters(float fov, float seeDistance, float speed,
-                                          float pathPheromoneIncrease, float foodPheromoneIncreaseWhenSeeingFood) {
+                                          float pathPheromoneIncrease, float foodPheromoneIncreaseWhenSeeingFood,
+                                          float hivePheromoneIncreaseWhenSeeingHive) {
         super();
         add("fov", new FloatSpeciesParameter(fov, 1.0f, 0.5f));
         add("seeDistance", new FloatSpeciesParameter(seeDistance, 20.0f, 2.0f));
         add("speed", new FloatSpeciesParameter(speed, 0.5f, 0.1f));
         add("pathPheromoneIncrease", new FloatSpeciesParameter(pathPheromoneIncrease, 0.5f, 0.1f));
         add("foodPheromoneIncreaseWhenSeeingFood", new FloatSpeciesParameter(foodPheromoneIncreaseWhenSeeingFood, 0.5f, 0.1f));
+        add("hivePheromoneIncreaseWhenSeeingHive", new FloatSpeciesParameter(hivePheromoneIncreaseWhenSeeingHive, 0.5f, 0.1f));
+
         add("movesMemorySize", new IntSpeciesParameter(500, 50, 10));
     }
 

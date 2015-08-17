@@ -13,6 +13,7 @@ public class SimplisticAntSpecies extends Species<SimplisticAnt> {
     protected final Pheromone foodPheromone;
     protected final Pheromone pathPheromone;
     protected final Pheromone foodImmediancyPheromone;
+    protected final Pheromone hivePheromone;
 
     //protected final Hive<SimplisticAntSpecies> hive;
 
@@ -22,9 +23,11 @@ public class SimplisticAntSpecies extends Species<SimplisticAnt> {
         foodPheromone = new Pheromone("Food", this, 0.001f, 0.002f, 0.1f, 500, Color.CYAN);
         pathPheromone = new Pheromone("Path", this, 0.2f, 0.002f, 0.1f, 500, Color.YELLOW);
         foodImmediancyPheromone = new Pheromone("FoodImmediancePheromone", this, 0.001f, 0.002f, 0.1f, 500, Color.MAGENTA);
+        hivePheromone = new Pheromone("HivePheromone", this, 0.001f, 0.002f, 0.1f, 500, Color.BLUE.mul(0.5f,0.5f,0.5f,1.0f));
         addSpeciesPheromone(foodPheromone);
         addSpeciesPheromone(pathPheromone);
         addSpeciesPheromone(foodImmediancyPheromone);
+        addSpeciesPheromone(hivePheromone);
 
         //hive = new Hive<>();
     }
@@ -44,5 +47,9 @@ public class SimplisticAntSpecies extends Species<SimplisticAnt> {
 
     public Pheromone getFoodImmediancyPheromone() {
         return foodImmediancyPheromone;
+    }
+
+    public Pheromone getHivePheromone() {
+        return hivePheromone;
     }
 }
