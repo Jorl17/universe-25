@@ -25,7 +25,7 @@ public class Hive<S extends Species> extends Region {
     public Hive(RegionsLayer regionsLayer, S regionSpecies, int width, int height) {
         super(regionsLayer, regionSpecies, null);
         int startCol = (int) (Math.random() * (regionsLayer.getNumCols()-2*width) + width);
-        int startRow = (int) (Math.random() * (regionsLayer.getNumRows()-2*width) + width);
+        int startRow = (int) (Math.random() * (regionsLayer.getNumRows()-2*height) + height);
         addCells(regionsLayer.getGridCellsRectangle(startCol, startRow, width, height));
         this.startCol = startCol;
         this.startRow = startRow;
