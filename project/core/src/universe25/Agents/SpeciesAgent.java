@@ -18,7 +18,7 @@ public abstract class SpeciesAgent extends Agent {
                 (float)parameters.get("speed").get(),
                 (int)parameters.get("movesMemorySize").get());
         this.species = species;
-        this.parameters = parameters;
+        this.parameters = parameters.cpy();
     }
 
     protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, Species species, SpeciesParameters parameters,
@@ -29,7 +29,7 @@ public abstract class SpeciesAgent extends Agent {
                 (float)parameters.get("speed").get(),
                 (int)parameters.get("movesMemorySize").get(),debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing);
         this.species = species;
-        this.parameters = parameters;
+        this.parameters = parameters.cpy();
     }
 
     public Species getSpecies() {
