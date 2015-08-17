@@ -3,7 +3,6 @@ package universe25.Agents.SimplisticAnt;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
-import universe25.Agents.SimplisticAntSpeciesParameters;
 import universe25.Agents.Stackable.Food.Food;
 import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
 import universe25.Agents.Stackable.StackableUtils;

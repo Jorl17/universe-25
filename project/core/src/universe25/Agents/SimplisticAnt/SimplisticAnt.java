@@ -1,10 +1,7 @@
 package universe25.Agents.SimplisticAnt;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import universe25.Agents.Pheromones.*;
-import universe25.Agents.SimplisticAntSpeciesParameters;
-import universe25.Agents.Species;
 import universe25.Agents.SpeciesAgent;
 import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
 import universe25.Agents.Stackable.StackableUtils;

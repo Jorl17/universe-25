@@ -1,4 +1,4 @@
-package universe25.Agents;
+package universe25.Agents.SpeciesParameters;
 
 import universe25.GameLogic.NumberProducers.GaussianFloatProducer;
 import universe25.GameLogic.NumberProducers.NumberProducer;

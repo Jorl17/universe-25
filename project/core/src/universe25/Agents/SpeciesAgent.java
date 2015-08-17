@@ -1,9 +1,8 @@
 package universe25.Agents;
 
 import com.badlogic.gdx.graphics.Texture;
-import universe25.Agents.Pheromones.Pheromone;
-
-import java.util.ArrayList;
+import universe25.Agents.SpeciesParameters.SpeciesParameter;
+import universe25.Agents.SpeciesParameters.SpeciesParameters;
 
 /**
  * Created by jorl17 on 09/08/15.

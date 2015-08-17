@@ -1,7 +1,6 @@
 package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
-import universe25.Agents.SimplisticAntSpeciesParameters;
 import universe25.Agents.States.*;
 import universe25.Agents.SimplisticAnt.States.GoToFood;
 

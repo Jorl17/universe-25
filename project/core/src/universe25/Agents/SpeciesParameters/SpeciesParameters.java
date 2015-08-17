@@ -1,4 +1,4 @@
-package universe25.Agents;
+package universe25.Agents.SpeciesParameters;
 
 import java.util.HashMap;
 import java.util.Map;

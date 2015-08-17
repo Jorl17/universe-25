@@ -1,4 +1,4 @@
-package universe25.Agents;
+package universe25.Agents.SpeciesParameters;
 
 /**
  * Created by jorl17 on 17/08/15.

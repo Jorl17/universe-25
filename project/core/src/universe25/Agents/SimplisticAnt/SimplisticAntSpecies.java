@@ -2,7 +2,6 @@ package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
 import universe25.Agents.Pheromones.Pheromone;
-import universe25.Agents.SimplisticAntSpeciesParameters;
 import universe25.Agents.Species;
 
 /**

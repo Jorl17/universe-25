@@ -1,4 +1,9 @@
-package universe25.Agents;
+package universe25.Agents.SimplisticAnt;
+
+import universe25.Agents.SpeciesParameters.FloatSpeciesParameter;
+import universe25.Agents.SpeciesParameters.IntSpeciesParameter;
+import universe25.Agents.SpeciesParameters.SpeciesParameter;
+import universe25.Agents.SpeciesParameters.SpeciesParameters;
 
 import java.util.Map;
 
