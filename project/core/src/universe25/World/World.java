@@ -11,8 +11,8 @@ import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
 import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.SpeciesAgent;
-import universe25.Food.AntPoison;
-import universe25.Food.Bread;
+import universe25.Agents.Stackable.Food.AntPoison;
+import universe25.Agents.Stackable.Food.Bread;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.GameLogic.Time.Ticks;
 import universe25.Objects.Stone;
@@ -34,7 +34,7 @@ public class World extends Stage {
     private BoundingBox worldBoundingBox;
     private Map<String, GridMapLayer> gridLayers;
     private WorldObjectsLayer objectsLayer;
-    private FoodLayer foodLayer;
+    private StackablesLayer stacksLayer;
 
     public World(Viewport viewport) {
         super(viewport);
@@ -53,13 +53,12 @@ public class World extends Stage {
     private void createLayersAndAddPheromones() {
         this.gridLayers = new HashMap<>();
         BaseEmptyLayer baseLayer = new BaseEmptyLayer(getWidth(), getHeight(), TILE_SIZE, "BaseLayer");
-        //TestFoodLayer foodLayer = new TestFoodLayer(getWidth(), getHeight(), TILE_SIZE, "FoodLayer", 100);
-        foodLayer = new FoodLayer(getWidth(), getHeight(), TILE_SIZE, "FoodLayer", Color.MAROON, true, 100);
+        stacksLayer = new StackablesLayer(getWidth(), getHeight(), TILE_SIZE, "Stackslayer", Color.MAROON, true, 100);
         objectsLayer = new WorldObjectsLayer(getWidth(), getHeight(), TILE_SIZE, "ObjectsLayer", Color.BLACK, false);
 
         addGridLayer(baseLayer);
         addPheromones();
-        addGridLayer(foodLayer);
+        addGridLayer(stacksLayer);
 
 
         for (int i = 0; i < 160; i++) {
@@ -88,10 +87,10 @@ public class World extends Stage {
         for(;;) {
             Vector2 pos = randomPosition();
             if (!(hit(pos.x, pos.y, false) instanceof WorldObject)) {
-                GridCell firstCell = foodLayer.getCell(pos.x, pos.y);
+                GridCell firstCell = stacksLayer.getCell(pos.x, pos.y);
                 for (int row = 0; row < 5; row++)
                     for (int col = 0; col < 5; col++) {
-                        GridCell cell = foodLayer.getCellAt(firstCell.getCol()+col, firstCell.getRow()+row);
+                        GridCell cell = stacksLayer.getCellAt(firstCell.getCol()+col, firstCell.getRow()+row);
                         if (cell != null)
                             breadCells.add(cell);
                     }
@@ -99,16 +98,16 @@ public class World extends Stage {
                 break;
             }
         }
-        new Bread(foodLayer, breadCells).putInLayer();
+        new Bread(stacksLayer, breadCells).putInLayer();
 
         ArrayList<GridCell> antCells = new ArrayList<>();
         for(;;) {
             Vector2 pos = randomPosition();
             if (!(hit(pos.x, pos.y, false) instanceof WorldObject)) {
-                GridCell firstCell = foodLayer.getCell(pos.x, pos.y);
+                GridCell firstCell = stacksLayer.getCell(pos.x, pos.y);
                 for (int row = 0; row < 5; row++)
                     for (int col = 0; col < 5; col++) {
-                        GridCell cell = foodLayer.getCellAt(firstCell.getCol()+col, firstCell.getRow()+row);
+                        GridCell cell = stacksLayer.getCellAt(firstCell.getCol()+col, firstCell.getRow()+row);
                         if (cell != null)
                             antCells.add(cell);
                     }
@@ -116,16 +115,16 @@ public class World extends Stage {
                 break;
             }
         }
-        new AntPoison(foodLayer, antCells).putInLayer();
+        new AntPoison(stacksLayer, antCells).putInLayer();
 
         antCells.clear();
         for(;;) {
             Vector2 pos = randomPosition();
             if (!(hit(pos.x, pos.y, false) instanceof WorldObject)) {
-                GridCell firstCell = foodLayer.getCell(pos.x, pos.y);
+                GridCell firstCell = stacksLayer.getCell(pos.x, pos.y);
                 for (int row = 0; row < 5; row++)
                     for (int col = 0; col < 5; col++) {
-                        GridCell cell = foodLayer.getCellAt(firstCell.getCol()+col, firstCell.getRow()+row);
+                        GridCell cell = stacksLayer.getCellAt(firstCell.getCol()+col, firstCell.getRow()+row);
                         if (cell != null)
                             antCells.add(cell);
                     }
@@ -133,7 +132,7 @@ public class World extends Stage {
                 break;
             }
         }
-        new AntPoison(foodLayer, antCells).putInLayer();
+        new AntPoison(stacksLayer, antCells).putInLayer();
 
         addGridLayer(objectsLayer);
     }
@@ -324,8 +323,8 @@ public class World extends Stage {
         return TILE_SIZE;
     }
 
-    public FoodLayer getFoodLayer() {
-        return foodLayer;
+    public StackablesLayer getStacksLayer() {
+        return stacksLayer;
     }
 
     public ArrayList<WorldObject> getAllObjects() {

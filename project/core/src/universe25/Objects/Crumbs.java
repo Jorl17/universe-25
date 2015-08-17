@@ -2,7 +2,7 @@ package universe25.Objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Align;
-import universe25.Food.Food;
+import universe25.Agents.Stackable.Food.Food;
 
 /**
  * Created by jorl17 on 14/08/15.

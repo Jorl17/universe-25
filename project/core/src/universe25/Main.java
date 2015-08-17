@@ -95,7 +95,7 @@ public class Main extends ApplicationAdapter {
 
 
         });
-        
+
         //simplisticAnt.setPosition(250,250);
 
 

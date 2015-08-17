@@ -1,25 +1,25 @@
-package universe25.Food;
+package universe25.Agents.Stackable.Food;
 
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
+import universe25.Agents.Stackable.Stackable;
 
 /**
  * Created by jorl17 on 14/08/15.
  */
-public class FoodQuantityPair {
+public class StackableSourceQuantityPair {
     private GridCell cell;
-    private Food source;
+    private Stackable source;
     private float amount;
 
-    public FoodQuantityPair() {
+    public StackableSourceQuantityPair() {
     }
 
-    public FoodQuantityPair(Food source, float amount, GridCell cell) {
-        this.source = source;
+    public StackableSourceQuantityPair(Stackable source, float amount, GridCell cell) {
         this.amount = amount;
         this.cell = cell;
     }
 
-    public Food getSource() {
+    public Stackable getSource() {
         return source;
     }
 
@@ -27,7 +27,7 @@ public class FoodQuantityPair {
         return amount;
     }
 
-    public void setSource(Food source) {
+    public void setSource(Stackable source) {
         this.source = source;
     }
 
@@ -41,10 +41,6 @@ public class FoodQuantityPair {
         return amount;
     }
 
-    public void notifySourceFoodEnded() {
-        source.onFoodEnded(cell);
-    }
-
     public void setCell(GridCell cell) {
         this.cell = cell;
     }
@@ -53,17 +49,13 @@ public class FoodQuantityPair {
         return cell;
     }
 
-    public boolean hasFood() {
+    public boolean hasStackables() {
         if ( source == null ) assert (amount == 0); //FIXME: Remove in release
         return source != null;
     }
 
-    @Override
-    public String toString() {
-        return "FoodQuantityPair{" +
-                "cell=" + cell +
-                ", source=" + source +
-                ", amount=" + amount +
-                '}';
+    public void notifyStackEnded() {
+        //FIXME
+        getSource().onStackEnded(getCell());
     }
 }

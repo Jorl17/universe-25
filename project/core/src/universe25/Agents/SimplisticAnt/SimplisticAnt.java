@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import universe25.Agents.Pheromones.*;
 import universe25.Agents.SpeciesAgent;
+import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
+import universe25.Agents.Stackable.StackableUtils;
 import universe25.Agents.ValuePositionPair;
-import universe25.Food.AntPoison;
-import universe25.Food.FoodQuantityPair;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
-import universe25.World.GridLayers.FoodLayer;
+import universe25.World.GridLayers.StackablesLayer;
 
 import java.util.ArrayList;
 
@@ -76,11 +76,11 @@ public abstract class SimplisticAnt extends SpeciesAgent {
     }
 
     public boolean areThereCellsWithFood() {
-        FoodLayer layer = getWorld().getFoodLayer();
+        StackablesLayer layer = getWorld().getStacksLayer();
         if ( getCellsInFov() != null ) {
             for ( GridCell cell : getCellsInFov()) {
-                FoodQuantityPair quantityPair = layer.getValueAtCell(cell);
-                if ( quantityPair.hasFood() && !(quantityPair.getSource() instanceof AntPoison)) return true;
+                StackableSourceQuantityPair quantityPair = layer.getValueAtCell(cell);
+                if ( StackableUtils.hasFoodAndNotAntPoison(quantityPair)) return true;
             }
         }
 
@@ -88,11 +88,11 @@ public abstract class SimplisticAnt extends SpeciesAgent {
     }
 
     public boolean areThereCellsWithAntPoison() {
-        FoodLayer layer = getWorld().getFoodLayer();
+        StackablesLayer layer = getWorld().getStacksLayer();
         if ( getCellsInFov() != null ) {
             for ( GridCell cell : getCellsInFov()) {
-                FoodQuantityPair quantityPair = layer.getValueAtCell(cell);
-                if ( quantityPair.hasFood() && quantityPair.getSource() instanceof AntPoison) return true;
+                StackableSourceQuantityPair quantityPair = layer.getValueAtCell(cell);
+                if (StackableUtils.hasAntPoison(quantityPair)) return true;
             }
         }
 

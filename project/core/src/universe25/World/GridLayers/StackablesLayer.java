@@ -2,70 +2,62 @@ package universe25.World.GridLayers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import universe25.Food.Food;
-import universe25.Food.FoodQuantityPair;
+import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
+import universe25.Agents.Stackable.Stackable;
 
 /**
  * Created by jorl17 on 14/08/15.
  */
-public class FoodLayer extends GridMapLayer<FoodQuantityPair> {
+public class StackablesLayer extends GridMapLayer<StackableSourceQuantityPair> {
     private float maxDensity;
-    public FoodLayer(float gridWidth, float gridHeight, float cellSize, String name, Color drawColor, boolean drawLayer, float maxDensity) {
-        super(FoodQuantityPair.class, gridWidth, gridHeight, cellSize, name, drawColor, drawLayer);
+    public StackablesLayer(float gridWidth, float gridHeight, float cellSize, String name, Color drawColor, boolean drawLayer, float maxDensity) {
+        super(StackableSourceQuantityPair.class, gridWidth, gridHeight, cellSize, name, drawColor, drawLayer);
         this.maxDensity = maxDensity;
-        assignCellsToFoodQuantityPairs();
+        assignCellsToSourceQuantityPairs();
         this.nextCells = this.cells;
     }
 
-    public FoodLayer(float cellSize, int nRows, int nCols, String name, float maxDensity) {
-        super(FoodQuantityPair.class, cellSize, nRows, nCols, name);
+    public StackablesLayer(float cellSize, int nRows, int nCols, String name, float maxDensity) {
+        super(StackableSourceQuantityPair.class, cellSize, nRows, nCols, name);
         this.maxDensity = maxDensity;
-        assignCellsToFoodQuantityPairs();
+        assignCellsToSourceQuantityPairs();
     }
 
-    private void assignCellsToFoodQuantityPairs() {
+    private void assignCellsToSourceQuantityPairs() {
         for (int i = 0; i < nRows; i++)
             for (int j = 0; j < nCols; j++)
                 getValueAtCell(j, i).setCell(getCellAt(j, i));
     }
 
-    public Food getFoodSource(int col, int row) {
-        return getValueAtCell(col, row).getSource();
+    public StackableSourceQuantityPair getStackable(int col, int row) {
+        return getValueAtCell(col, row);
     }
 
-    public Food getFoodSource(GridCell cell) {
-        return getValueAtCell(cell).getSource();
+    public StackableSourceQuantityPair getStackable(GridCell cell) {
+        return getValueAtCell(cell);
     }
 
-    public boolean isFoodSource(int col, int row) {
-        return getFoodSource(col, row) != null;
-    }
-
-    public boolean isFoodSource(GridCell cell) {
-        return getFoodSource(cell) != null;
-    }
-
-    public void putFoodSource(int col, int row, Food source, float quantity) {
-        FoodQuantityPair valueAtCell = getValueAtCell(col, row);
+    public void putStackable(int col, int row, Stackable source, float quantity) {
+        StackableSourceQuantityPair valueAtCell = getValueAtCell(col, row);
         valueAtCell.setSource(source);
         valueAtCell.setAmount(quantity);
         //System.out.println("Put " + source + " at " + "(" + row + ", " + col + ") -> ");
     }
 
-    public void putFoodSource(GridCell cell, Food source, float quantity) {
-        putFoodSource(cell.getCol(), cell.getRow(), source, quantity);
+    public void putStackable(GridCell cell, Stackable source, float quantity) {
+        putStackable(cell.getCol(), cell.getRow(), source, quantity);
     }
 
     public float decreaseQuantityAtCell(int col, int row, float quantity) {
-        FoodQuantityPair valueAtCell = getValueAtCell(col, row);
+        StackableSourceQuantityPair valueAtCell = getValueAtCell(col, row);
         assert ( valueAtCell.getSource() != null );
 
         if ( quantity < valueAtCell.getAmount() ) {
             valueAtCell.decrementAmount(quantity);
             return quantity;
         } else {
-            valueAtCell.notifySourceFoodEnded();
+            valueAtCell.notifyStackEnded();
             valueAtCell.setSource(null);
             float amount = valueAtCell.getAmount();
             valueAtCell.setAmount(0);

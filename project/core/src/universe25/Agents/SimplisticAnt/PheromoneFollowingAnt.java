@@ -3,16 +3,17 @@ package universe25.Agents.SimplisticAnt;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
+import universe25.Agents.Stackable.Food.Food;
+import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
+import universe25.Agents.Stackable.StackableUtils;
 import universe25.Agents.States.*;
 import universe25.Agents.States.SimplisticAntStates.AvoidAntPoison;
 import universe25.Agents.States.SimplisticAntStates.CircleForPheromone;
 import universe25.Agents.States.SimplisticAntStates.GoToFood;
 import universe25.Agents.States.SimplisticAntStates.GoToPheromone;
-import universe25.Food.FoodQuantityPair;
 import universe25.GameLogic.NumberProducers.GaussianFloatProducer;
 import universe25.GameLogic.NumberProducers.GaussianLongProducer;
 import universe25.Objects.Crumbs;
-import universe25.World.GridLayers.FloatLayer;
 
 /**
  * Created by jorl17 on 08/08/15.
@@ -92,14 +93,14 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
     public void update() {
         super.update();
         tmpPos.set(getX(Align.center), getY(Align.center));
-        FoodQuantityPair food = getWorld().getFoodLayer().getValueAt(tmpPos.x, tmpPos.y);
-        if ( food.hasFood() && first) {
-            getWorld().getFoodLayer().decreaseQuantityAt(tmpPos.x, tmpPos.y, 10);
+        StackableSourceQuantityPair stackbles = getWorld().getStacksLayer().getValueAt(tmpPos.x, tmpPos.y);
+        if ( StackableUtils.hasFood(stackbles) && first) {
+            getWorld().getStacksLayer().decreaseQuantityAt(tmpPos.x, tmpPos.y, 10);
             //getWorld().getActors().removeValue(this, false);
 
             //System.out.println(getMovesMemory().cpy().reverse());
             testDoMoveSequence(getMovesMemory().cpy().reverse());
-            getStack().add(new Crumbs(food.getSource(), 10));
+            getStack().add(new Crumbs((Food)stackbles.getSource(), 10));
 
             first = false;
             //getGoalMovement().clearGoals();

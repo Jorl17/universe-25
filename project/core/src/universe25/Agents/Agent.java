@@ -7,17 +7,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
+import universe25.Agents.Stackable.Food.Food;
+import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
+import universe25.Agents.Stackable.StackableUtils;
 import universe25.Agents.States.DoMoveSequence;
 import universe25.Agents.States.StateManager;
-import universe25.Food.Food;
-import universe25.Food.FoodQuantityPair;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.MoveSequence.FixedGridMoveSequence;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.WorldObject;
 import universe25.World.GridLayers.FloatLayer;
-import universe25.World.GridLayers.FoodLayer;
+import universe25.World.GridLayers.StackablesLayer;
 import universe25.World.GridLayers.WorldObjectsLayer;
 import universe25.World.World;
 import universe25.GameLogic.Movement.MovableImage;
@@ -224,11 +225,11 @@ public abstract class Agent extends MovableImage implements Disposable {
         return false;
     }
 
-    protected boolean areThereCellsWithFoodAtFoodLayer(FoodLayer layer) {
+    protected boolean areThereCellsWithFoodAtStackableLayer(StackablesLayer layer) {
         if ( tmpCellsInFov != null ) {
             for ( GridCell cell : tmpCellsInFov) {
-                FoodQuantityPair quantityPair = layer.getValueAtCell(cell);
-                if ( quantityPair.hasFood() ) return true;
+                StackableSourceQuantityPair quantityPair = layer.getValueAtCell(cell);
+                if (StackableUtils.hasFood(quantityPair)) return true;
             }
         }
 
@@ -274,14 +275,14 @@ public abstract class Agent extends MovableImage implements Disposable {
         return ret;
     }
 
-    public ArrayList<ValuePositionPair<FoodQuantityPair>> getCenterOfCellsInFieldOfViewWithFood() {
-        FoodLayer layer = getWorld().getFoodLayer();
-        ArrayList<ValuePositionPair<FoodQuantityPair>> ret = new ArrayList<>();
+    public ArrayList<ValuePositionPair<StackableSourceQuantityPair>> getCenterOfCellsInFieldOfViewWithFood() {
+        StackablesLayer layer = getWorld().getStacksLayer();
+        ArrayList<ValuePositionPair<StackableSourceQuantityPair>> ret = new ArrayList<>();
 
         if (tmpCellsInFov != null ) {
             for ( GridCell cell : tmpCellsInFov) {
-                ValuePositionPair<FoodQuantityPair> cellCentreAndValue = layer.getCellCentreAndValue(cell);
-                if ( cellCentreAndValue.getValue().hasFood() )
+                ValuePositionPair<StackableSourceQuantityPair> cellCentreAndValue = layer.getCellCentreAndValue(cell);
+                if ( StackableUtils.hasFood(cellCentreAndValue.getValue()) )
                     ret.add(cellCentreAndValue);
             }
         }
