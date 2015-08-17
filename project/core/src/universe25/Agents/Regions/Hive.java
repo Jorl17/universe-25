@@ -7,12 +7,14 @@ import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.World.GridLayers.RegionsLayer;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by jorl17 on 17/08/15.
  */
 public class Hive<S extends Species> extends Region {
     private int startCol, startRow, width, height;
+    private SubRegion foodStackRegion;
 
     public Hive(RegionsLayer regionsLayer, S regionSpecies, int startCol, int startRow, int width, int height) {
         super(regionsLayer, regionSpecies, regionsLayer.getGridCellsRectangle(startCol, startRow, width, height));
@@ -20,6 +22,8 @@ public class Hive<S extends Species> extends Region {
         this.startRow = startRow;
         this.width = width;
         this.height = height;
+        this.foodStackRegion = new SubRegion(this);
+        foodStackRegion.randomlyExpand();
     }
 
     public Hive(RegionsLayer regionsLayer, S regionSpecies, int width, int height) {
@@ -31,11 +35,17 @@ public class Hive<S extends Species> extends Region {
         this.startRow = startRow;
         this.width = width;
         this.height = height;
+        this.foodStackRegion = new SubRegion(this);
+        foodStackRegion.randomlyExpand();
     }
 
     public Vector2 getHiveCenter() {
         int endCol = startCol + width;
         int endRow = startRow + height;
         return getRegionsLayer().getCellCentre(endCol, endRow).add(getRegionsLayer().getCellCentre(startCol, startRow)).scl(0.5f);
+    }
+
+    public SubRegion getFoodStackRegion() {
+        return foodStackRegion;
     }
 }
