@@ -9,7 +9,7 @@ public class NoSpecies extends Species {
     }
 
     @Override
-    public Species newIndividual() {
+    public SpeciesAgent newIndividual() {
         return null;
     }
 }

@@ -3,11 +3,12 @@ package universe25.Agents.SimplisticAnt;
 import com.badlogic.gdx.graphics.Color;
 import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.Species;
+import universe25.Agents.SpeciesAgent;
 
 /**
  * Created by jorl17 on 17/08/15.
  */
-public class SimplisticAntSpecies extends Species {
+public class SimplisticAntSpecies extends Species<SimplisticAnt> {
     protected final Pheromone foodPheromone;
     protected final Pheromone pathPheromone;
     protected final Pheromone foodImmediancyPheromone;
@@ -24,9 +25,8 @@ public class SimplisticAntSpecies extends Species {
     }
 
     @Override
-    public Species newIndividual() {
-        //return new SimplisticAntSpecies(this);
-        return null; //FIXME
+    public SimplisticAnt newIndividual() {
+        return Math.random() <= 0.99f ? new PheromoneFollowingAnt(this) : new ScouterAnt(this);
     }
 
     public Pheromone getFoodPheromone() {

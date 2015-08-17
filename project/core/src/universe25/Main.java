@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import universe25.Agents.Agent;
 import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
+import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAntSpecies;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.PathFinder;
@@ -115,7 +116,7 @@ public class Main extends ApplicationAdapter {
             p = stage.randomPosition();
         } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );
         for (int i = 0; i < 100; i++) {
-            PheromoneFollowingAnt ant = new PheromoneFollowingAnt(species);
+            SimplisticAnt ant = species.newIndividual();
             ant.setPosition(p.x,p.y);
             stage.addActor(ant);
         }

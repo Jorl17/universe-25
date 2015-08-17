@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 17/08/15.
  */
-public abstract class Species/*<P extends SpeciesParameters>*/ {
+public abstract class Species<T>/*<P extends SpeciesParameters>*/ {
     private String name;
     private static ArrayList<Pheromone> allPheromones = new ArrayList<>();
     private static ArrayList<Region> allRegions = new ArrayList<>();
@@ -23,7 +23,7 @@ public abstract class Species/*<P extends SpeciesParameters>*/ {
         //this.parameters = parameters;
     }
 
-    public abstract Species newIndividual();
+    public abstract T newIndividual();
 
     public String getName() {
         return name;
