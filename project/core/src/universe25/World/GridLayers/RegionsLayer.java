@@ -11,12 +11,27 @@ import java.util.ArrayList;
  */
 public class RegionsLayer extends GridMapLayer<Region> {
 
-    public RegionsLayer(float gridWidth, float gridHeight, float cellSize, String name, Color drawColor, boolean drawLayer) {
+    private Region freeRegion;
+
+    public RegionsLayer(float gridWidth, float gridHeight, float cellSize, String name, Region initialRegion, Color drawColor, boolean drawLayer) {
         super(Region.class, gridWidth, gridHeight, cellSize, name, drawColor, drawLayer);
+        this.freeRegion = initialRegion;
+        markAllAsFree();
     }
 
-    public RegionsLayer(float cellSize, int nRows, int nCols, String name) {
+    public RegionsLayer(float cellSize, int nRows, int nCols, String name, Region initialRegion) {
         super(Region.class, cellSize, nRows, nCols, name);
+        this.freeRegion = initialRegion;
+        markAllAsFree();
+    }
+
+    public void markAllAsFree() {
+        freeRegion.markAsFreeRegion();
+        for (int i = 0; i < nRows; i++)
+            for (int j = 0; j < nCols; j++) {
+                //cells[i][j] = freeRegion; <-- This is done in addCell()
+                freeRegion.addCell(getCellAt(j, i));
+            }
     }
 
     public boolean hasRegion(GridCell cell) {

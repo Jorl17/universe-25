@@ -43,6 +43,8 @@ public class Region {
 
     public void addCell(GridCell cell) {
         this.cells.add(cell);
+        if ( regionsLayer != null && regionsLayer.getValueAtCell(cell) != this )
+            regionsLayer.setValueAtCell(cell, this);
     }
 
     public void addCells(ArrayList<GridCell> cell) {
@@ -68,5 +70,14 @@ public class Region {
 
     public ArrayList<GridCell> getCells() {
         return cells;
+    }
+
+    public void setRegionSpecies(String regionSpecies) {
+        this.regionSpecies = regionSpecies;
+    }
+
+    public void markAsFreeRegion() {
+        // Note that we intend to have ONE single static region that has all free cells...so this is redundant I guess
+        setRegionSpecies("FreeRegion");
     }
 }
