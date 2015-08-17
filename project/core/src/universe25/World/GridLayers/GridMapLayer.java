@@ -139,6 +139,10 @@ public abstract class GridMapLayer<T> extends Actor {
         nextCells[row][col] = val;
     }
 
+    public void setValueAtCell(GridCell cell, T val) {
+        setValueAtCell(cell.getCol() ,cell.getRow(), val);
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if ( drawLayer ) {
