@@ -1,6 +1,7 @@
 package universe25.Agents.Pheromones;
 
 import com.badlogic.gdx.graphics.Color;
+import universe25.Agents.Species;
 import universe25.World.GridLayers.PheromoneMapLayer;
 import universe25.World.World;
 
@@ -10,7 +11,7 @@ import universe25.World.World;
 public class Pheromone {
     private World world;
     private String pheromoneName;
-    private String species;
+    private Species species;
     private float evaporationRate;
     private float spreadRate;
     private float spreadProbability;
@@ -18,7 +19,7 @@ public class Pheromone {
     private PheromoneMapLayer layer;
     private Color color;
 
-    public Pheromone(String pheromoneName, String species, float evaporationRate, float spreadRate, float spreadProbability, float pheromoneLayerMax, Color color) {
+    public Pheromone(String pheromoneName, Species species, float evaporationRate, float spreadRate, float spreadProbability, float pheromoneLayerMax, Color color) {
         this.pheromoneName = pheromoneName;
         this.species = species;
         this.evaporationRate = evaporationRate;
@@ -36,7 +37,7 @@ public class Pheromone {
     }
 
     public String getFullPheromoneName() {
-        return species + pheromoneName;
+        return species.getName() + pheromoneName;
     }
 
     public String getWorldLayerName() {

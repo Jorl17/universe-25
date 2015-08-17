@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
 import universe25.Agents.Pheromones.Pheromone;
+import universe25.Agents.Species;
 import universe25.Agents.SpeciesAgent;
 import universe25.Agents.Stackable.Food.AntPoison;
 import universe25.Agents.Stackable.Food.Bread;
@@ -155,7 +156,7 @@ public class World extends Stage {
     }
 
     public void addPheromones() {
-        ArrayList<Pheromone> pheromones = SpeciesAgent.getPheromones();
+        ArrayList<Pheromone> pheromones = getPheromones();
         for ( Pheromone pheromone : pheromones ) {
             System.out.println("World registering " + pheromone);
             pheromone.registerWithWorld(this);
@@ -316,7 +317,7 @@ public class World extends Stage {
     }
 
     public ArrayList<Pheromone> getPheromones() {
-        return SpeciesAgent.getPheromones();
+        return Species.getAllPheromones();
     }
 
     public static float getTileSize() {

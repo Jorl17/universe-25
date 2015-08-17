@@ -9,31 +9,22 @@ import java.util.ArrayList;
  * Created by jorl17 on 09/08/15.
  */
 public abstract class SpeciesAgent extends Agent {
-    private static String species;
-    private static ArrayList<Pheromone> pheromones = new ArrayList<>();
-    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed,
-                           int movesMemorySize, String species) {
+    private Species species;
+
+    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, Species species, float fov, float seeDistance, float speed,
+                           int movesMemorySize) {
         super(texture, shouldDisposeTexture, fov, seeDistance, speed, movesMemorySize);
-        SpeciesAgent.species = species;
+        this.species = species;
     }
 
-    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed,
+    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, Species species, float fov, float seeDistance, float speed,
                            int movesMemorySize, boolean debugDrawFov, boolean debugDrawCellsUnderFov,
-                           boolean debugDrawGoals, boolean debugDrawfacing, String species) {
+                           boolean debugDrawGoals, boolean debugDrawfacing) {
         super(texture, shouldDisposeTexture, fov, seeDistance, speed, movesMemorySize, debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing);
-        SpeciesAgent.species = species;
+        this.species = species;
     }
 
-    public static String getSpecies() {
+    public Species getSpecies() {
         return species;
     }
-
-    public static ArrayList<Pheromone> getPheromones() {
-        return pheromones;
-    }
-
-    protected static void addSpeciesPheromone(Pheromone p) {
-        pheromones.add(p);
-    }
-
 }

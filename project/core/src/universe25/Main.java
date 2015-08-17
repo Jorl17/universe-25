@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import universe25.Agents.Agent;
 import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
+import universe25.Agents.SimplisticAnt.SimplisticAntSpecies;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.PathFinder;
 import universe25.Objects.Stone;
@@ -23,7 +24,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create () {
-        SimplisticAnt.initializePheromones();
+        SimplisticAntSpecies species = new SimplisticAntSpecies("Species1");
 
         stage = new World(new FitViewport(640, 480));
         Gdx.input.setInputProcessor(stage);
@@ -52,11 +53,11 @@ public class Main extends ApplicationAdapter {
                 } else if ( keycode == Input.Keys.R ) {
                     stage.getAllAgents().forEach(Agent::toggleDebugDrawGoals);
                 } else if ( keycode == Input.Keys.A ) {
-                    SimplisticAnt.getPathPheronome().getWorldLayer().toggleDrawLayer();
+                    species.getPathPheromone().getWorldLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.S ) {
-                    SimplisticAnt.getFoodPheromone().getWorldLayer().toggleDrawLayer();
+                    species.getFoodPheromone().getWorldLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.D ) {
-                    SimplisticAnt.getFoodImmediancyPheromone().getWorldLayer().toggleDrawLayer();
+                    species.getFoodImmediancyPheromone().getWorldLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.L ) {
                     stage.getWorldObjectsLayer().toggleDrawLayer();
                 }
@@ -115,7 +116,7 @@ public class Main extends ApplicationAdapter {
             p = stage.randomPosition();
         } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );
         for (int i = 0; i < 100; i++) {
-            PheromoneFollowingAnt ant = new PheromoneFollowingAnt();
+            PheromoneFollowingAnt ant = new PheromoneFollowingAnt(species);
             ant.setPosition(p.x,p.y);
             stage.addActor(ant);
         }/*

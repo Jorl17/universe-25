@@ -1,5 +1,7 @@
 package universe25.Agents.Regions;
 
+import universe25.Agents.NoSpecies;
+import universe25.Agents.Species;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.World.GridLayers.PheromoneMapLayer;
 import universe25.World.GridLayers.RegionsLayer;
@@ -12,14 +14,14 @@ import java.util.ArrayList;
  */
 public class Region {
     private RegionsLayer regionsLayer;
-    private String regionSpecies;
+    private Species regionSpecies;
     private ArrayList<GridCell> cells;
 
     public Region() {
         this.cells = new ArrayList<>();
     }
 
-    public Region(RegionsLayer regionsLayer, String regionSpecies, ArrayList<GridCell> cells) {
+    public Region(RegionsLayer regionsLayer, Species regionSpecies, ArrayList<GridCell> cells) {
         this.regionsLayer = regionsLayer;
         this.regionSpecies = regionSpecies;
         this.cells = new ArrayList<>();
@@ -53,7 +55,7 @@ public class Region {
 
 
     public boolean isEmptyRegion() {
-        return regionSpecies == null;
+        return regionSpecies instanceof NoSpecies;
     }
 
     public void setRegionsLayer(RegionsLayer regionsLayer) {
@@ -64,7 +66,7 @@ public class Region {
         return regionsLayer;
     }
 
-    public String getRegionSpecies() {
+    public Species getRegionSpecies() {
         return regionSpecies;
     }
 
@@ -72,12 +74,12 @@ public class Region {
         return cells;
     }
 
-    public void setRegionSpecies(String regionSpecies) {
+    public void setRegionSpecies(Species regionSpecies) {
         this.regionSpecies = regionSpecies;
     }
 
     public void markAsFreeRegion() {
         // Note that we intend to have ONE single static region that has all free cells...so this is redundant I guess
-        setRegionSpecies("FreeRegion");
+        setRegionSpecies(new NoSpecies());
     }
 }

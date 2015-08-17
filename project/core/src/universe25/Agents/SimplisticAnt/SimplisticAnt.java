@@ -3,6 +3,7 @@ package universe25.Agents.SimplisticAnt;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import universe25.Agents.Pheromones.*;
+import universe25.Agents.Species;
 import universe25.Agents.SpeciesAgent;
 import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
 import universe25.Agents.Stackable.StackableUtils;
@@ -18,23 +19,20 @@ import java.util.ArrayList;
 public abstract class SimplisticAnt extends SpeciesAgent {
     private static final Texture texture = new Texture("ant.png");
 
-    protected static final Pheromone foodPheromone = new Pheromone("Food", getSpecies(), 0.001f, 0.002f, 0.1f, 500, Color.CYAN);
-    protected static final Pheromone pathPheronome = new Pheromone("Path", getSpecies(), 0.2f, 0.002f, 0.1f, 500, Color.YELLOW);
-    protected static final Pheromone foodImmediancyPheromone = new Pheromone("FoodImmediancePheromone", getSpecies(), 0.001f, 0.002f, 0.1f, 500, Color.MAGENTA);
+    protected final Pheromone foodPheromone;
+    protected final Pheromone pathPheronome;
+    protected final Pheromone foodImmediancyPheromone;
 
     protected PheromoneController foodPheromoneController, pathPheronomeController, foodImmediancyPheromoneController;
 
-    public static void initializePheromones() {
-        addSpeciesPheromone(pathPheronome);
-        addSpeciesPheromone(foodPheromone);
-        addSpeciesPheromone(foodImmediancyPheromone);
-    }
-
-    protected SimplisticAnt(float fov, float seeDistance, float speed, int movesMemorySize, float pathPheronomeIncrease, float foodPheromoneIncreaseWhenSeeingFood, float foodPheromoneIncreaseWhenSeeingFoodPheromone) {
-        super(texture, false, fov, seeDistance, speed, movesMemorySize, "SimplisticAnt");
+    protected SimplisticAnt(SimplisticAntSpecies species, float fov, float seeDistance, float speed, int movesMemorySize, float pathPheronomeIncrease, float foodPheromoneIncreaseWhenSeeingFood, float foodPheromoneIncreaseWhenSeeingFoodPheromone) {
+        super(texture, false, species, fov, seeDistance, speed, movesMemorySize);
         setSize(8,8);
         setOriginX(4);
         setOriginY(4);
+        foodPheromone = species.getFoodPheromone();
+        pathPheronome = species.getPathPheromone();
+        foodImmediancyPheromone = species.getFoodImmediancyPheromone();
         //setBoundingBoxThreshold(1.0f);
         foodPheromoneController = new AlternativeOrderedPheromoneController(
                                     new ConditionalIncreasePheromoneController<>(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFood,
@@ -53,10 +51,6 @@ public abstract class SimplisticAnt extends SpeciesAgent {
                 SimplisticAnt::areThereCellsWithFood);
 
         prepareStates();
-    }
-
-    public static Pheromone getFoodImmediancyPheromone() {
-        return foodImmediancyPheromone;
     }
 
     protected abstract void prepareStates();
@@ -101,13 +95,5 @@ public abstract class SimplisticAnt extends SpeciesAgent {
 
     public ArrayList<ValuePositionPair<Float>> getCenterOfCellsInFieldOfViewWithPheromone(Pheromone pheromoneType) {
         return getCenterOfCellsInFieldOfViewWithValueForSomeFloatLayer(pheromoneType.getWorldLayer());
-    }
-
-    public static Pheromone getPathPheronome() {
-        return pathPheronome;
-    }
-
-    public static Pheromone getFoodPheromone() {
-        return foodPheromone;
     }
 }
