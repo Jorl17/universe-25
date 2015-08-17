@@ -10,21 +10,38 @@ import java.util.ArrayList;
  */
 public abstract class SpeciesAgent extends Agent {
     private Species species;
+    private SpeciesParameters parameters;
 
-    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, Species species, float fov, float seeDistance, float speed,
-                           int movesMemorySize) {
-        super(texture, shouldDisposeTexture, fov, seeDistance, speed, movesMemorySize);
+    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, Species species, SpeciesParameters parameters) {
+        super(texture, shouldDisposeTexture,
+                (float)parameters.get("fov").get(),
+                (float)parameters.get("seeDistance").get(),
+                (float)parameters.get("speed").get(),
+                (int)parameters.get("movesMemorySize").get());
         this.species = species;
+        this.parameters = parameters;
     }
 
-    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, Species species, float fov, float seeDistance, float speed,
-                           int movesMemorySize, boolean debugDrawFov, boolean debugDrawCellsUnderFov,
-                           boolean debugDrawGoals, boolean debugDrawfacing) {
-        super(texture, shouldDisposeTexture, fov, seeDistance, speed, movesMemorySize, debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing);
+    protected SpeciesAgent(Texture texture, boolean shouldDisposeTexture, Species species, SpeciesParameters parameters,
+                           boolean debugDrawFov, boolean debugDrawCellsUnderFov, boolean debugDrawGoals, boolean debugDrawfacing) {
+        super(texture, shouldDisposeTexture,
+                (float)parameters.get("fov").get(),
+                (float)parameters.get("seeDistance").get(),
+                (float)parameters.get("speed").get(),
+                (int)parameters.get("movesMemorySize").get(),debugDrawFov, debugDrawCellsUnderFov, debugDrawGoals, debugDrawfacing);
         this.species = species;
+        this.parameters = parameters;
     }
 
     public Species getSpecies() {
         return species;
+    }
+
+    public SpeciesParameters getParameters() {
+        return parameters;
+    }
+
+    public SpeciesParameter getParameter(String name) {
+        return parameters.get(name);
     }
 }

@@ -3,6 +3,7 @@ package universe25.Agents.SimplisticAnt;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
+import universe25.Agents.SimplisticAntSpeciesParameters;
 import universe25.Agents.Stackable.Food.Food;
 import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
 import universe25.Agents.Stackable.StackableUtils;
@@ -19,18 +20,20 @@ import universe25.Objects.Crumbs;
  * Created by jorl17 on 08/08/15.
  */
 public class PheromoneFollowingAnt extends SimplisticAnt {
-    private static float fov=60;
-    private static float seeDistance=50;
-    private static float speed=1.0f;
-    private static int   movesMemorySize=500;
-    private static float pathPheromoneIncrease=5/*1*/;
-    private static float floatPheromoneIncreaseWhenSeeingFood=pathPheromoneIncrease*5;
-    private static float floatPheromoneIncreaseWhenSeeingFoodPheromone=floatPheromoneIncreaseWhenSeeingFood/50.0f;
-    public PheromoneFollowingAnt(SimplisticAntSpecies species) {
-        //super(30, 150, 1, 1, 15);
+    private static SimplisticAntSpeciesParameters defaultSpeciesParameters = new SimplisticAntSpeciesParameters(
+            /*fov*/60,
+            /*seeDistance*/50,
+            /*speed*/1.0f,
+            /*pathPheromoneIncrease*/5,
+            /*floatPheromoneIncreaseWhenSeeingFood*/5*5
+    );
 
-        super(species, fov, seeDistance, speed, movesMemorySize, pathPheromoneIncrease, floatPheromoneIncreaseWhenSeeingFood,
-              floatPheromoneIncreaseWhenSeeingFoodPheromone);
+    public PheromoneFollowingAnt(SimplisticAntSpecies species, SimplisticAntSpeciesParameters parameters) {
+        super(species, parameters);
+    }
+
+    public PheromoneFollowingAnt(SimplisticAntSpecies species) {
+        this(species, defaultSpeciesParameters);
     }
 
     @Override

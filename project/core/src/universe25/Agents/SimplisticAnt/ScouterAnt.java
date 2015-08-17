@@ -1,6 +1,7 @@
 package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
+import universe25.Agents.SimplisticAntSpeciesParameters;
 import universe25.Agents.States.*;
 import universe25.Agents.SimplisticAnt.States.GoToFood;
 
@@ -8,12 +9,22 @@ import universe25.Agents.SimplisticAnt.States.GoToFood;
  * Created by jorl17 on 06/08/15.
  */
 public class ScouterAnt extends SimplisticAnt {
+    private static SimplisticAntSpeciesParameters defaultSpeciesParameters = new SimplisticAntSpeciesParameters(
+            /*fov*/90,
+            /*seeDistance*/70,
+            /*speed*/3,
+            /*pathPheromoneIncrease*/3,
+            /*floatPheromoneIncreaseWhenSeeingFood*/3*8
+    );
 
-    public ScouterAnt(SimplisticAntSpecies species) {
-        //super(90, 200, 3, 3, 10);
-        super(species, 90, 70, 3, 3, 3*8, 0.5f, 100);
+    protected ScouterAnt(SimplisticAntSpecies species, SimplisticAntSpeciesParameters parameters) {
+        super(species, parameters);
         setColor(new Color(1.0f,0.0f,0.0f,1.0f));
         foodImmediancyPheromoneController = null;
+    }
+
+    public ScouterAnt(SimplisticAntSpecies species) {
+        this(species, defaultSpeciesParameters);
     }
 
     @Override

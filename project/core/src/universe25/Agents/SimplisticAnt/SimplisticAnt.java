@@ -3,6 +3,7 @@ package universe25.Agents.SimplisticAnt;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import universe25.Agents.Pheromones.*;
+import universe25.Agents.SimplisticAntSpeciesParameters;
 import universe25.Agents.Species;
 import universe25.Agents.SpeciesAgent;
 import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
@@ -25,8 +26,8 @@ public abstract class SimplisticAnt extends SpeciesAgent {
 
     protected PheromoneController foodPheromoneController, pathPheronomeController, foodImmediancyPheromoneController;
 
-    protected SimplisticAnt(SimplisticAntSpecies species, float fov, float seeDistance, float speed, int movesMemorySize, float pathPheronomeIncrease, float foodPheromoneIncreaseWhenSeeingFood, float foodPheromoneIncreaseWhenSeeingFoodPheromone) {
-        super(texture, false, species, fov, seeDistance, speed, movesMemorySize);
+    protected SimplisticAnt(SimplisticAntSpecies species, SimplisticAntSpeciesParameters parameters) {
+        super(texture, false, species, parameters);
         setSize(8,8);
         setOriginX(4);
         setOriginY(4);
@@ -35,7 +36,7 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         foodImmediancyPheromone = species.getFoodImmediancyPheromone();
         //setBoundingBoxThreshold(1.0f);
         foodPheromoneController = new AlternativeOrderedPheromoneController(
-                                    new ConditionalIncreasePheromoneController<>(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFood,
+                                    new ConditionalIncreasePheromoneController<>(this, foodPheromone, (float)getParameter("foodPheromoneIncreaseWhenSeeingFood").get(),
                                             SimplisticAnt::areThereCellsWithFood),
                                    /* new ConditionalIncreasePheromoneController(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFoodPheromone,
                                     (agent) -> ((SimplisticAnt)agent).areThereCellsWithPheromone(foodPheromone)*/
@@ -45,7 +46,7 @@ public abstract class SimplisticAnt extends SpeciesAgent {
         pathPheronomeController = /*new AlternativeOrderedPheromoneController( new ConditionalIncreasePheromoneController(this, pathPheronome, pathPheronomeIncrease,
                 (agent) -> !((SimplisticAnt)agent).areThereCellsWithPheromone(pathPheronome)),
                 new ProportionalPheromoneController(this, pathPheronome, 0.5f, pathPheronomeIncrease, true, 100));*/
-                new IncreasePheromoneController(this, pathPheronome, pathPheronomeIncrease);
+                new IncreasePheromoneController(this, pathPheronome, (float)getParameter("pathPheromoneIncrease").get());
 
         foodImmediancyPheromoneController = new ConditionalIncreasePheromoneController<>(this, foodImmediancyPheromone, 1,
                 SimplisticAnt::areThereCellsWithFood);

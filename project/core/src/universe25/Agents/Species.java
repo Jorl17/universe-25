@@ -8,16 +8,19 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 17/08/15.
  */
-public abstract class Species {
+public abstract class Species/*<P extends SpeciesParameters>*/ {
     private String name;
     private static ArrayList<Pheromone> allPheromones = new ArrayList<>();
     private static ArrayList<Region> allRegions = new ArrayList<>();
     private ArrayList<Pheromone> pheromones = new ArrayList<>();
     private ArrayList<Region> regions = new ArrayList<>();
+    //private P parameters;
 
 
-    public Species(String name) {
+
+    public Species(String name/*, P parameters*/) {
         this.name = name;
+        //this.parameters = parameters;
     }
 
     public abstract Species newIndividual();
@@ -51,4 +54,12 @@ public abstract class Species {
     public static ArrayList<Pheromone> getAllPheromones() {
         return allPheromones;
     }
+
+    /*public P getParameters() {
+        return parameters;
+    }
+
+    public SpeciesParameter getParameter(String name) {
+        return parameters.get(name);
+    }*/
 }

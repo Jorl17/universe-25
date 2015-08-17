@@ -9,8 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import universe25.Agents.Agent;
 import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
+import universe25.Agents.SimplisticAnt.ScouterAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAntSpecies;
+import universe25.Agents.SimplisticAntSpeciesParameters;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.PathFinder;
 import universe25.Objects.Stone;
@@ -119,10 +121,10 @@ public class Main extends ApplicationAdapter {
             PheromoneFollowingAnt ant = new PheromoneFollowingAnt(species);
             ant.setPosition(p.x,p.y);
             stage.addActor(ant);
-        }/*
+        }
 
-        for (int i = 0; i < 1; i++) {
-            ScouterAnt ant = new ScouterAnt();
+        /*for (int i = 0; i < 1; i++) {
+            ScouterAnt ant = new ScouterAnt(species);
             ant.setPosition(0,0);
             stage.addActor(ant);
         }*/
