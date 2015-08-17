@@ -61,35 +61,6 @@ public class Main extends ApplicationAdapter {
                 } else if ( keycode == Input.Keys.L ) {
                     stage.getWorldObjectsLayer().toggleDrawLayer();
                 }
-                else if (keycode == Input.Keys.DOWN) {
-                    Agent agent = (Agent) stage.getActors().get(2);
-                    GoalMovement goalMovement = agent.getGoalMovement();
-                    if (!goalMovement.hasGoals())
-                        goalMovement.setGoal(new Vector2(250, 250));
-                    /*
-                    Seek<Vector2> seek =
-                            new Seek<Vector2>(agent, new SteerableScene2DLocation(50, 50));
-                    Seek<Vector2> seek2 =
-                            new Seek<Vector2>(agent, new SteerableScene2DLocation(450, 450));
-                    BlendedSteering<Vector2> vector2BlendedSteering = new BlendedSteering<Vector2>(agent);
-                    vector2BlendedSteering.add(new BlendedSteering.BehaviorAndWeight<Vector2>(seek, 10));
-                    vector2BlendedSteering.add(new BlendedSteering.BehaviorAndWeight<Vector2>(seek2, 30));
-                    agent.setSteeringBehavior(vector2BlendedSteering);*/
-
-                    /*agent.setPosition(200,200);
-                    Wander<Vector2> wander =
-                            new Wander<Vector2>(agent).setFaceEnabled(false).setWanderOffset(1.50f).setWanderRadius(2.0f).setWanderRate((float) (Math.PI/6.0f));
-                    agent.setSteeringBehavior(wander);*/
-
-                    //agent.addAction(Actions.moveBy(0, -20.0f, 0.5f));
-                } else if ( keycode == Input.Keys.UP ) {
-                    Agent agent = (Agent) stage.getActors().get(2);
-                    GoalMovement goalMovement = agent.getGoalMovement();
-                    goalMovement.setWeightedGoals(new WeightedGoal(new Vector2(250, 250), 1.0f), new WeightedGoal(new Vector2(100, 10), 0.5f));
-                } else if ( keycode == Input.Keys.LEFT ) {
-                    Agent agent = (Agent) stage.getActors().get(2);
-                    agent.rotateBy(30);
-                }
 
                 return true;
             }
@@ -97,10 +68,6 @@ public class Main extends ApplicationAdapter {
 
         });
 
-        //simplisticAnt.setPosition(250,250);
-
-
-        //stage.addActor(simplisticAnt);
         /*for (int i = 0; i < 100; i++) {
             PheromoneFollowingAnt ant = new PheromoneFollowingAnt();
             Vector2 p;
@@ -120,13 +87,6 @@ public class Main extends ApplicationAdapter {
             ant.setPosition(p.x,p.y);
             stage.addActor(ant);
         }
-
-        /*for (int i = 0; i < 1; i++) {
-            ScouterAnt ant = new ScouterAnt(species);
-            ant.setPosition(0,0);
-            stage.addActor(ant);
-        }*/
-
 
         stage.addListener(new InputListener() {
             @Override
