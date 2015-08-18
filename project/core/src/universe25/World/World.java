@@ -20,6 +20,7 @@ import universe25.Objects.Stone;
 import universe25.Objects.Wall;
 import universe25.Objects.Wall2;
 import universe25.Objects.WorldObject;
+import universe25.Utils.RandomUtils;
 import universe25.Utils.Scene2DShapeRenderer;
 import universe25.World.GridLayers.*;
 
@@ -301,7 +302,7 @@ public class World extends Stage {
     }
 
     public Vector2 randomPosition() {
-        return new Vector2((float)Math.random()*getWidth(), (float)Math.random()*getHeight());
+        return new Vector2(RandomUtils.rand(0, getWidth()), RandomUtils.rand(0, getHeight()));
     }
 
     public ArrayList<Agent> getAllAgents() {

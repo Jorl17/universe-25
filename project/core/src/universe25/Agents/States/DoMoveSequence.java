@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
+import universe25.Utils.RandomUtils;
 
 /**
  * Created by jorl17 on 12/08/15.
@@ -62,8 +63,8 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
                     destination = this.moveSequence.getMoveAt(currentMove);
             }
 
-            agent.getGoalMovement().setGoal(destination.cpy().add((float) Math.random() * cellSize * 2 - cellSize,
-                    (float) Math.random() * cellSize * 2 - cellSize));
+            agent.getGoalMovement().setGoal(destination.cpy().add(RandomUtils.rand(-cellSize, cellSize),
+                    RandomUtils.rand(-cellSize, cellSize)));
         }
         return null;
     }

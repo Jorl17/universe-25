@@ -1,13 +1,9 @@
 package universe25.Agents.Regions;
 
 import com.badlogic.gdx.math.Vector2;
-import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.Species;
-import universe25.GameLogic.Movement.Pathfinding.GridCell;
+import universe25.Utils.RandomUtils;
 import universe25.World.GridLayers.RegionsLayer;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by jorl17 on 17/08/15.
@@ -28,8 +24,8 @@ public class Hive<S extends Species> extends Region {
 
     public Hive(RegionsLayer regionsLayer, S regionSpecies, int width, int height) {
         super(regionsLayer, regionSpecies, null);
-        int startCol = (int) (Math.random() * (regionsLayer.getNumCols()-2*width) + width);
-        int startRow = (int) (Math.random() * (regionsLayer.getNumRows()-2*height) + height);
+        int startCol = RandomUtils.rand(width, regionsLayer.getNumCols() - width);
+        int startRow = RandomUtils.rand(height, regionsLayer.getNumRows() - height);
         addCells(regionsLayer.getGridCellsRectangle(startCol, startRow, width, height));
         this.startCol = startCol;
         this.startRow = startRow;

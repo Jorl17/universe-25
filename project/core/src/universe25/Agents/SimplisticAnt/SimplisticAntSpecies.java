@@ -5,6 +5,7 @@ import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.Regions.Hive;
 import universe25.Agents.Species;
 import universe25.Agents.SpeciesAgent;
+import universe25.Utils.RandomUtils;
 
 /**
  * Created by jorl17 on 17/08/15.
@@ -33,7 +34,7 @@ public class SimplisticAntSpecies extends Species<SimplisticAnt> {
 
     @Override
     public SimplisticAnt newIndividual() {
-        return Math.random() <= 0.99f ? new PheromoneFollowingAnt(this) : new ScouterAnt(this);
+        return RandomUtils.coin(0.99f) ? new PheromoneFollowingAnt(this) : new ScouterAnt(this);
     }
 
     public Pheromone getFoodPheromone() {

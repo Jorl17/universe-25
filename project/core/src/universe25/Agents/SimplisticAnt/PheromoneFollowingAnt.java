@@ -11,6 +11,7 @@ import universe25.Agents.States.*;
 import universe25.GameLogic.NumberProducers.GaussianFloatProducer;
 import universe25.GameLogic.NumberProducers.GaussianLongProducer;
 import universe25.Objects.Crumbs;
+import universe25.Utils.RandomUtils;
 
 /**
  * Created by jorl17 on 08/08/15.
@@ -45,7 +46,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         long rampageDeactivationTimeStd = 300L;
         PriorityAggregatorState searchForFood = new PriorityAggregatorState<>(this, "searchForFood");
 
-        boolean orangeSpecies = Math.random() > 0.5f;
+        boolean orangeSpecies = RandomUtils.coin();
 
         StateWithPriority<PheromoneFollowingAnt> wanderState, wanderStateHighestPrioTanFollowPathPheromoneState;
         GoToPheromone followPathPheromoneState;

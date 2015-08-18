@@ -3,6 +3,7 @@ package universe25.Agents.States;
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
 import universe25.GameLogic.Movement.WeightedGoal;
+import universe25.Utils.RandomUtils;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class Wander<T extends Agent> extends ToggablePriorityState<T> {
     private void randomTarget() {
         Vector2 dir = agent.getFacingDirection();
 
-        float rotationAngle = (float) (Math.random() * maxAllowedDegreeChange - maxAllowedDegreeChange / 2);
+        float rotationAngle = RandomUtils.rand(-maxAllowedDegreeChange / 2, maxAllowedDegreeChange/2);
         dir = dir.rotate(rotationAngle);
 
         int collisionsWithWorld = agent.getCollisionsWithWorld();
@@ -89,9 +90,10 @@ public class Wander<T extends Agent> extends ToggablePriorityState<T> {
 
     @Override
     public void updatePriority() {
-        if (Math.random() > (1-dontWanderProb)) {
+        if ( RandomUtils.coin(dontWanderProb) )
             makeReachable();
-        } else
+        else
             giveLowestPriority();
+
     }
 }

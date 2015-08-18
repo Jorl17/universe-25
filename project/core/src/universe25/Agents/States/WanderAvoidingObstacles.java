@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Agent;
 import universe25.GameLogic.Movement.WeightedGoal;
 import universe25.GameLogic.NumberProducers.NumberProducer;
+import universe25.Utils.RandomUtils;
 
 import java.util.ArrayList;
 
@@ -46,10 +47,10 @@ public class WanderAvoidingObstacles<T extends Agent> extends  StateWithPriority
 
 
         for (Vector2 v : centerOfCellsInFieldOfView)
-            dir.add(v.sub(pos).nor().scl((float) (Math.random()*weight.produce())));
+            dir.add(v.sub(pos).nor().scl(RandomUtils.rand(0,weight.produce())));
 
         if ( dir.isZero() || alwaysPerturbateMovement ) {
-            float rotationAngle = (float) (Math.random() * maxAllowedChangeDeg - maxAllowedChangeDeg / 2);
+            float rotationAngle = RandomUtils.rand(-maxAllowedChangeDeg / 2, maxAllowedChangeDeg/2);
             dir = agent.getFacingDirection().rotate(rotationAngle);
         }
 

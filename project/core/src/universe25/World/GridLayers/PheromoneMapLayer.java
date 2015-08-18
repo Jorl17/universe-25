@@ -2,6 +2,7 @@ package universe25.World.GridLayers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import universe25.Utils.RandomUtils;
 
 /**
  * Created by jorl17 on 08/08/15.
@@ -48,7 +49,7 @@ public class PheromoneMapLayer extends FloatLayer {
             for (int j = 0; j < nCols; j++)
                 for (int k = i - 1; k <= i + 1; k++)
                     for (int l = j - 1; l <= j + 1; l++)
-                        if ( Math.random() <= spreadProbability)
+                        if (RandomUtils.coin(spreadProbability) )
                             if (k >= 0 && k < nRows && l >= 0 && l < nCols && !(k == i && l == j)) {
                                 increasePheromoneAtCell(l, k, rate * getValueAtCell(j, i, tmpCells));
                                 decreasePheromoneAtCell(j, i, .9f * rate * getValueAtCell(j, i, tmpCells));
