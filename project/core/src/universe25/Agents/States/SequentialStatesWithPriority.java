@@ -16,39 +16,65 @@ public class SequentialStatesWithPriority<T extends Agent> extends CompositeStat
     private boolean highestPrioDecidedByChildren;
     private boolean loop;
     private RestartMode restartMode;
+    private Runnable action;
 
-    public SequentialStatesWithPriority(T agent, String name, int priorityWhenToggled, boolean highestPrioDecidedByChildren, boolean loop, RestartMode restartMode) {
+    public SequentialStatesWithPriority(T agent, String name, int priorityWhenToggled, boolean loop, RestartMode restartMode) {
         super(agent, name, priorityWhenToggled);
-        this.highestPrioDecidedByChildren = highestPrioDecidedByChildren;
+        this.highestPrioDecidedByChildren = priorityWhenToggled == -1;
         this.loop = loop;
         this.restartMode = restartMode;
         this.conditions = new ArrayList<>();
     }
 
     public void addState(StateWithPriority state, BooleanSupplier enterCondition) {
-        if ( numStates() == 0 ) assert ( enterCondition == null);
+        if ( numStates() == 0 ) {
+            assert (enterCondition == null);
+            currentState = 0;
+        }
+        else {
+            assert ( enterCondition != null );
+            conditions.add(enterCondition);
+        }
         addState(state);
-        conditions.add(enterCondition);
+    }
+
+    public void addEndingConditionActionPair(BooleanSupplier endingCondition, Runnable action) {
+        assert ( endingCondition != null );
+        conditions.add(endingCondition);
+        this.action = action;
+
     }
 
     @Override
     public void updatePriority() {
-        if ( highestPrioDecidedByChildren && currentState != -1)
-            setPriority(getSubStates().get(currentState).getPriority());
+        updateStatePriorities();
+        if ( currentState != -1 ) {
+            if (highestPrioDecidedByChildren)
+                setPriority(getSubStates().get(currentState).getPriority());
+            else
+                makeReachable();
+        }
     }
 
     @Override
     public String update() {
         if ( currentState != -1 ) {
-            if ( conditions.get(currentState).getAsBoolean() )
+            if ( conditions.get(currentState).getAsBoolean() ) {
                 getSubStates().get(currentState).leaveState();
 
-            if ( ++currentState > numStates() ) {
-                if (!loop) return null;
-                else currentState = 0;
+                if (++currentState == numStates()) {
+                    action.run();
+                    if (!loop) {
+                        currentState = -1;
+                        return null;
+                    }
+                    else currentState = 0;
+                }
+
+                getSubStates().get(currentState).enterState();
             }
 
-            getSubStates().get(currentState).enterState();
+            getSubStates().get(currentState).update();
         }
 
         return null;
@@ -77,6 +103,7 @@ public class SequentialStatesWithPriority<T extends Agent> extends CompositeStat
             int stateNumber = getFirstUnmetCondition()-1;
             if ( stateNumber < 0 ) {
                 // All conditions were met ...
+                action.run();
                 if ( loop ) currentState = 0;
                 else currentState = -1;
             }

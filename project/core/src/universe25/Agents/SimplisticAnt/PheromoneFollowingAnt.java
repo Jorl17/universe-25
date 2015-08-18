@@ -43,51 +43,70 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         long rampageActivationTimeStd = 500L;
         long rampageDeactivationTimeMean = 1000L;
         long rampageDeactivationTimeStd = 300L;
-        PriorityAggregatorState priorityAggregatorStates = new PriorityAggregatorState<>(this, "prioritisedStates");
+        PriorityAggregatorState searchForFood = new PriorityAggregatorState<>(this, "searchForFood");
 
         boolean orangeSpecies = Math.random() > 0.5f;
 
+        StateWithPriority<PheromoneFollowingAnt> wanderState, wanderStateHighestPrioTanFollowPathPheromoneState;
+        GoToPheromone followPathPheromoneState;
         if ( orangeSpecies ) {
             setColor(Color.ORANGE);
-            priorityAggregatorStates.addState(new WanderAvoidingObstacles<>(this, 15,
+            searchForFood.addState(wanderState = new WanderAvoidingObstacles<>(this, 15,
                     wanderMaxAllowedChangeDegree, new GaussianFloatProducer(3.0f, 0.25f), false));
         } else
-                priorityAggregatorStates.addState(new Wander<>(this,
+                searchForFood.addState(wanderState=new Wander<>(this,
                                                        wanderDirectionChangeIntervalMs,
                                                        wanderMaxAllowedChangeDegree,
                                                        wanderWhenSeeingPathPheromoneProbability, 15));
-        priorityAggregatorStates.addState(new GoToPheromone(this, 10, pathPheronome));
-        priorityAggregatorStates.addState(new GoToPheromone(this, 16, foodPheromone));
-        priorityAggregatorStates.addState(new Wander<>(this,
-                                                       wanderDirectionChangeIntervalMs,
-                                                       wanderMaxAllowedChangeDegree,
-                                                       wanderWhenSeeingFoodPheromoneProbability, 17));
-        priorityAggregatorStates.addState(new TickBasedPriorityStateActivator<>(this, "RampageForFood", 19,
-                                          new ParallelPriorityStates<>(this, "RampageAndChangeColor",
-                                                  orangeSpecies ?
-                                                                       new Wander<>(this, wanderDirectionChangeIntervalMs,
-                                                                                          wanderMaxAllowedChangeDegree)
-                                                  : new WanderAvoidingObstacles<>(this, 15,
-                                                          wanderMaxAllowedChangeDegree, () -> 1.0f, false),
-                                                                       new ChangeColorState<>(this, orangeSpecies ?
-                                                                               Color.GREEN :
-                                                                               Color.CYAN)),
-                                                                   PheromoneFollowingAnt.this::areThereCellsWithFood,
-                                                                   new GaussianLongProducer(rampageActivationTimeMean,
-                                                                                            rampageActivationTimeStd),
-                                                                   new GaussianLongProducer(rampageDeactivationTimeMean,
-                                                                                            rampageDeactivationTimeStd),
-                                                                   true));
-        priorityAggregatorStates.addState(new GoToPheromone(this, 20, foodImmediancyPheromone));
-        priorityAggregatorStates.addState(new CircleForPheromone(this, "CircleLookingForFood", 21,
+
+        searchForFood.addState(followPathPheromoneState=new GoToPheromone(this, 10, pathPheronome));
+        searchForFood.addState(new GoToPheromone(this, 16, foodPheromone));
+        searchForFood.addState(wanderStateHighestPrioTanFollowPathPheromoneState=new Wander<>(this,
+                wanderDirectionChangeIntervalMs,
+                wanderMaxAllowedChangeDegree,
+                wanderWhenSeeingFoodPheromoneProbability, 17));
+        searchForFood.addState(new TickBasedPriorityStateActivator<>(this, "RampageForFood", 19,
+                new ParallelPriorityStates<>(this, "RampageAndChangeColor",
+                        orangeSpecies ?
+                                new Wander<>(this, wanderDirectionChangeIntervalMs,
+                                        wanderMaxAllowedChangeDegree)
+                                : new WanderAvoidingObstacles<>(this, 15,
+                                wanderMaxAllowedChangeDegree, () -> 1.0f, false),
+                        new ChangeColorState<>(this, orangeSpecies ?
+                                Color.GREEN :
+                                Color.CYAN)),
+                PheromoneFollowingAnt.this::areThereCellsWithFood,
+                new GaussianLongProducer(rampageActivationTimeMean,
+                        rampageActivationTimeStd),
+                new GaussianLongProducer(rampageDeactivationTimeMean,
+                        rampageDeactivationTimeStd),
+                true));
+        searchForFood.addState(new GoToPheromone(this, 20, foodImmediancyPheromone));
+        searchForFood.addState(new CircleForPheromone(this, "CircleLookingForFood", 21,
                 foodImmediancyPheromone, 5, () -> 10L, true, -1/*0.25f*/ /* Because add rate is 1, we remove 25% */));
-        priorityAggregatorStates.addState(new GoToFood(this, 22));
-        //priorityAggregatorStates.addState(new GoToPheromone(this, 23, hivePheromone));
-        //priorityAggregatorStates.addState(new GoToHive(this, 24));
-        //states.addState(priorityAggregatorStates);
-        states.addState(new RootState<>(this, "Root", priorityAggregatorStates,
+        searchForFood.addState(new GoToFood(this, 22));
+
+        PriorityAggregatorState takeFoodBack = new PriorityAggregatorState<>(this, "TakeFoodBack");
+        takeFoodBack.addState(wanderState);
+        takeFoodBack.addState(followPathPheromoneState);
+        takeFoodBack.addState(wanderStateHighestPrioTanFollowPathPheromoneState);
+        takeFoodBack.addState(new GoToPheromone(this, 19, hivePheromone));
+        takeFoodBack.addState(new GoToHive(this, 20));
+        SequentialStatesWithPriority normalOperation = new SequentialStatesWithPriority<>(this, "NormalOperation",
+                -1, false, SequentialStatesWithPriority.RestartMode.REENTER_FIRST_STATE_CHECK_CONDITIONS_FIRST);
+        normalOperation.addState(searchForFood, null);
+        normalOperation.addState(takeFoodBack, this::hasFood);
+        normalOperation.addEndingConditionActionPair(() -> !isOutsideHive(), () -> getGoalMovement().clearGoals() );
+
+        //states.addState(searchForFood);
+        states.addState(new RootState<>(this, "Root",
                 new ParallelPriorityStates<>(this, "Parallel States",
-                priorityAggregatorStates,new AvoidAntPoison(this, 22))));
+                normalOperation,new AvoidAntPoison(this, 22))));
+    }
+
+    private boolean hasFood() {
+        //System.out.println("Check eh =" + first);
+        return !first;
     }
 
     private boolean first = true;
@@ -102,10 +121,11 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
             //getWorld().getActors().removeValue(this, false);
 
             //System.out.println(getMovesMemory().cpy().reverse());
-            testDoMoveSequence(getMovesMemory().cpy().reverse());
+            //testDoMoveSequence(getMovesMemory().cpy().reverse());
             getStack().add(new Crumbs((Food)stackbles.getSource(), 10));
 
             first = false;
+
             //getGoalMovement().clearGoals();
             //states.clearStates();
         }
