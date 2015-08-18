@@ -12,7 +12,15 @@ public class ParallelPriorityStates<T extends Agent> extends CompositeStateWithP
 
     @Override
     public void updatePriority() {
-        //FIXME
+        // This priority is the priority of the highest priority state
+        updateStatePriorities();
+        int highPrio = findHighestPriorityState();
+        if ( highPrio == -1 ) {
+            setPriority(0); // FIXME: -1?
+            return;
+        }
+
+        setPriority(getSubStates().get(highPrio).getPriority());
     }
 
     public ParallelPriorityStates(T agent, String name, StateWithPriority... states) {
