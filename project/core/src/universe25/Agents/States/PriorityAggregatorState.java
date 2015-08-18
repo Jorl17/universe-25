@@ -18,7 +18,16 @@ public class PriorityAggregatorState<T extends Agent> extends CompositeStateWith
 
     @Override
     public void updatePriority() {
-        //FIXME
+        // This priority is the priority of the highest priority state
+        updateStatePriorities();
+        int highPrio = findHighestPriorityState();
+        if ( highPrio == -1 ) {
+            assert( currentState == -1 );
+            setPriority(0); // FIXME: -1?
+            return;
+        }
+
+        setPriority(getSubStates().get(highPrio).getPriority());
     }
 
     public PriorityAggregatorState(T agent, String name, StateWithPriority... states) {
@@ -42,7 +51,6 @@ public class PriorityAggregatorState<T extends Agent> extends CompositeStateWith
 
     @Override
     public String update() {
-        updateStatePriorities();
         //System.out.println(subStates);
         enterHighestPriorityState();
         if ( currentState != -1 )
