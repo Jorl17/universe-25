@@ -27,7 +27,7 @@ public class ProportionalPheromoneController implements PheromoneController {
         this.factor = factor;
         this.threshold = threshold;
         this.upperThreshold = upperThreshold;
-        if ( upperThreshold == -1 ) upperThreshold = pheromone.getMax()+0.1f;
+        if ( upperThreshold == -1 ) this.upperThreshold = pheromone.getMax()+0.1f;
         this.dontRepeat = dontRepeat;
         if ( dontRepeat )
             memory = new FixedGridMoveSequence(memorySize);
