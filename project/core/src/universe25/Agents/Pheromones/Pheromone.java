@@ -56,6 +56,10 @@ public class Pheromone {
         this.layer.spread(spreadRate, spreadProbability);
     }
 
+    public float getMax() {
+        return pheromoneLayerMax;
+    }
+
     @Override
     public String toString() {
         return "Pheromone{worldLayerName=" + getWorldLayerName() +

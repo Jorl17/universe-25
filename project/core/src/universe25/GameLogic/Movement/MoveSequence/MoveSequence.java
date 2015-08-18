@@ -72,4 +72,13 @@ public class MoveSequence {
     public MoveSequence cpy() {
         return new MoveSequence(moves);
     }
+
+    public MoveSequence last(int numMoves) {
+        ArrayList<Vector2> ret = new ArrayList<>();
+        if ( numMoves > moves.size() ) numMoves = moves.size();
+        for (int i=moves.size()-numMoves; i < moves.size(); i++ )
+            ret.add(moves.get(i));
+
+        return new MoveSequence(ret);
+    }
 }

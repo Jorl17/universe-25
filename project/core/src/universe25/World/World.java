@@ -64,8 +64,8 @@ public class World extends Stage {
         addGridLayer(regionsLayer);
         addGridLayer(stacksLayer);
 
-/*
-        for (int i = 0; i < 160; i++) {
+
+        for (int i = 0; i < 60; i++) {
             Stone stone = new Stone();
             Vector2 pos = randomPosition();
             stone.setPosition(pos.x, pos.y);
@@ -85,7 +85,7 @@ public class World extends Stage {
             Vector2 pos = randomPosition();
             wall.setPosition(pos.x, pos.y);
             addActor(wall);
-        }*/
+        }
 
         ArrayList<GridCell> breadCells = new ArrayList<>();
         for(;;) {

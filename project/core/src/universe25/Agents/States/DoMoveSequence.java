@@ -32,39 +32,39 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
         /*System.out.println();
         System.out.println(this.moveSequence.numMoves());
         System.out.println(currentMove);*/
-        if ( this.moveSequence.numMoves() == 0 ) {
-            makeUnreachable();
-            return null;
-        }
-        if ( currentMove  == this.moveSequence.numMoves()) {
-            makeUnreachable();
-            agent.getGoalMovement().clearGoals();
-            return null;
-        }
-        Vector2 pos = agent.getPosition();
-        Vector2 destination = this.moveSequence.getMoveAt(currentMove);
-        GridCell posGrid = agent.getWorld().getWorldObjectsLayer().getCell(pos.x,pos.y);
-        GridCell destGrid = agent.getWorld().getWorldObjectsLayer().getCell(destination.x,destination.y);
-
-        float cellSize = agent.getWorld().getWorldObjectsLayer().getCellSize();
-
-        boolean reached;
-        if ( currentMove  == this.moveSequence.numMoves()-1 )
-            reached = posGrid.equals(destGrid);
-        else
-        reached = pos.epsilonEquals(destination, cellSize *1.5f);
-        if ( reached ) {
-            if (++currentMove == this.moveSequence.numMoves()) {
+        if ( this.moveSequence != null ) {
+            if (this.moveSequence.numMoves() == 0) {
                 makeUnreachable();
-                return null; // All done!
+                return null;
             }
+            if (currentMove == this.moveSequence.numMoves()) {
+                makeUnreachable();
+                agent.getGoalMovement().clearGoals();
+                return null;
+            }
+            Vector2 pos = agent.getPosition();
+            Vector2 destination = this.moveSequence.getMoveAt(currentMove);
+            GridCell posGrid = agent.getWorld().getWorldObjectsLayer().getCell(pos.x, pos.y);
+            GridCell destGrid = agent.getWorld().getWorldObjectsLayer().getCell(destination.x, destination.y);
+
+            float cellSize = agent.getWorld().getWorldObjectsLayer().getCellSize();
+
+            boolean reached;
+            if (currentMove == this.moveSequence.numMoves() - 1)
+                reached = posGrid.equals(destGrid);
             else
-                destination = this.moveSequence.getMoveAt(currentMove);
+                reached = pos.epsilonEquals(destination, cellSize * 1.5f);
+            if (reached) {
+                if (++currentMove == this.moveSequence.numMoves()) {
+                    makeUnreachable();
+                    return null; // All done!
+                } else
+                    destination = this.moveSequence.getMoveAt(currentMove);
+            }
+
+            agent.getGoalMovement().setGoal(destination.cpy().add((float) Math.random() * cellSize * 2 - cellSize,
+                    (float) Math.random() * cellSize * 2 - cellSize));
         }
-
-        agent.getGoalMovement().setGoal(destination.cpy().add((float) Math.random() * cellSize * 2 - cellSize,
-                (float) Math.random() * cellSize * 2 - cellSize));
-
         return null;
     }
 
@@ -81,5 +81,21 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
     @Override
     public void updatePriority() {
 
+    }
+
+    protected boolean doRestartIfLeftUnfinished() {
+        return restartIfLeftUnfinished;
+    }
+
+    public void setMoveSequence(MoveSequence moveSequence) {
+        this.moveSequence = moveSequence;
+    }
+
+    public MoveSequence getMoveSequence() {
+        return moveSequence;
+    }
+
+    public boolean isFinished() {
+        return moveSequence != null && currentMove == this.moveSequence.numMoves()-1;
     }
 }

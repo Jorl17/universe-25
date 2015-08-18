@@ -16,15 +16,18 @@ public class ProportionalPheromoneController implements PheromoneController {
     private Pheromone pheromone;
     private float factor;
     private float threshold;
+    private float upperThreshold;
     private boolean dontRepeat;
 
     private FixedGridMoveSequence memory;
 
-    public ProportionalPheromoneController(Agent agent, Pheromone pheromone, float factor, float threshold, boolean dontRepeat, int memorySize) {
+    public ProportionalPheromoneController(Agent agent, Pheromone pheromone, float factor, float threshold, float upperThreshold, boolean dontRepeat, int memorySize) {
         this.agent = agent;
         this.pheromone = pheromone;
         this.factor = factor;
         this.threshold = threshold;
+        this.upperThreshold = upperThreshold;
+        if ( upperThreshold == -1 ) upperThreshold = pheromone.getMax()+0.1f;
         this.dontRepeat = dontRepeat;
         if ( dontRepeat )
             memory = new FixedGridMoveSequence(memorySize);
@@ -43,7 +46,7 @@ public class ProportionalPheromoneController implements PheromoneController {
 
         sum /= cellsInFov.size();
 
-        if ( sum > threshold ) {
+        if ( sum > threshold && sum < upperThreshold ) {
             if ( dontRepeat ) {
                 memory.setGrid(agent.getWorld().getWorldObjectsLayer());
                 GridCell agentCell = agent.getWorld().getWorldObjectsLayer().getCell(position.x, position.y);

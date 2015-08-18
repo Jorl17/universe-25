@@ -22,7 +22,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
             /*speed*/1.0f,
             /*pathPheromoneIncrease*/5,
             /*foodPheromoneIncreaseWhenSeeingFood*/5*5,
-            /*hivePheromoneIncreaseWhenSeeingHive*/2
+            /*hivePheromoneIncreaseWhenSeeingHive*/5
     );
 
     public PheromoneFollowingAnt(SimplisticAntSpecies species, SimplisticAntSpeciesParameters parameters) {
@@ -86,6 +86,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
                 foodImmediancyPheromone, 5, () -> 10L, true, -1/*0.25f*/ /* Because add rate is 1, we remove 25% */));
         searchForFood.addState(new GoToFood(this, 22));
 
+        RepeatLastSteps repeatLastSteps = new RepeatLastSteps<>(this, "RedoLastSteps", 15, false);
         PriorityAggregatorState takeFoodBack = new PriorityAggregatorState<>(this, "TakeFoodBack");
         takeFoodBack.addState(wanderState);
         takeFoodBack.addState(followPathPheromoneState);
@@ -95,7 +96,8 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         SequentialStatesWithPriority normalOperation = new SequentialStatesWithPriority<>(this, "NormalOperation",
                 -1, false, SequentialStatesWithPriority.RestartMode.REENTER_FIRST_STATE_CHECK_CONDITIONS_FIRST);
         normalOperation.addState(searchForFood, null);
-        normalOperation.addState(takeFoodBack, this::hasFood);
+        normalOperation.addState(repeatLastSteps, this::hasFood);
+        normalOperation.addState(takeFoodBack, () -> areThereHiveCells() || repeatLastSteps.isFinished());
         normalOperation.addEndingConditionActionPair(() -> !isOutsideHive(), () -> getGoalMovement().clearGoals() );
 
         //states.addState(searchForFood);

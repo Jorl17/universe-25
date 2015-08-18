@@ -47,7 +47,7 @@ public abstract class SimplisticAnt extends SpeciesAgent {
                                             SimplisticAnt::areThereCellsWithFood),
                                    /* new ConditionalIncreasePheromoneController(this, foodPheromone, foodPheromoneIncreaseWhenSeeingFoodPheromone,
                                     (agent) -> ((SimplisticAnt)agent).areThereCellsWithPheromone(foodPheromone)*/
-                                    new ProportionalPheromoneController(this, foodPheromone, 0.20f, 1, true, 100)
+                                    new ProportionalPheromoneController(this, foodPheromone, 0.20f, 1, -1, true, 100)
                                  );
 
         pathPheronomeController = /*new AlternativeOrderedPheromoneController( new ConditionalIncreasePheromoneController(this, pathPheronome, pathPheronomeIncrease,
@@ -65,7 +65,7 @@ public abstract class SimplisticAnt extends SpeciesAgent {
                         (float)getParameter("hivePheromoneIncreaseWhenSeeingHive").get(),
                         (agent) -> isOutsideHive() && areThereHiveCells()),
                 new ConditionalPheromoneController<>(this,
-                        new ProportionalPheromoneController(this, hivePheromone, 0.05f, 5, true, 100),
+                        new ProportionalPheromoneController(this, hivePheromone, 0.3f, 2, 65, true, 100),
                         (agent) -> isOutsideHive() )
 
         );
