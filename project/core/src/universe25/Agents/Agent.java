@@ -307,6 +307,18 @@ public abstract class Agent extends MovableImage implements Disposable {
     }
 
     @Override
+    public void setRotation(float degrees) {
+        super.setRotation(degrees);
+        stack.setRotation(degrees);
+    }
+
+    @Override
+    public void rotateBy(float amountInDegrees) {
+        super.rotateBy(amountInDegrees);
+        stack.rotateBy(amountInDegrees);
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         stack.draw(batch, parentAlpha);
