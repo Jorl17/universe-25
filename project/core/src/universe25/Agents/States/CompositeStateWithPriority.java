@@ -78,4 +78,9 @@ public abstract class CompositeStateWithPriority<T extends Agent> extends Toggab
     protected ArrayList<StateWithPriority> getSubStates() {
         return subStates;
     }
+
+    protected  int numStates() {
+        if ( subStates == null ) return 0;
+        return subStates.size();
+    }
 }
