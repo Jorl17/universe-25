@@ -16,9 +16,12 @@ import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.PathFinder;
 import universe25.Objects.Stone;
 import universe25.Objects.WorldObject;
+import universe25.Utils.RandomUtils;
 import universe25.World.World;
 import universe25.GameLogic.Movement.GoalMovement;
 import universe25.GameLogic.Movement.WeightedGoal;
+
+import java.util.Random;
 
 public class Main extends ApplicationAdapter {
     private World stage;
@@ -102,6 +105,7 @@ public class Main extends ApplicationAdapter {
         for (int i = 0; i < 100; i++) {
             SimplisticAnt ant = species.newIndividual();
             ant.setPosition(p.x,p.y);
+            ant.setRotation(RandomUtils.rand(0, 360));
             stage.addActor(ant);
         }
 
