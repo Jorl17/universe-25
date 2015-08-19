@@ -305,6 +305,7 @@ public abstract class GridMapLayer<T> extends Actor {
     }
 
     public boolean isPointInCell(Vector2 pos, int col, int row) {
+        //FIXME: Redo this later, it can be made much more efficient (just divide it)
         Vector2 topLeft = new Vector2(col * cellSize, row * cellSize),
                 topRight = new Vector2(col * cellSize, (row+1) * cellSize),
                 bottomRight = new Vector2((col+1) * cellSize, (row+1) * cellSize),
