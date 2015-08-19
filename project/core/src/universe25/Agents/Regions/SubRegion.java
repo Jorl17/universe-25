@@ -35,7 +35,7 @@ public class SubRegion {
         }
 
         if ( candidateNeighbours.isEmpty() ) {
-            System.out.println("Couldn't expand StackRegion in Hive!!!");
+            System.out.println("Couldn't expand SubRegion in Hive!!!");
             return false;
         } else {
             cells.add(candidateNeighbours.get(random.nextInt(candidateNeighbours.size())));
