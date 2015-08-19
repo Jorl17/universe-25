@@ -2,6 +2,7 @@ package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import universe25.Agents.SimplisticAnt.States.*;
 import universe25.Agents.Stackable.Food.Food;
@@ -95,45 +96,53 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         takeFoodBack.addState(new GoToPheromone(this, 19, hivePheromone));
         takeFoodBack.addState(new GoToHive(this, 20));
 
-        takeFoodBack.addState(wanderState);
-
+        PriorityAggregatorState goToFoodStackRegion = new PriorityAggregatorState<>(this, "GoToFoodStackRegion");
+        goToFoodStackRegion.addState(wanderState);
+        goToFoodStackRegion.addState(new GoToCellIfVisible<>(this, 20, "GoToFoodStackRegionCell", () -> getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()));
 
 
         SequentialStatesWithPriority normalOperation = new SequentialStatesWithPriority<>(this, "NormalOperation",
-                -1, false/*true*/, SequentialStatesWithPriority.RestartMode.REENTER_FIRST_STATE_CHECK_CONDITIONS_FIRST,
+                -1, true, SequentialStatesWithPriority.RestartMode.REENTER_FIRST_STATE_CHECK_CONDITIONS_FIRST,
                 SequentialStatesWithPriority.UpdateMode.ALWAYS_CHECK_ALL_CONDITIONS);
         normalOperation.addState(searchForFood, null);
         normalOperation.addState(repeatLastSteps, this::hasFood);
         normalOperation.addState(takeFoodBack, () -> areThereHiveCells() || repeatLastSteps.isFinished());
-        normalOperation.addEndingConditionActionPair(() -> !isOutsideHive(), () -> /*first = true*/getGoalMovement().clearGoals() );
+        //normalOperation.addState(wanderState, () -> !isOutsideHive());
+        normalOperation.addState(goToFoodStackRegion, () -> !isOutsideHive());
+        normalOperation.addEndingConditionActionPair(() -> isInCell(getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()),
+                () -> /*first = true*/{ getGoalMovement().clearGoals();
+                    Crumbs crumbs = new Crumbs(null, 10);
+                    getWorld().addActor(crumbs);
+                    crumbs.setPosition(getPosition().x, getPosition().y);
+                    getStack().clear(); } );
+
 
         //states.addState(searchForFood);
         states.addState(new RootState<>(this, "Root",
                 new ParallelPriorityStates<>(this, "Parallel States",
-                normalOperation,new AvoidAntPoison(this, 22))));
+                        normalOperation, new AvoidAntPoison(this, 22))));
     }
 
     private boolean hasFood() {
         //System.out.println("Check eh =" + first);
-        return !first;
+
+        //FIXME: Clearly wrong
+        return !getStack().isEmpty();
     }
 
-    private boolean first = true;
     private Vector2 tmpPos = new Vector2();
     @Override
     public void update() {
         super.update();
         tmpPos.set(getX(Align.center), getY(Align.center));
         StackableSourceQuantityPair stackbles = getWorld().getStacksLayer().getValueAt(tmpPos.x, tmpPos.y);
-        if ( StackableUtils.hasFood(stackbles) && first) {
+        if ( StackableUtils.hasFood(stackbles) && !hasFood()) {
             getWorld().getStacksLayer().decreaseQuantityAt(tmpPos.x, tmpPos.y, 10);
             //getWorld().getActors().removeValue(this, false);
 
             //System.out.println(getMovesMemory().cpy().reverse());
             //testDoMoveSequence(getMovesMemory().cpy().reverse());
             getStack().add(new Crumbs((Food)stackbles.getSource(), 10));
-
-            first = false;
 
             //getGoalMovement().clearGoals();
             //states.clearStates();
