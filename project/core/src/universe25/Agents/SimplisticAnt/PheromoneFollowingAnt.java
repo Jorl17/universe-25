@@ -94,12 +94,18 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         takeFoodBack.addState(wanderStateHighestPrioTanFollowPathPheromoneState);
         takeFoodBack.addState(new GoToPheromone(this, 19, hivePheromone));
         takeFoodBack.addState(new GoToHive(this, 20));
+
+        takeFoodBack.addState(wanderState);
+
+
+
         SequentialStatesWithPriority normalOperation = new SequentialStatesWithPriority<>(this, "NormalOperation",
-                -1, false, SequentialStatesWithPriority.RestartMode.REENTER_FIRST_STATE_CHECK_CONDITIONS_FIRST);
+                -1, false/*true*/, SequentialStatesWithPriority.RestartMode.REENTER_FIRST_STATE_CHECK_CONDITIONS_FIRST,
+                SequentialStatesWithPriority.UpdateMode.ALWAYS_CHECK_ALL_CONDITIONS);
         normalOperation.addState(searchForFood, null);
         normalOperation.addState(repeatLastSteps, this::hasFood);
         normalOperation.addState(takeFoodBack, () -> areThereHiveCells() || repeatLastSteps.isFinished());
-        normalOperation.addEndingConditionActionPair(() -> !isOutsideHive(), () -> getGoalMovement().clearGoals() );
+        normalOperation.addEndingConditionActionPair(() -> !isOutsideHive(), () -> /*first = true*/getGoalMovement().clearGoals() );
 
         //states.addState(searchForFood);
         states.addState(new RootState<>(this, "Root",

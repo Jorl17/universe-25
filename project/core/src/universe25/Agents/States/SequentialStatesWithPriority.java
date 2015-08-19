@@ -11,18 +11,21 @@ import java.util.function.BooleanSupplier;
 public class SequentialStatesWithPriority<T extends Agent> extends CompositeStateWithPriority<T> {
 
     public enum RestartMode { REENTER_LAST_STATE, REENTER_FIRST_STATE_CHECK_CONDITIONS_FIRST};
+    public enum UpdateMode { ALWAYS_CHECK_ALL_CONDITIONS, ONLY_CHECK_NEXT_CONDITION};
     private int currentState;
     private ArrayList<BooleanSupplier> conditions;
     private boolean highestPrioDecidedByChildren;
     private boolean loop;
     private RestartMode restartMode;
+    private UpdateMode updateMode;
     private Runnable action;
 
-    public SequentialStatesWithPriority(T agent, String name, int priorityWhenToggled, boolean loop, RestartMode restartMode) {
+    public SequentialStatesWithPriority(T agent, String name, int priorityWhenToggled, boolean loop, RestartMode restartMode, UpdateMode ipdateMode) {
         super(agent, name, priorityWhenToggled);
         this.highestPrioDecidedByChildren = priorityWhenToggled == -1;
         this.loop = loop;
         this.restartMode = restartMode;
+        this.updateMode = updateMode;
         this.conditions = new ArrayList<>();
     }
 
@@ -59,21 +62,43 @@ public class SequentialStatesWithPriority<T extends Agent> extends CompositeStat
     @Override
     public String update() {
         if ( currentState != -1 ) {
-            if ( conditions.get(currentState).getAsBoolean() ) {
-                getSubStates().get(currentState).leaveState();
+            int prevState = currentState;
 
-                if (++currentState == numStates()) {
+            if ( updateMode == UpdateMode.ONLY_CHECK_NEXT_CONDITION ) {
+                if (conditions.get(currentState).getAsBoolean()) {
+                    getSubStates().get(currentState).leaveState();
+
+                    if (++currentState == numStates()) {
+                        action.run();
+                        if (!loop) {
+                            currentState = -1;
+                            return null;
+                        } else currentState = 0;
+                    }
+
+                    getSubStates().get(currentState).enterState();
+                }
+            } else {
+                int stateNumber = getFirstUnmetCondition();
+                if ( stateNumber == -1 ) {
+                    // All conditions were met ...
                     action.run();
-                    if (!loop) {
+                    if ( loop ) currentState = 0;
+                    else {
                         currentState = -1;
                         return null;
                     }
-                    else currentState = 0;
+                } else
+                    currentState = stateNumber;
+                if ( prevState != currentState ) {
+                    // leave() and enter() all states between the current and the next. Only enter the next, don't leave
+                    for (int i = prevState; i < currentState; i++) {
+                        getSubStates().get(i).leaveState();
+                        getSubStates().get(i + 1).enterState();
+                    }
                 }
 
-                getSubStates().get(currentState).enterState();
             }
-
             getSubStates().get(currentState).update();
         }
 
@@ -100,8 +125,8 @@ public class SequentialStatesWithPriority<T extends Agent> extends CompositeStat
     @Override
     public void enterState() {
         if (currentState != -1 && restartMode == RestartMode.REENTER_FIRST_STATE_CHECK_CONDITIONS_FIRST) {
-            int stateNumber = getFirstUnmetCondition()-1;
-            if ( stateNumber < 0 ) {
+            int stateNumber = getFirstUnmetCondition();
+            if ( stateNumber == -1 ) {
                 // All conditions were met ...
                 action.run();
                 if ( loop ) currentState = 0;
