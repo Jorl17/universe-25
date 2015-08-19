@@ -47,5 +47,6 @@ public abstract class GoToCells<T extends Agent> extends ToggablePriorityState<T
     @Override
     public void enterState() {
         //System.out.println("Entered " + getName());
+        agent.getGoalMovement().clearGoals();
     }
 }
