@@ -35,7 +35,7 @@ public class Hive<S extends Species> extends Region {
         foodStackRegion.randomlyExpand();
     }
 
-    public Vector2 getHiveCenter() {
+    public Vector2 getCenter() {
         int endCol = startCol + width;
         int endRow = startRow + height;
         return getRegionsLayer().getCellCentre(endCol, endRow).add(getRegionsLayer().getCellCentre(startCol, startRow)).scl(0.5f);

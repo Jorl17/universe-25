@@ -8,20 +8,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import universe25.Agents.Agent;
-import universe25.Agents.Regions.Hive;
-import universe25.Agents.SimplisticAnt.PheromoneFollowingAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAntSpecies;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
 import universe25.GameLogic.Movement.Pathfinding.PathFinder;
 import universe25.Objects.Stone;
-import universe25.Objects.WorldObject;
 import universe25.Utils.RandomUtils;
 import universe25.World.World;
-import universe25.GameLogic.Movement.GoalMovement;
-import universe25.GameLogic.Movement.WeightedGoal;
-
-import java.util.Random;
 
 public class Main extends ApplicationAdapter {
     private World stage;
@@ -33,10 +26,7 @@ public class Main extends ApplicationAdapter {
 
         stage = new World(new FitViewport(640, 480));
         Gdx.input.setInputProcessor(stage);
-
-
-        Hive<SimplisticAntSpecies> hive = new Hive<>(stage.getRegionsLayer(), species, 10, 10);
-        hive.putInLayer();
+        species.initialize(stage);
 
         stage.addListener(new InputListener() {
             @Override
@@ -98,7 +88,7 @@ public class Main extends ApplicationAdapter {
 
 
 
-        Vector2 p = hive.getHiveCenter();
+        Vector2 p = species.getHive().getCenter();
         /*do {
             p = stage.randomPosition();
         } while ( stage.hit(p.x, p.y, false) instanceof WorldObject );*/
