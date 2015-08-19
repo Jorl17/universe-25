@@ -140,6 +140,10 @@ public abstract class Agent extends MovableImage implements Disposable {
         }
     }
 
+    protected boolean isInCell(GridCell cell) {
+        return cell.isPointInCell(getPosition());
+    }
+
     private void runAwayFromCollidingObjects(Vector2 lastMove) {
         if ( lastMove == null ) lastMove = new Vector2(0,0);
         GoalMovement goalMovement = getGoalMovement();
