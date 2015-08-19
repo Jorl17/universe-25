@@ -18,4 +18,8 @@ public class ObjectStack extends Group {
     public void onAddedToWorld(World w) {
         w.addActor(this);
     }
+
+    public boolean isEmpty() {
+        return getChildren().size == 0;
+    }
 }
