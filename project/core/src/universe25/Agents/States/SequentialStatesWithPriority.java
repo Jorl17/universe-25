@@ -50,8 +50,9 @@ public class SequentialStatesWithPriority<T extends Agent> extends CompositeStat
 
     @Override
     public void updatePriority() {
-        updateStatePriorities();
+        //updateStatePriorities();
         if ( currentState != -1 ) {
+            getSubStates().get(currentState).updatePriority();
             if (highestPrioDecidedByChildren)
                 setPriority(getSubStates().get(currentState).getPriority());
             else
@@ -91,6 +92,7 @@ public class SequentialStatesWithPriority<T extends Agent> extends CompositeStat
                 } else
                     currentState = stateNumber;
                 if ( prevState != currentState ) {
+                    //System.out.println("Changed state " + getSubStates().get(prevState).getName() + " (" + prevState + ") -> " + getSubStates().get(currentState).getName() + " (" + currentState + ")");
                     // leave() and enter() all states between the current and the next. Only enter the next, don't leave
                     for (int i = prevState; i < currentState; i++) {
                         getSubStates().get(i).leaveState();
