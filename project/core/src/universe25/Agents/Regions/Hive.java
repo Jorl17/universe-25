@@ -41,7 +41,7 @@ public class Hive<S extends Species> extends Region {
         return getRegionsLayer().getCellCentre(endCol, endRow).add(getRegionsLayer().getCellCentre(startCol, startRow)).scl(0.5f);
     }
 
-    public SubRegion getFoodStackRegion() {
+    public FoodStackSubRegion getFoodStackRegion() {
         return foodStackRegion;
     }
 }
