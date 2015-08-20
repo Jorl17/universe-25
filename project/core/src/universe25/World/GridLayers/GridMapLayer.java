@@ -306,6 +306,7 @@ public abstract class GridMapLayer<T> extends Actor {
 
     public boolean isPointInCell(Vector2 pos, int col, int row) {
         //FIXME: Redo this later, it can be made much more efficient (just divide it)
+        /*
         Vector2 topLeft = new Vector2(col * cellSize, row * cellSize),
                 topRight = new Vector2(col * cellSize, (row+1) * cellSize),
                 bottomRight = new Vector2((col+1) * cellSize, (row+1) * cellSize),
@@ -313,7 +314,10 @@ public abstract class GridMapLayer<T> extends Actor {
 
         com.badlogic.gdx.utils.Array<Vector2> vector2s = new com.badlogic.gdx.utils.Array<>();
         vector2s.add(topLeft); vector2s.add(topRight); vector2s.add(bottomRight); vector2s.add(bottomLeft);
-        return Intersector.isPointInPolygon(vector2s, pos);/*
+        return Intersector.isPointInPolygon(vector2s, pos);*/
+
+        return getCellAt(col, row).equals(getCell(pos.x,pos.y));
+        /*
         if ( pos.x > topRight.x || pos.x < topLeft.x ) return false;
         if ( pos.y > topRight.y || pos.y < bottomRight.y ) return false;
 
