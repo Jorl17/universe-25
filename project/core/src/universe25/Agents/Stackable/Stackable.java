@@ -15,8 +15,17 @@ public abstract class Stackable {
 
     public Stackable(StackablesLayer layer, ArrayList<GridCell> cells) {
         this.cells = new ArrayList<>();
-        this.cells.addAll(cells);
+        if ( cells != null )
+            this.cells.addAll(cells);
         this.layer = layer;
+    }
+
+    public void addCell(int col, int row) {
+        cells.add(layer.getCellAt(col, row));
+    }
+
+    public void addCell(GridCell cell) {
+        cells.add(cell);
     }
 
     public ArrayList<GridCell> getCells() {

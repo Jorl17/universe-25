@@ -15,6 +15,7 @@ public class StackableSourceQuantityPair {
     }
 
     public StackableSourceQuantityPair(Stackable source, float amount, GridCell cell) {
+        this.source = source;
         this.amount = amount;
         this.cell = cell;
     }
@@ -29,6 +30,12 @@ public class StackableSourceQuantityPair {
 
     public void setSource(Stackable source) {
         this.source = source;
+        /*
+        try {
+            source.getCells();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
     }
 
     public void setAmount(float amount) {
@@ -38,6 +45,11 @@ public class StackableSourceQuantityPair {
     public float decrementAmount(float amnt) {
         amount -= amnt;
         assert ( amount >= 0);
+        return amount;
+    }
+
+    public float incrementAmount(float amnt) {
+        amount += amnt;
         return amount;
     }
 
@@ -57,5 +69,14 @@ public class StackableSourceQuantityPair {
     public void notifyStackEnded() {
         //FIXME
         getSource().onStackEnded(getCell());
+    }
+
+    @Override
+    public String toString() {
+        return "StackableSourceQuantityPair{" +
+                "cell=" + cell +
+                ", source=" + source +
+                ", amount=" + amount +
+                ", o = " + super.toString() + "}";
     }
 }

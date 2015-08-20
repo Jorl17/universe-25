@@ -12,6 +12,7 @@ import universe25.Agents.States.*;
 import universe25.GameLogic.NumberProducers.GaussianFloatProducer;
 import universe25.GameLogic.NumberProducers.GaussianLongProducer;
 import universe25.Objects.Crumbs;
+import universe25.Objects.FoodBits;
 import universe25.Utils.RandomUtils;
 
 /**
@@ -111,9 +112,10 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         normalOperation.addState(goToFoodStackRegion, () -> !isOutsideHive());
         normalOperation.addEndingConditionActionPair(() -> isInCell(getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()),
                 () -> /*first = true*/{ getGoalMovement().clearGoals();
-                    Crumbs crumbs = new Crumbs(null, 10);
+                    /*Crumbs crumbs = new Crumbs(null, 10);
                     getWorld().addActor(crumbs);
-                    crumbs.setPosition(getPosition().x, getPosition().y);
+                    crumbs.setPosition(getPosition().x, getPosition().y);*/
+                    getSpecies().getHive().getFoodStackRegion().stack((FoodBits)getStack().getChildren().get(0));
                     getStack().clear(); } );
 
 

@@ -8,15 +8,15 @@ import universe25.Utils.RandomUtils;
 /**
  * Created by jorl17 on 14/08/15.
  */
-public class Crumbs extends  WorldObject {
-    private Food source;
-    private float foodAmount;
+public class Crumbs extends  FoodBits {
     public Crumbs(Food source, float foodAmount) {
-        super(new Texture("crumbs.gif"));
-        setSize(4,4);
-        setOrigin(Align.center);
-        setRotation(RandomUtils.rand(0, 360.0f));
-        this.source = source;
-        this.foodAmount = foodAmount;
+        super(new Texture("crumbs.gif"), source, foodAmount);
+    }
+
+    @Override
+    public FoodBits cpy() {
+        Crumbs crumbs = new Crumbs(this.getSource(), this.getFoodAmount());
+        crumbs.setPosition(getParent().getX(), getParent().getY()); //FIXME: THis is so ridiculously hacked
+        return crumbs;
     }
 }

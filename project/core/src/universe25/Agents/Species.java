@@ -59,7 +59,7 @@ public abstract class Species<T>/*<P extends SpeciesParameters>*/ {
 
     public void initialize(World world) {
         this.world = world;
-        this.hive = new Hive<>(world.getRegionsLayer(), this, initialHiveWidth, initialHiveHeight);
+        this.hive = new Hive<>(world, this, initialHiveWidth, initialHiveHeight);
         hive.putInLayer();
     }
 

@@ -2,9 +2,12 @@ package universe25.World.GridLayers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import universe25.Agents.Stackable.Food.Food;
+import universe25.Agents.Stackable.Food.FoodDeposit;
 import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Agents.Stackable.Stackable;
+import universe25.Objects.FoodBits;
 
 /**
  * Created by jorl17 on 14/08/15.
@@ -42,11 +45,44 @@ public class StackablesLayer extends GridMapLayer<StackableSourceQuantityPair> {
         StackableSourceQuantityPair valueAtCell = getValueAtCell(col, row);
         valueAtCell.setSource(source);
         valueAtCell.setAmount(quantity);
-        //System.out.println("Put " + source + " at " + "(" + row + ", " + col + ") -> ");
+        //System.out.println("Put " + source + " at " + "(" + row + ", " + col + ") -> " + valueAtCell);
     }
 
     public void putStackable(GridCell cell, Stackable source, float quantity) {
         putStackable(cell.getCol(), cell.getRow(), source, quantity);
+    }
+
+    public boolean isFull(GridCell cell) {
+        return getValueAtCell(cell).getAmount() == maxDensity;
+    }
+
+    public float putBitsAtCell(int col, int row, FoodBits bits) {
+        StackableSourceQuantityPair valueAtCell = getValueAtCell(col, row);
+        //System.out.println(valueAtCell);
+        if ( !valueAtCell.hasStackables() ) {
+            FoodDeposit deposit = new FoodDeposit(this, null);
+            deposit.addCell(getCellAt(col, row));
+            putStackable(col, row, deposit, 0);
+            //valueAtCell = getValueAtCell(col, row);
+        }
+        /*else assert(bits.getSource() == valueAtCell.getSource() );*/
+        assert( valueAtCell.getSource() instanceof FoodDeposit);
+
+        float quantity = bits.getFoodAmount();
+
+        float diff =  quantity + valueAtCell.getAmount() - maxDensity;
+
+        if ( diff > 0 ) {
+            valueAtCell.setAmount(maxDensity);
+            return diff;
+        } else {
+            valueAtCell.incrementAmount(quantity);
+            return 0;
+        }
+    }
+
+    public float putBitsAtCell(GridCell cell, FoodBits bits) {
+        return putBitsAtCell(cell.getCol(), cell.getRow(), bits);
     }
 
     public float decreaseQuantityAtCell(int col, int row, float quantity) {
