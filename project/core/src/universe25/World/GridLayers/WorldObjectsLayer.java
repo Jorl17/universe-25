@@ -40,6 +40,7 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
     }
 
     public void addWorldObject(WorldObject o) {
+        if ( !o.isOpaque() ) return; //FIXME: Is this right?
         int[] minMaxRowCol = new int[4];
         Vector2[] boundingBoxPoints = o.getBoundingBoxPoints();
         getMinMaxRowCols(boundingBoxPoints, minMaxRowCol);

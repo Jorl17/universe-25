@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import javafx.geometry.BoundingBox;
+import universe25.Objects.WorldObject;
 
 /**
  * Created by jorl17 on 10/08/15.
@@ -19,45 +20,77 @@ import javafx.geometry.BoundingBox;
 public class BoundingBoxImage extends Image{
     protected BoundingBox boundingBox;
     private float boundingBoxThreshold = 0.0f;
+    private boolean opaque;
 
     public BoundingBoxImage(NinePatch patch) {
+        this(patch, true);
+    }
+
+    public BoundingBoxImage(NinePatch patch, boolean opaque) {
         super(patch);
+        this.opaque = opaque;
         setBounds(getX(), getY(), getWidth(), getHeight());
         setTouchable(Touchable.enabled);
     }
 
     public BoundingBoxImage(TextureRegion region) {
+        this(region, true);
+    }
+
+    public BoundingBoxImage(TextureRegion region, boolean opaque) {
         super(region);
+        this.opaque = opaque;
         setBounds(getX(), getY(), getWidth(), getHeight());
         setTouchable(Touchable.enabled);
     }
 
     public BoundingBoxImage(Texture texture) {
+        this(texture, true);
+    }
+
+    public BoundingBoxImage(Texture texture, boolean opaque) {
         super(texture);
+        this.opaque = opaque;
         setBounds(getX(), getY(), getWidth(), getHeight());
         setTouchable(Touchable.enabled);
     }
 
     public BoundingBoxImage(Skin skin, String drawableName) {
+        this(skin, drawableName, true);
+    }
+
+    public BoundingBoxImage(Skin skin, String drawableName, boolean opaque) {
         super(skin, drawableName);
+        this.opaque = opaque;
         setBounds(getX(), getY(), getWidth(), getHeight());
         setTouchable(Touchable.enabled);
     }
 
     public BoundingBoxImage(Drawable drawable) {
+        this(drawable, true);
+    }
+
+    public BoundingBoxImage(Drawable drawable, boolean opaque) {
         super(drawable);
+        this.opaque = opaque;
         setBounds(getX(), getY(), getWidth(), getHeight());
         setTouchable(Touchable.enabled);
     }
 
-    public BoundingBoxImage(Drawable drawable, Scaling scaling) {
+    public BoundingBoxImage(Drawable drawable, Scaling scaling, boolean opaque) {
         super(drawable, scaling);
+        this.opaque = opaque;
         setBounds(getX(), getY(), getWidth(), getHeight());
         setTouchable(Touchable.enabled);
     }
 
     public BoundingBoxImage(Drawable drawable, Scaling scaling, int align) {
+        this(drawable, scaling, align, true);
+    }
+
+    public BoundingBoxImage(Drawable drawable, Scaling scaling, int align, boolean opaque) {
         super(drawable, scaling, align);
+        this.opaque = opaque;
         setBounds(getX(), getY(), getWidth(), getHeight());
         setTouchable(Touchable.enabled);
     }
@@ -84,7 +117,8 @@ public class BoundingBoxImage extends Image{
     }
 
     public boolean interesects(BoundingBoxImage o) {
-        return boundingBox.intersects(o.boundingBox);
+        //FIXME: SO FUCKING Hacked in
+        return isOpaque() && o.isOpaque() && boundingBox.intersects(o.boundingBox);
     }
 
     public BoundingBox getBoundingBox() {
@@ -123,5 +157,9 @@ public class BoundingBoxImage extends Image{
 
     public float getBoundingBoxThreshold() {
         return boundingBoxThreshold;
+    }
+
+    public boolean isOpaque() {
+        return opaque;
     }
 }

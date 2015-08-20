@@ -15,9 +15,14 @@ import universe25.GameLogic.Movement.BoundingBoxImage;
  */
 public class WorldObject extends BoundingBoxImage implements Disposable {
     private Texture texture;
-    public WorldObject(Texture texture) {
-        super(texture);
+
+    public WorldObject(Texture texture, boolean opaque) {
+        super(texture, opaque);
         this.texture = texture;
+    }
+
+    public WorldObject(Texture texture) {
+        this(texture, true);
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
@@ -55,7 +54,7 @@ public class MovableImage extends BoundingBoxImage {
     }
 
     public MovableImage(Drawable drawable, Scaling scaling, float speed) {
-        super(drawable, scaling);
+        super(drawable, scaling, true);
         setOrigin(getX(Align.center), getY(Align.center));
         goalMovement = new GoalMovement(this);
         this.speed = speed;

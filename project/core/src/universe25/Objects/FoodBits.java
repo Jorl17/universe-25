@@ -13,7 +13,7 @@ public abstract class FoodBits extends  WorldObject {
     private Food source;
     private float foodAmount;
     public FoodBits(Texture texture, Food source, float foodAmount) {
-        super(texture);
+        super(texture, false);
         setSize(4,4);
         setOrigin(Align.center);
         setRotation(RandomUtils.rand(0, 360.0f));
