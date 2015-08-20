@@ -99,7 +99,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
 
         PriorityAggregatorState goToFoodStackRegion = new PriorityAggregatorState<>(this, "GoToFoodStackRegion");
         goToFoodStackRegion.addState(wanderState);
-        goToFoodStackRegion.addState(new GoToCellIfVisible<>(this, 20, "GoToFoodStackRegionCell", () -> getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()));
+        goToFoodStackRegion.addState(new GoToCellIfVisible<>(this, 40, "GoToFoodStackRegionCell", () -> getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()));
 
 
         SequentialStatesWithPriority normalOperation = new SequentialStatesWithPriority<>(this, "NormalOperation",
@@ -107,9 +107,9 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
                 SequentialStatesWithPriority.UpdateMode.ALWAYS_CHECK_ALL_CONDITIONS);
         normalOperation.addState(searchForFood, null);
         normalOperation.addState(repeatLastSteps, this::hasFood);
-        normalOperation.addState(takeFoodBack, () -> areThereHiveCells() || repeatLastSteps.isFinished());
+        normalOperation.addState(takeFoodBack, () -> areThereHiveCells() || repeatLastSteps.isFinished() || !isOutsideHive());
         //normalOperation.addState(wanderState, () -> !isOutsideHive());
-        normalOperation.addState(goToFoodStackRegion, () -> !isOutsideHive());
+        normalOperation.addState(goToFoodStackRegion, () -> !isOutsideHive() || isVisible(getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()));
         normalOperation.addEndingConditionActionPair(() -> isInCell(getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()),
                 () -> /*first = true*/{ getGoalMovement().clearGoals();
                     /*Crumbs crumbs = new Crumbs(null, 10);
