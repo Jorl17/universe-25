@@ -374,6 +374,14 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     }
 
+    public boolean isVisible(GridCell cell) {
+        for ( GridCell c : getCellsInFov() )
+            if ( c.equals(cell) )
+                return true;
+
+        return false;
+    }
+
     public ArrayList<GridCell> getCellsInFov() {
         return tmpCellsInFov;
     }
