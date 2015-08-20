@@ -27,13 +27,7 @@ public class GoToCellIfVisible<T extends Agent> extends GoToCells<T> {
 
     @Override
     protected boolean areThereCellsToGoTo() {
-        GridCell cell = gridCellSupplier.get();
-        for ( GridCell c : agent.getCellsInFov() )
-            if ( c.equals(cell) )
-                return true;
-
-        //System.out.println(cell + ", " + agent.getCellsInFov());
-        return false;
+        return agent.isVisible(gridCellSupplier.get());
     }
 
     @Override
