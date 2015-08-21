@@ -20,7 +20,7 @@ public class SequentialStatesWithPriority<T extends Agent> extends CompositeStat
     private UpdateMode updateMode;
     private Runnable action;
 
-    public SequentialStatesWithPriority(T agent, String name, int priorityWhenToggled, boolean loop, RestartMode restartMode, UpdateMode ipdateMode) {
+    public SequentialStatesWithPriority(T agent, String name, int priorityWhenToggled, boolean loop, RestartMode restartMode, UpdateMode updateMode) {
         super(agent, name, priorityWhenToggled);
         this.highestPrioDecidedByChildren = priorityWhenToggled == -1;
         this.loop = loop;
@@ -66,11 +66,12 @@ public class SequentialStatesWithPriority<T extends Agent> extends CompositeStat
             int prevState = currentState;
 
             if ( updateMode == UpdateMode.ONLY_CHECK_NEXT_CONDITION ) {
-                if (conditions.get(currentState).getAsBoolean()) {
+                if (currentState < conditions.size() && conditions.get(currentState).getAsBoolean()) {
                     getSubStates().get(currentState).leaveState();
 
                     if (++currentState == numStates()) {
-                        action.run();
+                        if ( action != null )
+                            action.run();
                         if (!loop) {
                             currentState = -1;
                             return null;
@@ -83,7 +84,8 @@ public class SequentialStatesWithPriority<T extends Agent> extends CompositeStat
                 int stateNumber = getFirstUnmetCondition();
                 if ( stateNumber == -1 ) {
                     // All conditions were met ...
-                    action.run();
+                    if ( action != null )
+                        action.run();
                     if ( loop ) currentState = 0;
                     else {
                         currentState = -1;
