@@ -12,6 +12,7 @@ import universe25.Utils.RandomUtils;
 public abstract class FoodBits extends  WorldObject {
     private Food source;
     private float foodAmount;
+    private float originalFoodAmount;
     public FoodBits(Texture texture, Food source, float foodAmount) {
         super(texture, false);
         setSize(4,4);
@@ -19,6 +20,12 @@ public abstract class FoodBits extends  WorldObject {
         setRotation(RandomUtils.rand(0, 360.0f));
         this.source = source;
         this.foodAmount = foodAmount;
+        this.originalFoodAmount = foodAmount;
+        updateAlpha();
+    }
+
+    private void updateAlpha() {
+        getColor().a=foodAmount / originalFoodAmount;
     }
 
     public Food getSource() {
@@ -31,6 +38,7 @@ public abstract class FoodBits extends  WorldObject {
 
     public void setFoodAmount(float foodAmount) {
         this.foodAmount = foodAmount;
+        updateAlpha();
     }
 
     public abstract FoodBits cpy();
