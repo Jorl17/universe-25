@@ -26,8 +26,8 @@ public class SubRegion {
             // Pick a random neighbour
             candidateNeighbours = new ArrayList<>();
             for ( GridCell cell : cells )
-                for (int i : new int[]{-1, 1})
-                    for (int j : new int[]{-1, 1}) {
+                for (int i = -1; i <= 1; i++)
+                    for (int j = -1; j <= 1; j++) {
                         GridCell candidate = parentRegion.getRegionsLayer().getCellAt(cell.getCol()+i, cell.getRow()+j);
                         if ( parentRegion.hasCell(candidate) && cells.indexOf(candidate) == -1 )
                             candidateNeighbours.add(candidate);
