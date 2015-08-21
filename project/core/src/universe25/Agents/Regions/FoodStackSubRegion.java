@@ -15,6 +15,7 @@ public class FoodStackSubRegion extends SubRegion {
     private World world;
     private ArrayList<ArrayList<FoodBits>> foodBits; //FIXME: This should be temporary
     private StackablesLayer stackablesLayer;
+    private int currentDeposit;
     public FoodStackSubRegion(World world, Region parentRegion, StackablesLayer stackablesLayer) {
         super(parentRegion);
         this.world = world;
@@ -28,6 +29,7 @@ public class FoodStackSubRegion extends SubRegion {
         if ( ret )
             foodBits.add(new ArrayList<>());
 
+        currentDeposit = getCells().size()-1;
         return ret;
     }
 
@@ -37,17 +39,23 @@ public class FoodStackSubRegion extends SubRegion {
         world.addActor(cpy);
         foodBits.get(getCurrentFoodStackCellIndex()).add(cpy);
 
-        // FIXME: do isFull() and all that jiggerjabber
-        bit.setFoodAmount(stackablesLayer.putBitsAtCell(getCurrentFoodStackCell(), bit));
 
-        //FIXME: set the right amount of good in cpy (it currently has the same as bit did)
+        float remaining = stackablesLayer.putBitsAtCell(getCurrentFoodStackCell(), bit);
+        bit.setFoodAmount(remaining);
 
-        return bit.getFoodAmount() > 0;
+        if ( currentFoodStackCellIsFull() )
+            randomlyExpand();
+
+        return remaining > 0;
+    }
+
+    private boolean currentFoodStackCellIsFull() {
+        return stackablesLayer.isFull(getCurrentFoodStackCell());
     }
 
     protected int getCurrentFoodStackCellIndex() {
         //FIXME: Testing only, completely hacked in
-        return 0;
+        return currentDeposit;
     }
 
     public GridCell getCurrentFoodStackCell() {
