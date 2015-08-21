@@ -2,6 +2,7 @@ package universe25.Agents.Regions;
 
 import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Species;
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Utils.RandomUtils;
 import universe25.World.GridLayers.RegionsLayer;
 import universe25.World.World;
@@ -28,8 +29,19 @@ public class Hive<S extends Species> extends Region {
     public Hive(World world, S regionSpecies, int width, int height) {
         super(world.getRegionsLayer(), regionSpecies, null);
         this.world = world;
-        int startCol = RandomUtils.rand(width, world.getRegionsLayer().getNumCols() - width);
-        int startRow = RandomUtils.rand(height, world.getRegionsLayer().getNumRows() - height);
+        int startCol, startRow;
+        boolean obstacles;
+        do {
+            obstacles = false;
+            startCol = RandomUtils.rand(width, world.getRegionsLayer().getNumCols() - width);
+            startRow = RandomUtils.rand(height, world.getRegionsLayer().getNumRows() - height);
+            for ( int i = startCol; i < startCol+width; i++)
+                for ( int j = startRow; j < startRow+height; j++ ) {
+                    GridCell cell = world.getWorldObjectsLayer().getCellAt(i, j);
+                    if ( cell != null && world.getWorldObjectsLayer().hasObjects(cell) )
+                        obstacles = true;
+                }
+        } while ( obstacles );
         addCells(world.getRegionsLayer().getGridCellsRectangle(startCol, startRow, width, height));
         this.startCol = startCol;
         this.startRow = startRow;
