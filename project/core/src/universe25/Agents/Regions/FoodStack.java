@@ -11,12 +11,12 @@ import java.util.ArrayList;
 /**
  * Created by jorl17 on 17/08/15.
  */
-public class FoodStackSubRegion extends SubRegion {
+public class FoodStack extends SubRegion {
     private World world;
     private ArrayList<ArrayList<FoodBits>> foodBits; //FIXME: This should be temporary
     private StackablesLayer stackablesLayer;
     private int currentDeposit;
-    public FoodStackSubRegion(World world, Region parentRegion, StackablesLayer stackablesLayer) {
+    public FoodStack(World world, Region parentRegion, StackablesLayer stackablesLayer) {
         super(parentRegion);
         this.world = world;
         foodBits = new ArrayList<>();

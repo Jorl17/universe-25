@@ -66,7 +66,7 @@ public class World extends Stage {
         addGridLayer(stacksLayer);
 
 
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < 100; i++) {
             Stone stone = new Stone();
             Vector2 pos = randomPosition();
             stone.setPosition(pos.x, pos.y);

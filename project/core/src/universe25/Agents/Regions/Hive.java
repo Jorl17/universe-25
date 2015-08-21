@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import universe25.Agents.Species;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Utils.RandomUtils;
-import universe25.World.GridLayers.RegionsLayer;
 import universe25.World.World;
 
 /**
@@ -13,7 +12,7 @@ import universe25.World.World;
 public class Hive<S extends Species> extends Region {
     private World world;
     private int startCol, startRow, width, height;
-    private FoodStackSubRegion foodStackRegion;
+    private FoodStack foodStackRegion;
 
     public Hive(World world, S regionSpecies, int startCol, int startRow, int width, int height) {
         super(world.getRegionsLayer(), regionSpecies, world.getRegionsLayer().getGridCellsRectangle(startCol, startRow, width, height));
@@ -22,7 +21,7 @@ public class Hive<S extends Species> extends Region {
         this.startRow = startRow;
         this.width = width;
         this.height = height;
-        this.foodStackRegion = new FoodStackSubRegion(world, this, world.getStacksLayer());
+        this.foodStackRegion = new FoodStack(world, this, world.getStacksLayer());
         foodStackRegion.randomlyExpand();
     }
 
@@ -47,7 +46,7 @@ public class Hive<S extends Species> extends Region {
         this.startRow = startRow;
         this.width = width;
         this.height = height;
-        this.foodStackRegion = new FoodStackSubRegion(world, this, world.getStacksLayer());
+        this.foodStackRegion = new FoodStack(world, this, world.getStacksLayer());
         foodStackRegion.randomlyExpand();
     }
 
@@ -57,7 +56,7 @@ public class Hive<S extends Species> extends Region {
         return getRegionsLayer().getCellCentre(endCol, endRow).add(getRegionsLayer().getCellCentre(startCol, startRow)).scl(0.5f);
     }
 
-    public FoodStackSubRegion getFoodStackRegion() {
+    public FoodStack getFoodStackRegion() {
         return foodStackRegion;
     }
 }
