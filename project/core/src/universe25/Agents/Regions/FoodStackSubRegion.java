@@ -46,7 +46,7 @@ public class FoodStackSubRegion extends SubRegion {
         if ( currentFoodStackCellIsFull() )
             randomlyExpand();
 
-        return remaining > 0;
+        return remaining == 0;
     }
 
     private boolean currentFoodStackCellIsFull() {
@@ -54,12 +54,10 @@ public class FoodStackSubRegion extends SubRegion {
     }
 
     protected int getCurrentFoodStackCellIndex() {
-        //FIXME: Testing only, completely hacked in
         return currentDeposit;
     }
 
     public GridCell getCurrentFoodStackCell() {
-        //FIXME: Testing only, completely hacked in
         return getCells().get(getCurrentFoodStackCellIndex());
     }
 }
