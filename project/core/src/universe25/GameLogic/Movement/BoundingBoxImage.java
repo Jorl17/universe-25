@@ -117,7 +117,6 @@ public class BoundingBoxImage extends Image{
     }
 
     public boolean interesects(BoundingBoxImage o) {
-        //FIXME: SO FUCKING Hacked in
         return isOpaque() && o.isOpaque() && boundingBox.intersects(o.boundingBox);
     }
 

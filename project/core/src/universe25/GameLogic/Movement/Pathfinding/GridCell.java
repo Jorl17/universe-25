@@ -124,8 +124,6 @@ public class GridCell implements IndexedNode<GridCell> {
         this.connections = null;
     }
 
-    //FIXME more stuff
-
     @Override
     public String toString() {
         return "GridCell{" +
