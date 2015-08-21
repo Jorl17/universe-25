@@ -2,7 +2,6 @@ package universe25.Agents.SimplisticAnt;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import universe25.Agents.SimplisticAnt.States.*;
 import universe25.Agents.Stackable.Food.Food;
@@ -89,34 +88,28 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
                 foodImmediancyPheromone, 5, () -> 10L, true, -1/*0.25f*/ /* Because add rate is 1, we remove 25% */));
         searchForFood.addState(new GoToFood(this, 22));
 
-        RepeatLastSteps repeatLastSteps = new RepeatLastSteps<>(this, "RedoLastSteps", 15, false);
+        RepeatLastSteps repeatLastSteps = new RepeatLastSteps<>(this, "RedoLastSteps", 18, 15, false);
         PriorityAggregatorState takeFoodBack = new PriorityAggregatorState<>(this, "TakeFoodBack");
         takeFoodBack.addState(wanderState);
         takeFoodBack.addState(followPathPheromoneState);
         takeFoodBack.addState(wanderStateHighestPrioTanFollowPathPheromoneState);
+        takeFoodBack.addState(repeatLastSteps);
         takeFoodBack.addState(new GoToPheromone(this, 19, hivePheromone));
         takeFoodBack.addState(new GoToHive(this, 20));
+        //takeFoodBack.addState(new GoToCellIfVisible<>(this, 21, "GoToFoodStackRegionCell", () -> getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()));
 
         PriorityAggregatorState goToFoodStackRegion = new PriorityAggregatorState<>(this, "GoToFoodStackRegion");
         goToFoodStackRegion.addState(wanderState);
         goToFoodStackRegion.addState(new GoToCellIfVisible<>(this, 40, "GoToFoodStackRegionCell", () -> getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()));
 
-
         SequentialStatesWithPriority normalOperation = new SequentialStatesWithPriority<>(this, "NormalOperation",
                 -1, true, SequentialStatesWithPriority.RestartMode.REENTER_FIRST_STATE_CHECK_CONDITIONS_FIRST,
                 SequentialStatesWithPriority.UpdateMode.ALWAYS_CHECK_ALL_CONDITIONS);
         normalOperation.addState(searchForFood, null);
-        normalOperation.addState(repeatLastSteps, this::hasFood);
-        normalOperation.addState(takeFoodBack, () -> areThereHiveCells() || repeatLastSteps.isFinished() || !isOutsideHive());
-        //normalOperation.addState(wanderState, () -> !isOutsideHive());
+        normalOperation.addState(takeFoodBack, this::isCarryingFood);
         normalOperation.addState(goToFoodStackRegion, () -> !isOutsideHive() || isVisible(getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()));
-        normalOperation.addEndingConditionActionPair(() -> isInCell(getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()),
-                () -> /*first = true*/{ getGoalMovement().clearGoals();
-                    /*Crumbs crumbs = new Crumbs(null, 10);
-                    getWorld().addActor(crumbs);
-                    crumbs.setPosition(getPosition().x, getPosition().y);*/
-                    getSpecies().getHive().getFoodStackRegion().stack((FoodBits)getStack().getChildren().get(0));
-                    getStack().clear(); } );
+        normalOperation.addEndingConditionActionPair(() -> false, () -> {});
+        //        () -> /*first = true*/{ getGoalMovement().clearGoals(); } );
 
 
         //states.addState(searchForFood);
@@ -125,7 +118,7 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
                         normalOperation, new AvoidAntPoison(this, 22))));
     }
 
-    private boolean hasFood() {
+    private boolean isCarryingFood() {
         //System.out.println("Check eh =" + first);
 
         //FIXME: Clearly wrong
@@ -138,16 +131,23 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         super.update();
         tmpPos.set(getX(Align.center), getY(Align.center));
         StackableSourceQuantityPair stackbles = getWorld().getStacksLayer().getValueAt(tmpPos.x, tmpPos.y);
-        if ( StackableUtils.hasFood(stackbles) && !hasFood()) {
-            getWorld().getStacksLayer().decreaseQuantityAt(tmpPos.x, tmpPos.y, 10);
+        if ( StackableUtils.hasFood(stackbles) && !isCarryingFood()) {
+            getWorld().getStacksLayer().decreaseQuantityAt(tmpPos.x, tmpPos.y, 15);
             //getWorld().getActors().removeValue(this, false);
 
             //System.out.println(getMovesMemory().cpy().reverse());
             //testDoMoveSequence(getMovesMemory().cpy().reverse());
-            getStack().add(new Crumbs((Food)stackbles.getSource(), 10));
+            getStack().add(new Crumbs((Food)stackbles.getSource(), 15));
 
             //getGoalMovement().clearGoals();
             //states.clearStates();
+        }
+
+        if (isCarryingFood() && isInCell(getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell())) {
+            if ( !getSpecies().getHive().getFoodStackRegion().stack((FoodBits)getStack().getChildren().get(0)) ) {
+            } else {
+                getStack().clear();
+            }
         }
     }
 }
