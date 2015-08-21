@@ -12,11 +12,6 @@ public class RepeatLastSteps<T extends Agent> extends DoMoveSequence<T> {
         this.numSteps = numSteps;
     }
 
-    public RepeatLastSteps(T agent, String name, int numSteps, boolean restartIfLeftUnfinished) {
-        super(agent, name, null, restartIfLeftUnfinished);
-        this.numSteps = numSteps;
-    }
-
     @Override
     public void enterState() {
         super.enterState();
