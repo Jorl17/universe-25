@@ -23,7 +23,7 @@ public class SimplisticAntSpecies extends Species<SimplisticAnt> {
         //FIXME: Add the below parameters to the species parameters as well
         foodPheromone = new Pheromone("Food", this, 0.001f, 0.002f, 0.1f, 500, Color.CYAN);
         pathPheromone = new Pheromone("Path", this, 0.2f, 0.002f, 0.1f, 500, Color.YELLOW);
-        foodImmediancyPheromone = new Pheromone("FoodImmediancePheromone", this, 0.001f, 0.002f, 0.1f, 500, Color.MAGENTA);
+        foodImmediancyPheromone = new Pheromone("FoodImmediancePheromone", this, 0.02f, 0.002f, 0.1f, 500, Color.MAGENTA);
         hivePheromone = new Pheromone("HivePheromone", this, 0.001f, 0.002f, 0.1f, 500, Color.BLUE.mul(0.5f,0.5f,0.5f,1.0f));
         addSpeciesPheromone(pathPheromone);
         addSpeciesPheromone(hivePheromone);
