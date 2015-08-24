@@ -16,7 +16,7 @@ public class Crumbs extends  FoodBits {
     @Override
     public FoodBits cpy() {
         Crumbs crumbs = new Crumbs(this.getSource(), this.getFoodAmount());
-        crumbs.setPosition(getParent().getX(), getParent().getY()); //FIXME: THis is so ridiculously hacked
+        crumbs.setPosition(getParent().getX(), getParent().getY()); //FIXME: This is so ridiculously hacked
         return crumbs;
     }
 }
