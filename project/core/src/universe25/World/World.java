@@ -38,6 +38,7 @@ public class World extends Stage {
     private WorldObjectsLayer objectsLayer;
     private StackablesLayer stacksLayer;
     private RegionsLayer regionsLayer;
+    private DirtLayer    dirtLayer;
 
     public World(Viewport viewport) {
         super(viewport);
@@ -59,10 +60,12 @@ public class World extends Stage {
         stacksLayer = new StackablesLayer(getWidth(), getHeight(), TILE_SIZE, "Stackslayer", Color.MAROON, true, 100);
         objectsLayer = new WorldObjectsLayer(getWidth(), getHeight(), TILE_SIZE, "ObjectsLayer", Color.BLACK, false);
         regionsLayer = new RegionsLayer(getWidth(), getHeight(), TILE_SIZE, "RegionsLayer", Color.BLUE, true);
+        dirtLayer = new DirtLayer(getWidth(), getHeight(), TILE_SIZE, "DirtLayer", 100.0f, Color.YELLOW.cpy().mul(0.5f, 0.5f, 0.5f, 1.0f));
 
         addGridLayer(baseLayer);
         addPheromones();
         addGridLayer(regionsLayer);
+        addGridLayer(dirtLayer);
         addGridLayer(stacksLayer);
 
 
@@ -344,5 +347,9 @@ public class World extends Stage {
 
     public RegionsLayer getRegionsLayer() {
         return regionsLayer;
+    }
+
+    public DirtLayer getDirtLayer() {
+        return dirtLayer;
     }
 }

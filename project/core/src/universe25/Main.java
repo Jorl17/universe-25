@@ -61,8 +61,9 @@ public class Main extends ApplicationAdapter {
                     species.getFoodImmediancyPheromone().getWorldLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.F ) {
                     species.getHivePheromone().getWorldLayer().toggleDrawLayer();
-                }
-                else if ( keycode == Input.Keys.J ) {
+                } else if ( keycode == Input.Keys.H ) {
+                    stage.getDirtLayer().toggleDrawLayer();
+                } else if ( keycode == Input.Keys.J ) {
                     stage.getStacksLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.K ) {
                     stage.getRegionsLayer().toggleDrawLayer();
