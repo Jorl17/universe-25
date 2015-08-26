@@ -24,7 +24,7 @@ public class DirtLayer extends FloatLayer {
         float halfDirt = getMaxDirt()/2;
         for (int i = 0; i < nRows; i++)
             for (int j = 0; j < nCols; j++)
-                cells[i][j] = halfDirt;
+                cells[i][j] = halfDirt ;
     }
 
     public Dirt takeDirtFromCellAt(int col, int row, float maxToTake) {
