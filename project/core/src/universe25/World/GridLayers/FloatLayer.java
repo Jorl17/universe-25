@@ -3,6 +3,7 @@ package universe25.World.GridLayers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
 
 /**
  * Created by jorl17 on 08/08/15.
@@ -43,9 +44,17 @@ public class FloatLayer extends GridMapLayer<Float> {
         setValueAtCell(col,row,newVal);
     }
 
+    public void decreaseValueAtCell(GridCell cell, float amnt) {
+        decreaseValueAtCell(cell.getCol(), cell.getRow(), amnt);
+    }
+
     public void increaseValueAtCell(int col, int row, float amnt) {
         float newVal = Float.min(getValueAtCell(col, row) + amnt, floatMax);
         setValueAtCell(col,row,newVal);
+    }
+
+    public void increaseValueAtCell(GridCell cell, float amnt) {
+        increaseValueAtCell(cell.getCol(), cell.getRow(), amnt);
     }
 
 
