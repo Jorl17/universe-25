@@ -11,6 +11,7 @@ import universe25.Agents.Agent;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAntSpecies;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
+import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.GameLogic.Movement.Pathfinding.PathFinder;
 import universe25.Objects.Stone;
 import universe25.Utils.RandomUtils;
@@ -28,6 +29,7 @@ public class Main extends ApplicationAdapter {
         Gdx.input.setInputProcessor(stage);
         species.initialize(stage);
 
+        stage.getDirtLayer().spreadDirtAtCell(stage.getDirtLayer().getCellAt(2, 2), stage.getDirtLayer().getCellAt(0,1), 1.0f);
         stage.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

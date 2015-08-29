@@ -60,7 +60,7 @@ public class DirtLayer extends FloatLayer {
 
         for ( GridCell c : cells )
             increaseValueAtCell(c, amountPerNeighbourCell);
-        
+
         decreaseValueAtCell(cell, valToSpread);
     }
 
