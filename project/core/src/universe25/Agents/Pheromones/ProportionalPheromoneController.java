@@ -50,10 +50,9 @@ public class ProportionalPheromoneController implements PheromoneController {
             if ( dontRepeat ) {
                 memory.setGrid(agent.getWorld().getWorldObjectsLayer());
                 GridCell agentCell = agent.getWorld().getWorldObjectsLayer().getCell(position.x, position.y);
-                if (memory.containsMove(agentCell) && pheromone.getWorldLayer().getValueAt(position.x, position.y) > 0) {
-                    //System.out.println("Hehe, not adding!");
+                if (memory.containsMove(agentCell) && pheromone.getWorldLayer().getValueAt(position.x, position.y) > 0)
                     return false;
-                } else
+                else
                     memory.addMoveIfUnique(agentCell);
             }
             pheromone.getWorldLayer().increasePheromoneAt(position.x, position.y, factor * sum);
