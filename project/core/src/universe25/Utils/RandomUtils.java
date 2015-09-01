@@ -8,9 +8,7 @@ import java.util.Random;
 public class RandomUtils {
     private static Random random = new Random();
     public static int rand(int minInc, int maxExcl) {
-        int randomNum = random.nextInt((maxExcl - minInc)) + minInc;
-
-        return randomNum;
+        return random.nextInt((maxExcl - minInc)) + minInc;
     }
 
     public static boolean coin(float prob) {
@@ -22,8 +20,6 @@ public class RandomUtils {
     }
 
     public static float rand(float minInc, float maxExcl) {
-        float randomNum = random.nextFloat() * (maxExcl - minInc) + minInc;
-
-        return randomNum;
+        return random.nextFloat() * (maxExcl - minInc) + minInc;
     }
 }
