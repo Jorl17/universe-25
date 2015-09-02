@@ -16,8 +16,6 @@ public class SimplisticAntSpecies extends Species<SimplisticAnt> {
     protected final Pheromone foodImmediancyPheromone;
     protected final Pheromone hivePheromone;
 
-    //protected final Hive<SimplisticAntSpecies> hive;
-
     public SimplisticAntSpecies(String subname) {
         super("SimplisticAnt " + "(" + subname + ")");
         //FIXME: Add the below parameters to the species parameters as well
