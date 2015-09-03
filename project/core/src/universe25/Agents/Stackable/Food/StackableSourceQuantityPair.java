@@ -30,12 +30,6 @@ public class StackableSourceQuantityPair {
 
     public void setSource(Stackable source) {
         this.source = source;
-        /*
-        try {
-            source.getCells();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
     public void setAmount(float amount) {
