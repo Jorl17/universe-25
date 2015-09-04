@@ -56,7 +56,7 @@ public class StackableSourceQuantityPair {
     }
 
     public boolean hasStackables() {
-        if ( source == null ) assert (amount == 0); //FIXME: Remove in release
+        if ( source == null ) assert (amount == 0);
         return source != null;
     }
 
