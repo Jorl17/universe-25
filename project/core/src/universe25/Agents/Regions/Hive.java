@@ -23,6 +23,7 @@ public class Hive<S extends Species> extends Region {
         this.height = height;
         this.foodStackRegion = new FoodStack(world, this, world.getStacksLayer());
         foodStackRegion.randomlyExpand();
+        removeDirtFrom();
     }
 
     public Hive(World world, S regionSpecies, int width, int height) {
@@ -48,6 +49,7 @@ public class Hive<S extends Species> extends Region {
         this.height = height;
         this.foodStackRegion = new FoodStack(world, this, world.getStacksLayer());
         foodStackRegion.randomlyExpand();
+        removeDirtFrom();
     }
 
     public Vector2 getCenter() {
@@ -58,5 +60,10 @@ public class Hive<S extends Species> extends Region {
 
     public FoodStack getFoodStackRegion() {
         return foodStackRegion;
+    }
+
+    private void removeDirtFrom() {
+        for ( GridCell c : getCells() )
+            world.getDirtLayer().removeDirtAt(c);
     }
 }

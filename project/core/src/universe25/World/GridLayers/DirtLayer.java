@@ -77,4 +77,8 @@ public class DirtLayer extends FloatLayer {
     }
 
     public float getMaxDirt() { return getMaxValue(); }
+
+    public void removeDirtAt(GridCell c) {
+        setValueAtCell(c, 0.0f);
+    }
 }
