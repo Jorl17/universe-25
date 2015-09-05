@@ -397,6 +397,20 @@ public abstract class GridMapLayer<T> extends Actor {
         return getCellCentreAndValue(cell.getCol(), cell.getRow());
     }
 
+    public boolean cellInCells(GridCell cell, ArrayList<GridCell> cells, boolean fastCompare) {
+        if ( fastCompare )
+            return cells.contains(cell);
+        else
+            for ( GridCell c : cells )
+                if ( c.equals(cell) ) return true;
+
+        return false;
+    }
+
+    public boolean cellInCells(GridCell cell, ArrayList<GridCell> cells) {
+        return cellInCells(cell, cells, false);
+    }
+
     public abstract float getMoveCost(int col, int row);
 
     public float getMoveCost(GridCell cell) {
