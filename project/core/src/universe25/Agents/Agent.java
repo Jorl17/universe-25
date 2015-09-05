@@ -367,10 +367,27 @@ public abstract class Agent extends MovableImage implements Disposable {
 
         }
 
-        batch.begin();
-
         if ( debugDrawFov )
             fieldOfView.draw(batch);
+
+/**
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        getWorld().getBaseLayer().getShapeRenderer().setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.setColor(Color.YELLOW);
+        shapeRenderer.line( (float) getBoundingBox().getMinX(), (float) getBoundingBox().getMinY(),
+                (float) getBoundingBox().getMinX(), (float) getBoundingBox().getMaxY());
+        shapeRenderer.line( (float) getBoundingBox().getMinX(), (float) getBoundingBox().getMaxY(),
+                (float) getBoundingBox().getMaxX(), (float) getBoundingBox().getMaxY());
+        shapeRenderer.line( (float) getBoundingBox().getMaxX(), (float) getBoundingBox().getMaxY(),
+                (float) getBoundingBox().getMaxX(), (float) getBoundingBox().getMinY());
+        shapeRenderer.line( (float) getBoundingBox().getMaxX(), (float) getBoundingBox().getMinY(),
+                (float) getBoundingBox().getMinX(), (float) getBoundingBox().getMinY());
+        shapeRenderer.end();
+**/
+        batch.begin();
+
+
+
 
 /*
         if ( movesToTake != null ) {
