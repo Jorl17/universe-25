@@ -154,6 +154,14 @@ public class ObjectAgentsLayer extends GridMapLayer<ArrayList> {
         return hasAgents(cell.getCol(), cell.getRow());
     }
 
+    public boolean hasEntities(int col, int row) {
+        return !getValueAtCell(col, row).isEmpty();
+    }
+
+    public boolean hasEntities(GridCell cell) {
+        return !getValueAtCell(cell).isEmpty();
+    }
+
     public float getOcclusionPercentage(int col, int row) {
         return occlusionPercentages[row][col];
     }
