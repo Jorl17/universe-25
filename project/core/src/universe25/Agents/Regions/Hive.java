@@ -36,8 +36,8 @@ public class Hive<S extends Species> extends Region {
             startRow = RandomUtils.rand(height, world.getRegionsLayer().getNumRows() - height);
             for ( int i = startCol; i < startCol+width; i++)
                 for ( int j = startRow; j < startRow+height; j++ ) {
-                    GridCell cell = world.getWorldObjectsLayer().getCellAt(i, j);
-                    if ( cell != null && world.getWorldObjectsLayer().hasObjects(cell) )
+                    GridCell cell = world.getAgentObjectsLayer().getCellAt(i, j);
+                    if ( cell != null && world.getAgentObjectsLayer().hasObjects(cell) )
                         obstacles = true;
                 }
         } while ( obstacles );

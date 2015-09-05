@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
-import universe25.Agents.Stackable.Food.Food;
 import universe25.Agents.Stackable.Food.StackableSourceQuantityPair;
 import universe25.Agents.Stackable.StackableUtils;
 import universe25.Agents.States.DoMoveSequence;
@@ -19,7 +18,7 @@ import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.WorldObject;
 import universe25.World.GridLayers.FloatLayer;
 import universe25.World.GridLayers.StackablesLayer;
-import universe25.World.GridLayers.WorldObjectsLayer;
+import universe25.World.GridLayers.ObjectAgentsLayer;
 import universe25.World.World;
 import universe25.GameLogic.Movement.MovableImage;
 import universe25.GameLogic.Movement.WeightedGoal;
@@ -49,6 +48,8 @@ public abstract class Agent extends MovableImage implements Disposable {
     private Vector2 runawayFromObjectsVector;
     private ArrayList<GridCell> cellsWithObjects;
 
+    private ArrayList<GridCell> cellsUnder; //Cells under this agent
+
     private FixedGridMoveSequence movesMemory;
 
     protected Agent(Texture texture, boolean shouldDisposeTexture, float fov, float seeDistance, float speed, int movesMemorySize) {
@@ -71,6 +72,7 @@ public abstract class Agent extends MovableImage implements Disposable {
         this.runawayFromObjectsVector  = new Vector2(0, 0);
         this.movesMemory = new FixedGridMoveSequence(movesMemorySize);
         this.stack = new ObjectStack();
+        this.cellsUnder = new ArrayList<>();
         setBoundingBoxThreshold(0.0f);
     }
 
@@ -89,7 +91,7 @@ public abstract class Agent extends MovableImage implements Disposable {
     public abstract void update();
 
     public void updateCellsInFov() {
-        WorldObjectsLayer objectsLayer = getWorld().getWorldObjectsLayer();
+        ObjectAgentsLayer objectsLayer = getWorld().getAgentObjectsLayer();
         tmpCellsInFov = objectsLayer.getCellsWithinTriangle(fieldOfView.getFovTriangle());
         Vector2 pos = getPosition();
 
@@ -103,11 +105,11 @@ public abstract class Agent extends MovableImage implements Disposable {
         }
 
         // Remove invisible cells (raycasting)
-        cellsWithObjects = getWorld().getWorldObjectsLayer().removeInvisibleCells(getPosition(), tmpCellsInFov);
+        cellsWithObjects = getWorld().getAgentObjectsLayer().removeInvisibleCells(getPosition(), tmpCellsInFov);
     }
 
     public void onAddedToWorld() {
-            this.movesMemory.setGrid(getWorld().getWorldObjectsLayer());
+            this.movesMemory.setGrid(getWorld().getAgentObjectsLayer());
             stack.onAddedToWorld(getWorld());
     }
 
@@ -132,7 +134,7 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     private void updateMovesMemory() {
         Vector2 pos = getPosition();
-        GridCell cell = getWorld().getWorldObjectsLayer().getCell(pos.x, pos.y);
+        GridCell cell = getWorld().getAgentObjectsLayer().getCell(pos.x, pos.y);
 
         GridCell lastCell = movesMemory.getLastCell();
         if (lastCell == null || lastCell != cell ) {
@@ -169,10 +171,10 @@ public abstract class Agent extends MovableImage implements Disposable {
                 collision = false;
                 float occlusionPercentage;
                 Vector2 pos = getPosition();
-                if (getWorld().getWorldObjectsLayer().getCell(pos.x, pos.y) == null)
+                if (getWorld().getAgentObjectsLayer().getCell(pos.x, pos.y) == null)
                     occlusionPercentage = 1.0f;
                 else
-                    occlusionPercentage = getWorld().getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
+                    occlusionPercentage = getWorld().getAgentObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
 
                 if (occlusionPercentage > 0.30) {
                     for (WorldObject o : getWorld().getAllObjects())
@@ -308,6 +310,12 @@ public abstract class Agent extends MovableImage implements Disposable {
     protected void positionChanged() {
         super.positionChanged();
         stack.setPosition(getX(Align.center), getY(Align.center), Align.center);
+
+        // FIXME: maybe we could hook this up onto a move method
+        if ( getWorld() != null ) {
+            getWorld().getAgentObjectsLayer().removeAgent(this);
+            getWorld().getAgentObjectsLayer().add(this);
+        }
     }
 
     @Override
@@ -453,5 +461,17 @@ public abstract class Agent extends MovableImage implements Disposable {
 
     public ObjectStack getStack() {
         return stack;
+    }
+
+    public void clearCellsUnder() {
+        cellsUnder.clear();
+    }
+
+    public void addCellUnder(GridCell cell) {
+        cellsUnder.add(cell);
+    }
+
+    public ArrayList<GridCell> getCellsUnder() {
+        return cellsUnder;
     }
 }

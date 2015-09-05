@@ -11,8 +11,6 @@ import javafx.geometry.BoundingBox;
 import universe25.Agents.Agent;
 import universe25.Agents.Pheromones.Pheromone;
 import universe25.Agents.Species;
-import universe25.Agents.SpeciesAgent;
-import universe25.Agents.Stackable.Food.AntPoison;
 import universe25.Agents.Stackable.Food.Bread;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.GameLogic.Time.Ticks;
@@ -35,7 +33,7 @@ public class World extends Stage {
     private static final float TILE_SIZE = 8.0f;
     private BoundingBox worldBoundingBox;
     private Map<String, GridMapLayer> gridLayers;
-    private WorldObjectsLayer objectsLayer;
+    private ObjectAgentsLayer objectsAndAgentsLayer;
     private StackablesLayer stacksLayer;
     private RegionsLayer regionsLayer;
     private DirtLayer    dirtLayer;
@@ -58,7 +56,7 @@ public class World extends Stage {
         this.gridLayers = new HashMap<>();
         BaseEmptyLayer baseLayer = new BaseEmptyLayer(getWidth(), getHeight(), TILE_SIZE, "BaseLayer");
         stacksLayer = new StackablesLayer(getWidth(), getHeight(), TILE_SIZE, "Stackslayer", Color.MAROON, true, 100);
-        objectsLayer = new WorldObjectsLayer(getWidth(), getHeight(), TILE_SIZE, "ObjectsLayer", Color.BLACK, false);
+        objectsAndAgentsLayer = new ObjectAgentsLayer(getWidth(), getHeight(), TILE_SIZE, "ObjectsLayer", Color.BLACK, false);
         regionsLayer = new RegionsLayer(getWidth(), getHeight(), TILE_SIZE, "RegionsLayer", Color.BLUE, true);
         dirtLayer = new DirtLayer(getWidth(), getHeight(), TILE_SIZE, "DirtLayer", 100.0f, Color.YELLOW.cpy().mul(0.5f, 0.5f, 0.5f, 1.0f));
 
@@ -142,19 +140,21 @@ public class World extends Stage {
         }
         new AntPoison(stacksLayer, antCells).putInLayer();
         */
-        addGridLayer(objectsLayer);
+        addGridLayer(objectsAndAgentsLayer);
     }
 
     @Override
     public void addActor(Actor actor) {
         super.addActor(actor);
         if ( actor instanceof  WorldObject )
-            getWorldObjectsLayer().addWorldObject((WorldObject)actor);
-        else if ( actor instanceof  Agent )
+            getAgentObjectsLayer().add((WorldObject) actor);
+        else if ( actor instanceof  Agent ) {
+            getAgentObjectsLayer().add((Agent) actor);
             ((Agent) actor).onAddedToWorld();
+        }
 
-        if ( getWorldObjectsLayer() != null )
-            getWorldObjectsLayer().toFront();
+        if ( getAgentObjectsLayer() != null )
+            getAgentObjectsLayer().toFront();
     }
 
     private  void addGridLayer(GridMapLayer layer) {
@@ -207,7 +207,7 @@ public class World extends Stage {
                     }
                     else if (actors.get(j) instanceof WorldObject) {
                         Vector2 pos = ((Agent) actors.get(i)).getPosition();
-                        float occlusionPercentage = getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
+                        float occlusionPercentage = getAgentObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
                         if (((Agent) actors.get(i)).interesects((WorldObject) actors.get(j)) &&
                                 occlusionPercentage > 0.25) {
                             resolveAgentObjectCollision((WorldObject)actors.get(j), (Agent)actors.get(i));
@@ -218,7 +218,7 @@ public class World extends Stage {
                 for (int j = i+1; j < actors.size; j++)
                     if ( actors.get(j) instanceof Agent) {
                         Vector2 pos = ((Agent) actors.get(j)).getPosition();
-                        float occlusionPercentage = getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
+                        float occlusionPercentage = getAgentObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
                         if (((WorldObject) actors.get(i)).interesects((Agent) actors.get(j)) &&
                                 occlusionPercentage > 0.30) {
                             resolveAgentObjectCollision((WorldObject) actors.get(i), (Agent) actors.get(j));
@@ -238,10 +238,10 @@ public class World extends Stage {
         do {
             agent.moveBy(line.x,line.y);
             Vector2 pos = agent.getPosition();
-            if ( getWorldObjectsLayer().getCell(pos.x,pos.y) == null )
+            if ( getAgentObjectsLayer().getCell(pos.x, pos.y) == null )
                 occlusionPercentage = 1.0f;
             else
-                occlusionPercentage = getWorldObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
+                occlusionPercentage = getAgentObjectsLayer().getOcclusionPercentage(pos.x, pos.y);
         } while ( agent.interesects(worldObject) && occlusionPercentage > 0.30 );
 
         agent.clearCollisionsWithWorld();
@@ -300,8 +300,8 @@ public class World extends Stage {
         return (BaseEmptyLayer) gridLayers.get("BaseLayer");
     }
 
-    public WorldObjectsLayer getWorldObjectsLayer() {
-        return objectsLayer;//return (WorldObjectsLayer) gridLayers.get("ObjectsLayer");
+    public ObjectAgentsLayer getAgentObjectsLayer() {
+        return objectsAndAgentsLayer;//return (WorldObjectsLayer) gridLayers.get("ObjectsLayer");
     }
 
     public Vector2 randomPosition() {

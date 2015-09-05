@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import javafx.geometry.BoundingBox;
+import universe25.Agents.Agent;
+import universe25.GameLogic.Movement.BoundingBoxImage;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.WorldObject;
 
@@ -16,15 +18,15 @@ import java.util.Set;
 /**
  * Created by jorl17 on 11/08/15.
  */
-public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
+public class ObjectAgentsLayer extends GridMapLayer<ArrayList> {
     private float[][] occlusionPercentages;
-    public WorldObjectsLayer(float gridWidth, float gridHeight, float cellSize, String name, Color drawColor, boolean drawLayer) {
+    public ObjectAgentsLayer(float gridWidth, float gridHeight, float cellSize, String name, Color drawColor, boolean drawLayer) {
         super(ArrayList.class, gridWidth, gridHeight, cellSize, name, drawColor, drawLayer);
         this.nextCells = this.cells;
         createOcclusionPercentagesArray();
     }
 
-    public WorldObjectsLayer(float cellSize, int nRows, int nCols, String name) {
+    public ObjectAgentsLayer(float cellSize, int nRows, int nCols, String name) {
         super(ArrayList.class, cellSize, nRows, nCols, name);
         this.nextCells = this.cells;
         createOcclusionPercentagesArray();
@@ -39,7 +41,7 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
         assert ( false ) ; // YOU SHOULD NOT BE CALLING ONTICKFINISHED FOR A WORLDOBJECTSLAYER
     }
 
-    public void addWorldObject(WorldObject o) {
+    public void add(BoundingBoxImage o) {
         if ( !o.isOpaque() ) return; //FIXME: Is this right?
         int[] minMaxRowCol = new int[4];
         Vector2[] boundingBoxPoints = o.getBoundingBoxPoints();
@@ -50,12 +52,19 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
         int maxRow = minMaxRowCol[3];
 
         BoundingBox bb = o.getBoundingBox();
+
+        if ( o instanceof Agent )
+            ((Agent)o).clearCellsUnder();
+
         for (int i = minRow; i <= maxRow; i++)
             for (int j = minCol; j <= maxCol; j++) {
                 BoundingBox cellBB = getCellBoundingBox(j,i);
                 if (bb.intersects(cellBB) || bb.contains(cellBB) || cellBB.contains(bb)) {
                     getValueAtCell(j, i).add(o);
-                    recalculateOcclusionPercentage(j,i);
+                    if ( o instanceof WorldObject )
+                        recalculateOcclusionPercentage(j,i);
+                    else if ( o instanceof Agent )
+                        ((Agent)o).addCellUnder(getCellAt(j, i));
                 }
             }
 
@@ -72,16 +81,28 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
 
     @Override
     protected void drawCellBody(Batch batch, int col, int row) {
-        if ( !getValueAtCell(col,row).isEmpty() ) {
+        ArrayList<BoundingBoxImage> valueAtCell = getValueAtCell(col, row);
+        if ( !valueAtCell.isEmpty() ) {
+            for ( BoundingBoxImage i : valueAtCell)
+                if ( i instanceof Agent ) {
+                    getShapeRenderer().setColor(Color.YELLOW);
+                    getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
+                    return;
+                }
             getShapeRenderer().setColor(getDrawColor().cpy().sub(0.0f,0.0f,0.0f,1- getOcclusionPercentage(col, row)));
             getShapeRenderer().rect(col * cellSize, row * cellSize, cellSize, cellSize);
         }
     }
 
-    private boolean rayToCellHasIntersection(Vector2 position, GridCell cell, Set<WorldObject> objectsToTest ) {
+    public void moveAgent() {
+
+    }
+
+    private boolean rayToCellHasIntersection(Vector2 position, GridCell cell, Set<BoundingBoxImage> objectsToTest ) {
         Vector2 cellCentre = cell.getCentre();
-        for ( WorldObject object : objectsToTest )
-            if ( Intersector.intersectSegmentPolygon(position, cellCentre, object.getBoundingBoxAsPolygon()) )
+        for ( BoundingBoxImage object : objectsToTest )
+            if ( object instanceof WorldObject && //Only collide objects
+                    Intersector.intersectSegmentPolygon(position, cellCentre, object.getBoundingBoxAsPolygon()) )
                 return true;
 
         return false;
@@ -89,9 +110,9 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
 
     public ArrayList<GridCell> removeInvisibleCells(Vector2 position, ArrayList<GridCell> tmpCellsInFov) {
         ArrayList<GridCell> ret = new ArrayList<>();
-        Set<WorldObject> objectsToTest = new HashSet<>();
+        Set<BoundingBoxImage> objectsToTest = new HashSet<>();
         for (GridCell cell : tmpCellsInFov) {
-            ArrayList<WorldObject> valueAtCell = getValueAtCell(cell);
+            ArrayList<BoundingBoxImage> valueAtCell = getValueAtCell(cell);
             if (!valueAtCell.isEmpty()) {
                 objectsToTest.addAll(valueAtCell);
                 ret.add( cell );
@@ -128,10 +149,11 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
     }
 
     public void recalculateOcclusionPercentage(int col, int row) {
-        ArrayList<WorldObject> objectsAtCell = getValueAtCell(col, row);
+        ArrayList<BoundingBoxImage> objectsAtCell = getValueAtCell(col, row);
         BoundingBox cellBB = getCellBoundingBox(col,row);
         occlusionPercentages[row][col] = 0;
-        for ( WorldObject o : objectsAtCell) {
+        for ( BoundingBoxImage o : objectsAtCell) {
+            if ( ! (o instanceof WorldObject) ) continue; // Exclude agents from the occlusion percentage
             BoundingBox objBB = o.getBoundingBox();
             occlusionPercentages[row][col] +=
                     ((Math.min(cellBB.getMaxX(), objBB.getMaxX())) - (Math.max(cellBB.getMinX(), objBB.getMinX()))) *
@@ -151,5 +173,11 @@ public class WorldObjectsLayer extends GridMapLayer<ArrayList> {
     @Override
     protected void drawCellGrids(Batch batch) {
         // Empty
+    }
+
+    public void removeAgent(Agent agent) {
+        ArrayList<GridCell> cellsUnder = agent.getCellsUnder();
+        for ( GridCell c : cellsUnder )
+            getValueAtCell(c).remove(agent);
     }
 }

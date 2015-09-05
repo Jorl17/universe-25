@@ -45,7 +45,7 @@ public abstract class AvoidCells<T extends Agent> extends ToggablePriorityState<
         Vector2 pos = agent.getPosition();
         for ( ValuePositionPair<Float> cell : cellsWithValues) {
             float dist = cell.getPosition().sub(pos).len();
-            if ( dist < agent.getWorld().getWorldObjectsLayer().getCellSize()*2f)
+            if ( dist < agent.getWorld().getAgentObjectsLayer().getCellSize()*2f)
                 goals.add(new WeightedGoal(cell.getPosition(), -runAwayFactor/dist));
 
         }

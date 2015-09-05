@@ -45,10 +45,10 @@ public class DoMoveSequence<T extends Agent> extends StateWithPriority<T> {
             }
             Vector2 pos = agent.getPosition();
             Vector2 destination = this.moveSequence.getMoveAt(currentMove);
-            GridCell posGrid = agent.getWorld().getWorldObjectsLayer().getCell(pos.x, pos.y);
-            GridCell destGrid = agent.getWorld().getWorldObjectsLayer().getCell(destination.x, destination.y);
+            GridCell posGrid = agent.getWorld().getAgentObjectsLayer().getCell(pos.x, pos.y);
+            GridCell destGrid = agent.getWorld().getAgentObjectsLayer().getCell(destination.x, destination.y);
 
-            float cellSize = agent.getWorld().getWorldObjectsLayer().getCellSize();
+            float cellSize = agent.getWorld().getAgentObjectsLayer().getCellSize();
 
             boolean reached;
             if (currentMove == this.moveSequence.numMoves() - 1)

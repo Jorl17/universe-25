@@ -11,7 +11,6 @@ import universe25.Agents.Agent;
 import universe25.Agents.SimplisticAnt.SimplisticAnt;
 import universe25.Agents.SimplisticAnt.SimplisticAntSpecies;
 import universe25.GameLogic.Movement.MoveSequence.MoveSequence;
-import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.GameLogic.Movement.Pathfinding.PathFinder;
 import universe25.Objects.Stone;
 import universe25.Utils.RandomUtils;
@@ -70,7 +69,7 @@ public class Main extends ApplicationAdapter {
                 } else if ( keycode == Input.Keys.K ) {
                     stage.getRegionsLayer().toggleDrawLayer();
                 } else if ( keycode == Input.Keys.L ) {
-                    stage.getWorldObjectsLayer().toggleDrawLayer();
+                    stage.getAgentObjectsLayer().toggleDrawLayer();
                 }
 
                 return true;
@@ -110,7 +109,7 @@ public class Main extends ApplicationAdapter {
                     s.setPosition(x-s.getWidth()/2,y-s.getHeight()/2);
                     stage.addActor(s);
                 } else {
-                    PathFinder pathFinder = new PathFinder(stage.getWorldObjectsLayer());
+                    PathFinder pathFinder = new PathFinder(stage.getAgentObjectsLayer());
                     for (Agent agent : stage.getAllAgents()) {
                         MoveSequence pathMoveSequence = pathFinder.getPathMoveSequence(agent.getPosition(), new Vector2(x, y));
                         agent.testDoMoveSequence(pathMoveSequence);
