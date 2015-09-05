@@ -131,11 +131,27 @@ public class ObjectAgentsLayer extends GridMapLayer<ArrayList> {
     }
 
     public boolean hasObjects(int col, int row) {
-        return !getValueAtCell(col, row).isEmpty();
+        ArrayList<BoundingBoxImage> objects = getValueAtCell(col, row);
+        if ( objects.isEmpty() ) return false;
+        for ( BoundingBoxImage i : objects)
+            if ( i instanceof WorldObject ) return true;
+        return false;
     }
 
     public boolean hasObjects(GridCell cell) {
-        return !getValueAtCell(cell).isEmpty();
+        return hasObjects(cell.getCol(), cell.getRow());
+    }
+
+    public boolean hasAgents(int col, int row) {
+        ArrayList<BoundingBoxImage> objects = getValueAtCell(col, row);
+        if ( objects.isEmpty() ) return false;
+        for ( BoundingBoxImage i : objects)
+            if ( i instanceof Agent ) return true;
+        return false;
+    }
+
+    public boolean hasAgents(GridCell cell) {
+        return hasAgents(cell.getCol(), cell.getRow());
     }
 
     public float getOcclusionPercentage(int col, int row) {

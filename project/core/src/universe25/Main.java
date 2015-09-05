@@ -28,7 +28,7 @@ public class Main extends ApplicationAdapter {
         Gdx.input.setInputProcessor(stage);
         species.initialize(stage);
 
-        stage.getDirtLayer().spreadDirtAtCell(stage.getDirtLayer().getCellAt(2, 2), stage.getDirtLayer().getCellAt(0,1), 1.0f);
+        stage.getDirtLayer().spreadDirtAtCell(stage.getDirtLayer().getCellAt(2, 2), 1.0f);
         stage.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

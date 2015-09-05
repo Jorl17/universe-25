@@ -3,6 +3,7 @@ package universe25.World.GridLayers;
 import com.badlogic.gdx.graphics.Color;
 import universe25.GameLogic.Movement.Pathfinding.GridCell;
 import universe25.Objects.Dirt;
+import universe25.World.World;
 
 import java.util.ArrayList;
 
@@ -10,15 +11,18 @@ import java.util.ArrayList;
  * Created by jorl17 on 25/08/15.
  */
 public class DirtLayer extends FloatLayer {
-    public DirtLayer(float gridWidth, float gridHeight, float cellSize, String name, float maxDirt, Color drawColor) {
+    private World world;
+    public DirtLayer(float gridWidth, float gridHeight, float cellSize, String name, float maxDirt, Color drawColor, World world) {
         super(gridWidth, gridHeight, cellSize, name, maxDirt, drawColor);
         this.nextCells = this.cells;
+        this.world = world;
         fillWithDirt();
     }
 
-    public DirtLayer(float cellSize, int nRows, int nCols, String name, float maxDirt, Color drawColor) {
+    public DirtLayer(float cellSize, int nRows, int nCols, String name, float maxDirt, Color drawColor, World world) {
         super(cellSize, nRows, nCols, name, maxDirt, drawColor);
-        this.nextCells = this.cells;
+        this.nextCells = this.cells;this.world = world;
+        this.world = world;
         fillWithDirt();
     }
 
@@ -42,7 +46,7 @@ public class DirtLayer extends FloatLayer {
         }
     }
 
-    public void spreadDirtAtCell(GridCell cell, GridCell spreadSource, float percentToSpread) {
+    public void spreadDirtAtCell(GridCell cell, float percentToSpread) {
         float valToSpread = getValueAtCell(cell) * percentToSpread;
 
         ArrayList<GridCell> cells = new ArrayList<>();
@@ -50,7 +54,7 @@ public class DirtLayer extends FloatLayer {
         for ( int i = -1; i <= 1; i++ )
             for ( int j = -1; j <= 1; j++ )
                 if ( ((tmp= getCellAt(cell.getCol() + i, cell.getRow() + j)) != null)
-                    && !tmp.equals(spreadSource)
+                    && !world.getAgentObjectsLayer().hasAgents(tmp)
                     && !tmp.equals(cell) )
                     cells.add(tmp);
 

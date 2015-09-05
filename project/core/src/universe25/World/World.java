@@ -58,7 +58,7 @@ public class World extends Stage {
         stacksLayer = new StackablesLayer(getWidth(), getHeight(), TILE_SIZE, "Stackslayer", Color.MAROON, true, 100);
         objectsAndAgentsLayer = new ObjectAgentsLayer(getWidth(), getHeight(), TILE_SIZE, "ObjectsLayer", Color.BLACK, false);
         regionsLayer = new RegionsLayer(getWidth(), getHeight(), TILE_SIZE, "RegionsLayer", Color.BLUE, true);
-        dirtLayer = new DirtLayer(getWidth(), getHeight(), TILE_SIZE, "DirtLayer", 100.0f, Color.YELLOW.cpy().mul(0.5f, 0.5f, 0.5f, 1.0f));
+        dirtLayer = new DirtLayer(getWidth(), getHeight(), TILE_SIZE, "DirtLayer", 100.0f, Color.YELLOW.cpy().mul(0.5f, 0.5f, 0.5f, 1.0f), this);
 
         addGridLayer(baseLayer);
         addPheromones();
