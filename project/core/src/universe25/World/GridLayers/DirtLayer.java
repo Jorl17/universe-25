@@ -54,7 +54,7 @@ public class DirtLayer extends FloatLayer {
         for ( int i = -1; i <= 1; i++ )
             for ( int j = -1; j <= 1; j++ )
                 if ( ((tmp= getCellAt(cell.getCol() + i, cell.getRow() + j)) != null)
-                    && !world.getAgentObjectsLayer().hasAgents(tmp)
+                    && !world.getAgentObjectsLayer().hasEntities(tmp)
                     && !tmp.equals(cell) )
                     cells.add(tmp);
 
