@@ -98,7 +98,6 @@ public class PheromoneFollowingAnt extends SimplisticAnt {
         takeFoodBack.addState(new GoToHive(this, 20));
 
         PriorityAggregatorState clearDirt = new PriorityAggregatorState<>(this, "ClearDirt");
-        //takeFoodBack.addState(new GoToCellIfVisible<>(this, 21, "GoToFoodStackRegionCell", () -> getSpecies().getHive().getFoodStackRegion().getCurrentFoodStackCell()));
 
         PriorityAggregatorState goToFoodStackRegion = new PriorityAggregatorState<>(this, "GoToFoodStackRegion");
         goToFoodStackRegion.addState(wanderState);
